@@ -37,6 +37,7 @@ def get_files_list(db_conn, db_name):
         {'$match': {'records': {'$elemMatch': {'fileFormat': 'wav'}}}},
         {'$match': {'records': {'$elemMatch': {'fileFormat': 'html'}}}},
         {'$unwind': '$records'},
+        {'$match': {'records.fileFormat': {'$in': ['wav', 'html']}}},
         {'$project': {'filename': '$records.filename'}}
     ]
 
