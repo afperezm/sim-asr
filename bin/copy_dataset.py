@@ -82,7 +82,7 @@ def copy_files(records_list, ssh_client):
         try:
             print("Copying file {0} to {1}".format(record["filename"].replace(loc_path, src_path),
                                                    record["filename"].replace(loc_path, dst_path)))
-            os.makedirs(record["filename"].replace(loc_path, dst_path), exist_ok=True)
+            os.makedirs(os.path.dirname(record["filename"].replace(loc_path, dst_path)), exist_ok=True)
             sftp_client.get(record["filename"].replace(loc_path, src_path),
                             record["filename"].replace(loc_path, dst_path))
             print("Done")
