@@ -28,7 +28,7 @@ def create_db_connection(host, username, password, auth_source, auth_mechanism):
     return client
 
 
-def get_files_list(db_conn, db_name):
+def get_resources_list(db_conn, db_name):
     """Executes an aggregation pipeline to extract the list of WAV and HTML records for VI type interviews."""
 
     pipeline = [
@@ -44,11 +44,6 @@ def get_files_list(db_conn, db_name):
         {'$match': {'records': {'$elemMatch': {'type': 'Audio de la entrevista'}}}},
         {'$match': {'records': {'$elemMatch': {'type': 'Transcripción final'}}}},
         {'$match': {'records': {'$elemMatch': {'accessLevel': 4}}}},
-        {'$match': {'records': {'$elemMatch': {'fileFormat': 'wav'}}}},
-        {'$match': {'records': {'$elemMatch': {'fileFormat': 'html'}}}},
-        {'$unwind': '$records'},
-        {'$match': {'records.fileFormat': {'$in': ['wav', 'html']}}},
-        {'$project': {'filename': '$records.filename'}}
     ]
 
     result = db_conn[db_name].records.aggregate(pipeline)
@@ -116,38 +111,6 @@ def extract_audio(file_name, file_format):
     content, _ = librosa.load(file_name, sr=16000, mono=True)
 
     return content
-
-
-def copy_files(records_list, ssh_client):
-    """Performs file copying from a remote server through SSH using a key file for authentication."""
-    empty_files_count = 0
-    missing_files_count = 0
-
-    sftp_client = ssh_client.open_sftp()
-
-    for record in records_list:
-        try:
-            print("Verifying file {0}".format(record["filename"].replace(loc_path, src_path)))
-            stat_info = sftp_client.stat(record["filename"].replace(loc_path, src_path))
-            if stat_info.st_size == 0:
-                empty_files_count += 1
-                print("File is empty")
-                continue
-        except FileNotFoundError as e:
-            missing_files_count += 1
-            print("File not found.", e)
-            continue
-        print("Done")
-
-        try:
-            print("Copying file {0} to {1}".format(record["filename"].replace(loc_path, src_path),
-                                                   record["filename"].replace(loc_path, dst_path)))
-            os.makedirs(os.path.dirname(record["filename"].replace(loc_path, dst_path)), exist_ok=True)
-            sftp_client.get(record["filename"].replace(loc_path, src_path),
-                            record["filename"].replace(loc_path, dst_path))
-            print("Done")
-        except IOError as e:
-            print("Failed.", e)
 
 
 def copy_records(resource_id, transcript_records, audio_records, ssh_client):
@@ -309,7 +272,7 @@ def main():
     db_conn = create_db_connection(args.mongo_host, args.mongo_user, args.mongo_pass, args.mongo_db, "SCRAM-SHA-256")
 
     # retrieve list of files to copy
-    files_list = get_files_list(db_conn, args.mongo_db)
+    resources_list = get_resources_list(db_conn, args.mongo_db)
 
     # close database connection
     db_conn.close()
@@ -318,7 +281,7 @@ def main():
     ssh_conn = create_ssh_connection(args.ssh_host, args.ssh_user, args.ssh_key_file, args.ssh_key_pass)
 
     # execute files copy to local
-    copy_files(files_list, ssh_conn)
+    copy_resources(resources_list, ssh_conn)
 
     # close SSH connection
     ssh_conn.close()
