@@ -1,7 +1,15 @@
 from pymongo import MongoClient
 import argparse
+import docx2txt
+import html2text
+import json
+import librosa
 import os
 import paramiko
+import pdftotext
+import soundfile
+import tempfile
+import textract
 
 src_path = "/var/www/html/expedientes/storage/app/public"
 loc_path = "/rep/CaptureModule"
@@ -59,6 +67,46 @@ def create_ssh_connection(hostname, username, key_filename, key_password=None):
     ssh_client.connect(hostname=hostname, username=username, pkey=private_key, timeout=10)
 
     return ssh_client
+
+
+def extract_text(file_name, file_format):
+    """Extract and return text content from document file."""
+    if file_format == "otr":
+        with open(file_name) as json_file:
+            content_json = json.load(json_file)
+        content_html = content_json["text"]
+        content_txt = html2text.html2text(content_html)
+    elif file_format == "html":
+        with open(file_name, "r") as f:
+            content_html = f.read()
+        content_txt = html2text.html2text(content_html)
+    elif file_format == "pdf":
+        with open(file_name, "rb") as f:
+            content_pdf = pdftotext.PDF(f)
+        content_txt = ''.join([page for page in content_pdf])
+    elif file_format == "doc":
+        content_txt = textract.process(file_name)
+    elif file_format == "docx":
+        content_txt = docx2txt.process(file_name)
+    elif file_format == "odt":
+        content_txt = textract.process(file_name)
+    else:
+        raise ValueError("Invalid file format {0}", file_format)
+
+    if not content_txt:
+        raise ValueError("Empty content")
+
+    return content_txt
+
+
+def extract_audio(file_name, file_format):
+    """Extract and return audio file content."""
+    if file_format not in ["aac", "m4a", "mp3", "mp4", "wav", "wma"]:
+        raise ValueError("Invalid file format {0}", file_format)
+
+    content, _ = librosa.load(file_name, sr=16000, mono=True)
+
+    return content
 
 
 def copy_files(records_list, ssh_client):
