@@ -251,6 +251,47 @@ def copy_records(resource_id, transcript_records, audio_records, ssh_client):
     return True
 
 
+def copy_resources(resources_list, ssh_client):
+    """Performs file copying from a remote server through SSH using a key file for authentication."""
+
+    os.makedirs(dst_path, exist_ok=True)
+
+    for resource in resources_list:
+
+        resource_id = resource['_id']
+        audio_records = [record for record in resource['records'] if record['type'] == 'Audio de la entrevista']
+        transcript_records = [record for record in resource['records'] if record['type'] == 'Transcripción final']
+
+        num_audio_records = len(audio_records)
+        num_transcript_records = len(transcript_records)
+
+        if num_audio_records + num_transcript_records == 2:
+            # Simple case: one audio and one transcription
+            print(resource_id)
+            print(audio_records)
+            print(transcript_records)
+            copy_result = copy_records(resource_id, transcript_records, audio_records, ssh_client)
+            if not copy_result:
+                print("Rollback records copying")
+                if os.path.exists("{0}/{1}.txt".format(dst_path, resource_id)):
+                    print("Remove transcript")
+                    os.remove("{0}/{1}.txt".format(dst_path, resource_id))
+                if os.path.exists("{0}/{1}.wav".format(dst_path, resource_id)):
+                    print("Remove audio")
+                    os.remove("{0}/{1}.wav".format(dst_path, resource_id))
+                print("Done")
+        elif num_audio_records + num_transcript_records > 2 and num_transcript_records == 1:
+            # Relatively simple case: one transcription and many audios (merge audios since most likely split)
+            print(resource_id)
+            print(audio_records)
+            print(transcript_records)
+        # elif num_audio_records + num_transcript_records > 2 and num_audio_records == 1:
+        #     # Relatively simple case: one audio and many transcriptions (choose best transcription format or merge?)
+        #     print(resource_id)
+        #     print(audio_records)
+        #     print(transcript_records)
+
+
 def main():
     parser = argparse.ArgumentParser(description="File synchronization through SSH")
     parser.add_argument("--mongo_host", type=str, help="MongoDB host", required=True)
