@@ -69,6 +69,15 @@ def create_ssh_connection(hostname, username, key_filename, key_password=None):
     return ssh_client
 
 
+def validate_file(file_name, sftp_client):
+    """Validate files on remote filesystem"""
+
+    stat_info = sftp_client.stat(file_name.replace(loc_path, src_path))
+
+    if stat_info.st_size == 0:
+        raise OSError("File is empty")
+
+
 def extract_text(file_name, file_format):
     """Extract and return text content from document file."""
     if file_format == "otr":
