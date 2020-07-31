@@ -150,6 +150,107 @@ def copy_files(records_list, ssh_client):
             print("Failed.", e)
 
 
+def copy_records(resource_id, transcript_records, audio_records, ssh_client):
+    """Copies transcript and audio records files from a remote server through SSH."""
+
+    sftp_client = ssh_client.open_sftp()
+
+    # Aggregate list of transcript records
+    record = transcript_records[0]
+
+    # Copy transcript
+
+    # Validate file on remote location
+    try:
+        print("Verifying file {0}".format(record["filename"].replace(loc_path, src_path)))
+        validate_file(record["filename"].replace(loc_path, src_path), sftp_client)
+        print("Done")
+    except OSError as e:
+        print("Failed.", e)
+        return False
+
+    tmp = tempfile.NamedTemporaryFile(mode="w+")
+
+    # Copy file to temporary location
+    try:
+        print("Copying file {0} to {1}".format(record["filename"].replace(loc_path, src_path), tmp.name))
+        sftp_client.get(record["filename"].replace(loc_path, src_path), tmp.name)
+        print("Done")
+    except IOError as e:
+        print("Failed.", e)
+        return False
+
+    # Extract copied file content
+    try:
+        print("Extracting transcript content")
+        transcript_content = extract_text(tmp.name, record["fileFormat"])
+        print("Done")
+    except ValueError as e:
+        print("Failed.", e)
+        tmp.close()
+        return False
+
+    tmp.close()
+
+    # Write extracted file content
+    try:
+        print("Writing extracted transcript file content to {0}/{1}.txt".format(dst_path, resource_id))
+        with open("{0}/{1}.txt".format(dst_path, resource_id), "w") as f:
+            f.write(transcript_content)
+        print("Done")
+    except IOError as e:
+        print("Failed.", e)
+        return False
+
+    # Aggregate list of audio records
+    record = audio_records[0]
+
+    # Copy audio
+
+    # Validate file on remote location
+    try:
+        print("Verifying file {0}".format(record["filename"].replace(loc_path, src_path)))
+        validate_file(record["filename"].replace(loc_path, src_path), sftp_client)
+        print("Done")
+    except OSError as e:
+        print("Failed.", e)
+        return False
+
+    tmp = tempfile.NamedTemporaryFile(mode="w+")
+
+    # Copy file to temporary location
+    try:
+        print("Copying file {0} to {1}".format(record["filename"].replace(loc_path, src_path), tmp.name))
+        sftp_client.get(record["filename"].replace(loc_path, src_path), tmp.name)
+        print("Done")
+    except IOError as e:
+        print("Failed.", e)
+        return False
+
+    # Extract copied file content
+    try:
+        print("Extracting audio content")
+        audio_content = extract_audio(tmp.name, record["fileFormat"])
+        print("Done")
+    except ValueError as e:
+        print("Failed.", e)
+        tmp.close()
+        return False
+
+    tmp.close()
+
+    # Write extracted file content
+    try:
+        print("Writing extracted audio file content to {0}/{1}.wav".format(dst_path, resource_id))
+        soundfile.write("{0}/{1}.wav".format(dst_path, resource_id), audio_content, 16000)
+        print("Done")
+    except IOError as e:
+        print("Failed.", e)
+        return False
+
+    return True
+
+
 def main():
     parser = argparse.ArgumentParser(description="File synchronization through SSH")
     parser.add_argument("--mongo_host", type=str, help="MongoDB host", required=True)
