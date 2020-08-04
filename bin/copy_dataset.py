@@ -116,7 +116,7 @@ def extract_audio(file_name, file_format):
     return content
 
 
-def copy_records(resource_id, transcript_records, audio_records, ssh_client):
+def copy_records(ssh_client, resource_id, transcript_records, audio_records):
     """Copies transcript and audio records files from a remote server through SSH."""
 
     sftp_client = ssh_client.open_sftp()
@@ -217,7 +217,7 @@ def copy_records(resource_id, transcript_records, audio_records, ssh_client):
     return True
 
 
-def copy_resources(resources_list, ssh_client):
+def copy_resources(ssh_client, resources_list):
     """Performs file copying from a remote server through SSH using a key file for authentication."""
 
     os.makedirs(dst_path, exist_ok=True)
@@ -236,7 +236,7 @@ def copy_resources(resources_list, ssh_client):
             print(resource_id)
             print(audio_records)
             print(transcript_records)
-            copy_result = copy_records(resource_id, transcript_records, audio_records, ssh_client)
+             copy_result = copy_records(ssh_client, resource_id, transcript_records, audio_records)
             if not copy_result:
                 print("Rollback records copying")
                 if os.path.exists("{0}/{1}.txt".format(dst_path, resource_id)):
@@ -284,7 +284,7 @@ def main():
     ssh_conn = create_ssh_connection(args.ssh_host, args.ssh_user, args.ssh_key_file, args.ssh_key_pass)
 
     # execute files copy to local
-    copy_resources(resources_list, ssh_conn)
+    copy_resources(ssh_conn, resources_list)
 
     # close SSH connection
     ssh_conn.close()
