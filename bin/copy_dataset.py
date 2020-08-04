@@ -1,5 +1,6 @@
 from pymongo import MongoClient
 import argparse
+import concurrent.futures
 import docx2txt
 import html2text
 import json
@@ -116,8 +117,34 @@ def extract_audio(file_name, file_format):
     return content
 
 
+def copy_records_with_rollback(ssh_client, resource):
+    """Copies transcript and audio records files and rollback if copy fails."""
+
+    resource_id = resource['_id']
+    audio_records = [record for record in resource['records'] if record['type'] == 'Audio de la entrevista']
+    transcript_records = [record for record in resource['records'] if record['type'] == 'Transcripción final']
+
+    copy_result = copy_records(ssh_client, resource_id, transcript_records, audio_records)
+
+    if not copy_result:
+        print("Rollback records copying")
+        if os.path.exists("{0}/{1}.txt".format(dst_path, resource_id)):
+            print("Remove transcript")
+            os.remove("{0}/{1}.txt".format(dst_path, resource_id))
+        if os.path.exists("{0}/{1}.wav".format(dst_path, resource_id)):
+            print("Remove audio")
+            os.remove("{0}/{1}.wav".format(dst_path, resource_id))
+        print("Done")
+
+    return copy_result
+
+
 def copy_records(ssh_client, resource_id, transcript_records, audio_records):
     """Copies transcript and audio records files from a remote server through SSH."""
+
+    print(resource_id)
+    print(audio_records)
+    print(transcript_records)
 
     sftp_client = ssh_client.open_sftp()
 
@@ -217,42 +244,24 @@ def copy_records(ssh_client, resource_id, transcript_records, audio_records):
     return True
 
 
-def copy_resources(ssh_client, resources_list):
+def copy_resources(ssh_client, resources_list, max_workers):
     """Performs file copying from a remote server through SSH using a key file for authentication."""
 
     os.makedirs(dst_path, exist_ok=True)
 
-    for resource in resources_list:
+    with concurrent.futures.ThreadPoolExecutor(max_workers=max_workers) as executor:
+        futures = []
+        for resource in resources_list:
+            futures.append(executor.submit(copy_records_with_rollback, ssh_client=ssh_client, resource=resource))
+        for future in concurrent.futures.as_completed(futures):
+            try:
+                print("Records copied: {0}".format(future.result()))
+            except Exception as e:
+                print("An error occurred {0}".format(e))
 
-        resource_id = resource['_id']
-        audio_records = [record for record in resource['records'] if record['type'] == 'Audio de la entrevista']
-        transcript_records = [record for record in resource['records'] if record['type'] == 'Transcripción final']
-
-        num_audio_records = len(audio_records)
-        num_transcript_records = len(transcript_records)
-
-        if num_audio_records + num_transcript_records == 2:
-            # Simple case: one audio and one transcription
-            print(resource_id)
-            print(audio_records)
-            print(transcript_records)
-            copy_result = copy_records(ssh_client, resource_id, transcript_records, audio_records)
-            if not copy_result:
-                print("Rollback records copying")
-                if os.path.exists("{0}/{1}.txt".format(dst_path, resource_id)):
-                    print("Remove transcript")
-                    os.remove("{0}/{1}.txt".format(dst_path, resource_id))
-                if os.path.exists("{0}/{1}.wav".format(dst_path, resource_id)):
-                    print("Remove audio")
-                    os.remove("{0}/{1}.wav".format(dst_path, resource_id))
-                print("Done")
-        elif num_audio_records + num_transcript_records > 2 and num_transcript_records == 1:
-            # Relatively simple case: one transcription and many audios (merge audios since most likely split)
-            print(resource_id)
-            print(audio_records)
-            print(transcript_records)
-        # elif num_audio_records + num_transcript_records > 2 and num_audio_records == 1:
-        #     # Relatively simple case: one audio and many transcriptions (choose best transcription format or merge?)
+        # el
+        # if num_audio_records > 1 and num_transcript_records == 1:
+        #     # Relatively simple case: one transcription and many audios (merge audios since most likely split)
         #     print(resource_id)
         #     print(audio_records)
         #     print(transcript_records)
@@ -268,6 +277,7 @@ def main():
     parser.add_argument("--ssh_user", type=str, help="SSH username", required=True)
     parser.add_argument("--ssh_key_file", type=str, help="Path to SSH key file", required=True)
     parser.add_argument("--ssh_key_pass", type=str, help="SSH key password", required=False)
+    parser.add_argument("--num_workers", type=int, help="Number of workers", required=False, default=4)
 
     args = parser.parse_args()
 
@@ -284,7 +294,7 @@ def main():
     ssh_conn = create_ssh_connection(args.ssh_host, args.ssh_user, args.ssh_key_file, args.ssh_key_pass)
 
     # execute files copy to local
-    copy_resources(ssh_conn, resources_list)
+    copy_resources(ssh_conn, resources_list, args.num_workers)
 
     # close SSH connection
     ssh_conn.close()
