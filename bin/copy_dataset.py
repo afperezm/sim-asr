@@ -44,6 +44,9 @@ def get_resources_list(db_conn, db_name):
         {'$match': {'records': {'$elemMatch': {'type': 'Audio de la entrevista'}}}},
         {'$match': {'records': {'$elemMatch': {'type': 'Transcripción final'}}}},
         {'$match': {'records': {'$elemMatch': {'accessLevel': 4}}}},
+        {'$project': {'records': 1, 'audioRecords': {'$filter': {'input': '$records', 'as': 'record', 'cond': {'$eq': ['$$record.type', 'Audio de la entrevista']}}}, 'transcriptRecords': {'$filter': {'input': '$records', 'as': 'record', 'cond': {'$eq': ['$$record.type', 'Transcripción final']}}}}},
+        {'$project': {'records': 1, 'numRecords': {'$size': '$records'}, 'numAudioRecords': {'$size': '$audioRecords'}, 'numTranscriptRecords': {'$size': '$transcriptRecords'}}},
+        {'$match': {'numRecords': {'$eq': 2}}},
     ]
 
     result = db_conn[db_name].records.aggregate(pipeline)
