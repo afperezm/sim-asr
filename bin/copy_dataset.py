@@ -236,7 +236,7 @@ def copy_resources(ssh_client, resources_list):
             print(resource_id)
             print(audio_records)
             print(transcript_records)
-             copy_result = copy_records(ssh_client, resource_id, transcript_records, audio_records)
+            copy_result = copy_records(ssh_client, resource_id, transcript_records, audio_records)
             if not copy_result:
                 print("Rollback records copying")
                 if os.path.exists("{0}/{1}.txt".format(dst_path, resource_id)):
