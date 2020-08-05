@@ -181,6 +181,7 @@ def copy_records(ssh_client, resource_id, transcript_record, audio_record):
         print("Done")
     except IOError as e:
         print("Failed.", e)
+        tmp.close()
         return False
 
     # Extract copied file content
@@ -228,6 +229,7 @@ def copy_records(ssh_client, resource_id, transcript_record, audio_record):
         print("Done")
     except IOError as e:
         print("Failed.", e)
+        tmp.close()
         return False
 
     # Extract copied file content
