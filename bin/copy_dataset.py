@@ -139,10 +139,14 @@ def copy_records_with_rollback(ssh_client, resource):
     audio_records = [record for record in resource['records'] if record['type'] == 'Audio de la entrevista']
     transcript_records = [record for record in resource['records'] if record['type'] == 'Transcripción final']
 
+    print("{0} - Copying records".format(resource_id))
+
     copy_result = copy_records(ssh_client, resource_id, transcript_records[0], audio_records[0])
 
-    if not copy_result:
-        # print("{0} - Rollback records copying".format(resource_id))
+    if copy_result:
+        print("{0} - Done".format(resource_id))
+    else:
+        print("{0} - Failed".format(resource_id))
         if os.path.exists("{0}/{1}.txt".format(dst_path, resource_id)):
             # print("{0} - Remove transcript".format(resource_id))
             os.remove("{0}/{1}.txt".format(dst_path, resource_id))
