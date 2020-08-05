@@ -1,3 +1,5 @@
+import threading
+
 from fs.sshfs import SSHFS
 from pymongo import MongoClient
 import argparse
@@ -139,14 +141,14 @@ def copy_records_with_rollback(ssh_client, resource):
     copy_result = copy_records(ssh_client, resource_id, transcript_records[0], audio_records[0])
 
     if not copy_result:
-        print("Rollback records copying")
+        print("{0} - Rollback records copying".format(resource_id))
         if os.path.exists("{0}/{1}.txt".format(dst_path, resource_id)):
-            print("Remove transcript")
+            print("{0} - Remove transcript".format(resource_id))
             os.remove("{0}/{1}.txt".format(dst_path, resource_id))
         if os.path.exists("{0}/{1}.wav".format(dst_path, resource_id)):
-            print("Remove audio")
+            print("{0} - Remove audio".format(resource_id))
             os.remove("{0}/{1}.wav".format(dst_path, resource_id))
-        print("Done")
+        print("{0} - Done".format(resource_id))
 
     return copy_result
 
@@ -161,36 +163,36 @@ def copy_records(ssh_client, resource_id, transcript_record, audio_record):
     sftp_client = ssh_client.open_sftp()
 
     # Copy transcript
-    print("Copying transcript")
+    print("{0} - Copying transcript".format(resource_id))
 
     # Validate file on remote location
     try:
-        print("Verifying file {0}".format(transcript_record["filename"].replace(loc_path, src_path)))
+        print("{0} - Verifying file {1}".format(resource_id, transcript_record["filename"].replace(loc_path, src_path)))
         validate_file(transcript_record["filename"].replace(loc_path, src_path), sftp_client)
-        print("Done")
+        print("{0} - Done".format(resource_id))
     except OSError as e:
-        print("Failed.", e)
+        print("{0} - Failed.".format(resource_id), e)
         return False
 
     tmp = tempfile.NamedTemporaryFile(mode="w+")
 
     # Copy file to temporary location
     try:
-        print("Copying file {0} to {1}".format(transcript_record["filename"].replace(loc_path, src_path), tmp.name))
+        print("{0} - Copying file {1} to {2}".format(resource_id, transcript_record["filename"].replace(loc_path, src_path), tmp.name))
         sftp_client.get(transcript_record["filename"].replace(loc_path, src_path), tmp.name)
-        print("Done")
+        print("{0} - Done".format(resource_id))
     except IOError as e:
-        print("Failed.", e)
+        print("{0} - Failed.".format(resource_id), e)
         tmp.close()
         return False
 
     # Extract copied file content
     try:
-        print("Extracting transcript content")
+        print("{0} - Extracting transcript content")
         transcript_content = extract_text(tmp.name, transcript_record["fileFormat"])
-        print("Done")
+        print("{0} - Done".format(resource_id))
     except ValueError as e:
-        print("Failed.", e)
+        print("{0} - Failed.".format(resource_id), e)
         tmp.close()
         return False
 
@@ -198,47 +200,47 @@ def copy_records(ssh_client, resource_id, transcript_record, audio_record):
 
     # Write extracted file content
     try:
-        print("Writing extracted transcript file content to {0}/{1}.txt".format(dst_path, resource_id))
+        print("{0} - Writing extracted transcript file content to {1}/{2}.txt".format(resource_id, dst_path, resource_id))
         with open("{0}/{1}.txt".format(dst_path, resource_id), "w") as f:
             f.write(transcript_content)
-        print("Done")
+        print("{0} - Done".format(resource_id))
     except IOError as e:
-        print("Failed.", e)
+        print("{0} - Failed.".format(resource_id), e)
         return False
 
-    print("Done")
+    print("{0} - Done".format(resource_id))
 
     # Copy audio
-    print("Copying audio track")
+    print("{0} - Copying audio track".format(resource_id))
 
     # Validate file on remote location
     try:
-        print("Verifying file {0}".format(audio_record["filename"].replace(loc_path, src_path)))
+        print("{0} - Verifying file {1}".format(resource_id, audio_record["filename"].replace(loc_path, src_path)))
         validate_file(audio_record["filename"].replace(loc_path, src_path), sftp_client)
-        print("Done")
+        print("{0} - Done".format(resource_id))
     except OSError as e:
-        print("Failed.", e)
+        print("{0} - Failed.".format(resource_id), e)
         return False
 
     tmp = tempfile.NamedTemporaryFile(mode="w+")
 
     # Copy file to temporary location
     try:
-        print("Copying file {0} to {1}".format(audio_record["filename"].replace(loc_path, src_path), tmp.name))
+        print("{0} - Copying file {1} to {2}".format(resource_id, audio_record["filename"].replace(loc_path, src_path), tmp.name))
         sftp_client.get(audio_record["filename"].replace(loc_path, src_path), tmp.name)
-        print("Done")
+        print("{0} - Done".format(resource_id))
     except IOError as e:
-        print("Failed.", e)
+        print("{0} - Failed.".format(resource_id), e)
         tmp.close()
         return False
 
     # Extract copied file content
     try:
-        print("Extracting audio content")
+        print("{0} - Extracting audio content")
         audio_content = extract_audio(tmp.name, audio_record["fileFormat"])
-        print("Done")
+        print("{0} - Done".format(resource_id))
     except ValueError as e:
-        print("Failed.", e)
+        print("{0} - Failed.".format(resource_id), e)
         tmp.close()
         return False
 
@@ -246,14 +248,14 @@ def copy_records(ssh_client, resource_id, transcript_record, audio_record):
 
     # Write extracted file content
     try:
-        print("Writing extracted audio file content to {0}/{1}.wav".format(dst_path, resource_id))
+        print("{0} - Writing extracted audio file content to {1}/{2}.wav".format(resource_id, dst_path, resource_id))
         soundfile.write("{0}/{1}.wav".format(dst_path, resource_id), audio_content, 16000)
-        print("Done")
+        print("{0} - Done".format(resource_id))
     except IOError as e:
-        print("Failed.", e)
+        print("{0} - Failed.".format(resource_id), e)
         return False
 
-    print("Done")
+    print("{0} - Done".format(resource_id))
 
     return True
 
@@ -270,9 +272,12 @@ def copy_resources(ssh_client, resources_list, max_workers):
         for future in concurrent.futures.as_completed(futures):
             resource_id = futures[future]
             try:
-                print("Resource {0}, records copied: {1}".format(resource_id, future.result()))
+                if future.result():
+                    print("{0} - Records copied".format(resource_id))
+                else:
+                    print("{0} - Records NOT copied".format(resource_id))
             except Exception as e:
-                print("An error occurred while copying resources.", e)
+                print("{0} - An error occurred while copying resources.", e)
 
         # el
         # if num_audio_records > 1 and num_transcript_records == 1:
