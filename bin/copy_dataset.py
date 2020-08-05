@@ -152,6 +152,7 @@ def copy_records(ssh_client, resource_id, transcript_records, audio_records):
     record = transcript_records[0]
 
     # Copy transcript
+    print("Copying transcript")
 
     # Validate file on remote location
     try:
@@ -195,10 +196,13 @@ def copy_records(ssh_client, resource_id, transcript_records, audio_records):
         print("Failed.", e)
         return False
 
+    print("Done")
+
     # Aggregate list of audio records
     record = audio_records[0]
 
     # Copy audio
+    print("Copying audio track")
 
     # Validate file on remote location
     try:
@@ -241,6 +245,8 @@ def copy_records(ssh_client, resource_id, transcript_records, audio_records):
         print("Failed.", e)
         return False
 
+    print("Done")
+
     return True
 
 
@@ -257,7 +263,7 @@ def copy_resources(ssh_client, resources_list, max_workers):
             try:
                 print("Records copied: {0}".format(future.result()))
             except Exception as e:
-                print("An error occurred {0}".format(e))
+                print("An error occurred while copying resources.", e)
 
         # el
         # if num_audio_records > 1 and num_transcript_records == 1:
@@ -285,7 +291,9 @@ def main():
     db_conn = create_db_connection(args.mongo_host, args.mongo_user, args.mongo_pass, args.mongo_db, "SCRAM-SHA-256")
 
     # retrieve list of files to copy
+    print("Retrieving resources list")
     resources_list = get_resources_list(db_conn, args.mongo_db)
+    print("Obtained {0} resources".format(len(resources_list)))
 
     # close database connection
     db_conn.close()
