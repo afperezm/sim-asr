@@ -289,7 +289,7 @@ def copy_resources(ssh_client, resources_list, max_workers):
                 else:
                     print("{0} - Records NOT copied".format(resource_id))
             except Exception as e:
-                print("{0} - An error occurred while copying resources.", e)
+                print("{0} - An error occurred while copying resources.".format(resource_id), e)
 
         # el
         # if num_audio_records > 1 and num_transcript_records == 1:
