@@ -281,6 +281,46 @@ def copy_resources(ssh_client, resources_list, max_workers):
         #     print(resource_id)
         #     print(audio_records)
         #     print(transcript_records)
+        #     any_none_orig_names = functools.reduce(operator.or_,
+        #                                            list(map(lambda r: r['originalName'] is None, audio_records)))
+        #     audio_records_sorted_1 = sorted(audio_records,
+        #                                     key=lambda r: True if any_none_orig_names else r['originalName'])
+        #     audio_records_sorted_2 = sorted(audio_records, key=lambda r: r['ident'])
+        #     print("Consistent sorting: {0}".format(audio_records_sorted_1 == audio_records_sorted_2))
+        #     file_format = audio_records[0]['fileFormat']
+        #     all_same_format = functools.reduce(operator.and_,
+        #                                        list(map(lambda r: r['fileFormat'] == file_format, audio_records)))
+        #     print("All same format: {0}".format(all_same_format))
+        # el
+        # if num_transcript_records > 1 and num_audio_records == 1:
+        #     # Relatively simple case: one audio and many transcriptions (choose best transcription format or merge?)
+        #     print(resource_id)
+        #     print(audio_records)
+        #     # print(transcript_records)
+        #     file_format = transcript_records[0]['fileFormat']
+        #     all_formats_equal = functools.reduce(operator.and_, list(
+        #         map(lambda r: r['fileFormat'] == file_format, transcript_records)))
+        #     # print("All formats equal: {0}".format(all_formats_equal))
+        #     # original_name = transcript_records[0]['originalName']
+        #     # all_original_names_equal = functools.reduce(operator.and_, list(
+        #     #     map(lambda r: r['originalName'] == original_name, transcript_records)))
+        #     # print("All original names equal: {0}".format(all_original_names_equal))
+        #     # if all_formats_equal and all_original_names_equal:
+        #     #     # pick anyone
+        #     #     num_sorted_audio_records += 1
+        #     #     # Compute and compare md5 signatures
+        #     #     md5_signatures = [compute_signature(ssh_client, record) for record in transcript_records]
+        #     #     all_signatures_equal = all(md5_signature == md5_signatures[0] for md5_signature in md5_signatures)
+        #     #     # print(md5_signatures)
+        #     #     print("All signatures equal: {0}".format(all_signatures_equal))
+        #     # el
+        #     # if not all_formats_equal and num_transcript_records == 2:
+        #         # pick html if any
+        #         # print(num_transcript_records)
+        #         # print((list(map(lambda r: r['fileFormat'], transcript_records))))
+        #     # else:
+        #     # if not all_formats_equal and num_transcript_records > 2:
+        #     #     print(transcript_records)
 
 
 def main():
