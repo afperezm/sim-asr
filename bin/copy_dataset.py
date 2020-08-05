@@ -268,9 +268,9 @@ def copy_resources(ssh_client, resources_list, max_workers):
     os.makedirs(dst_path, exist_ok=True)
 
     with concurrent.futures.ThreadPoolExecutor(max_workers=max_workers) as executor:
-        futures = []
-        for resource in resources_list:
-            futures.append(executor.submit(copy_records_with_rollback, ssh_client=ssh_client, resource=resource))
+        futures = {
+            executor.submit(copy_records_with_rollback, ssh_client=ssh_client, resource=resource): resource['_id'] for
+            resource in resources_list}
         for future in concurrent.futures.as_completed(futures):
             try:
                 print("Records copied: {0}".format(future.result()))
