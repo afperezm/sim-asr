@@ -272,8 +272,9 @@ def copy_resources(ssh_client, resources_list, max_workers):
             executor.submit(copy_records_with_rollback, ssh_client=ssh_client, resource=resource): resource['_id'] for
             resource in resources_list}
         for future in concurrent.futures.as_completed(futures):
+            resource_id = futures[future]
             try:
-                print("Records copied: {0}".format(future.result()))
+                print("Resource {0}, records copied: {1}".format(resource_id, future.result()))
             except Exception as e:
                 print("An error occurred while copying resources.", e)
 
