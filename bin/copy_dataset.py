@@ -169,7 +169,7 @@ def copy_records(ssh_client, resource_id, transcript_record, audio_record):
     audio_exists = os.path.isfile("{0}/{1}.wav".format(dst_path, resource_id))
 
     if transcript_exists and audio_exists:
-        print("{0} - Transcript and audio files already copied")
+        print("{0} - Transcript and audio files already copied".format(resource_id))
         return True
 
     sftp_client = ssh_client.open_sftp()
