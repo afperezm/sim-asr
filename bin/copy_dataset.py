@@ -248,7 +248,7 @@ def copy_records(ssh_client, resource_id, transcript_record, audio_record):
 
     # Extract copied file content
     try:
-        print("{0} - Extracting audio content")
+        print("{0} - Extracting audio content".format(resource_id))
         audio_content = extract_audio(tmp.name, audio_record["fileFormat"])
         print("{0} - Done".format(resource_id))
     except ValueError as e:
