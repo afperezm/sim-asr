@@ -1,3 +1,4 @@
+from fs.sshfs import SSHFS
 from pymongo import MongoClient
 import argparse
 import concurrent.futures
@@ -66,6 +67,15 @@ def create_ssh_connection(hostname, username, key_filename, key_password=None):
     ssh_client.connect(hostname=hostname, username=username, pkey=private_key, timeout=10)
 
     return ssh_client
+
+
+def create_ssh_filesystem(hostname, username, key_filename, key_password=None):
+    """Creates a filesystem object over SSH using Paramiko."""
+
+    private_key = paramiko.RSAKey.from_private_key_file(key_filename, key_password)
+    ssh_fs = SSHFS(hostname, user=username, pkey=private_key)
+
+    return ssh_fs
 
 
 def validate_file(file_name, sftp_client):
