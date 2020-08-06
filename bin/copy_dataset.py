@@ -330,7 +330,7 @@ def main():
     parser.add_argument("--ssh_user", type=str, help="SSH username", required=True)
     parser.add_argument("--ssh_key_file", type=str, help="Path to SSH key file", required=True)
     parser.add_argument("--ssh_key_pass", type=str, help="SSH key password", required=False)
-    parser.add_argument("--num_workers", type=int, help="Number of workers", required=False, default=4)
+    parser.add_argument("--num_workers", type=int, help="Number of workers", required=False, default=1)
 
     args = parser.parse_args()
 
