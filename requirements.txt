@@ -1,9 +1,7 @@
 docx2txt==0.8
 fs.sshfs==0.12.3
 html2text==2020.1.16
-librosa==0.8.0
 paramiko==2.7.1
 pdftotext==2.1.4
 pymongo==3.9.0
-SoundFile==0.10.3.post1
 textract==1.6.3
