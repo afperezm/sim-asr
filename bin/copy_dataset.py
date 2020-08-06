@@ -168,7 +168,7 @@ def copy_records(ssh_client, resource_id, transcript_record, audio_record):
 
     # Validate file on remote location
     try:
-        print("{0} - Verifying transcript file {1}".format(resource_id, transcript_record["filename"].replace(loc_path, src_path)))
+        print("{0} - Verifying transcript file".format(resource_id))
         validate_file(transcript_record["filename"].replace(loc_path, src_path), sftp_client)
         print("{0} - Verifying transcript file - Done".format(resource_id))
     except OSError as e:
