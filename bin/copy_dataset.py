@@ -2,16 +2,15 @@ import threading
 
 from fs.sshfs import SSHFS
 from pymongo import MongoClient
+from subprocess import check_call, CalledProcessError
 import argparse
 import concurrent.futures
 import docx2txt
 import html2text
 import json
-import librosa
 import os
 import paramiko
 import pdftotext
-import soundfile
 import tempfile
 import textract
 
@@ -120,16 +119,6 @@ def extract_text(file_name, file_format):
         raise ValueError("Empty content")
 
     return content_txt
-
-
-def extract_audio(file_name, file_format):
-    """Extract and return audio file content."""
-    if file_format not in ["aac", "m4a", "mp3", "mp4", "wav", "wma"]:
-        raise ValueError("Invalid file format {0}", file_format)
-
-    content, _ = librosa.load(file_name, sr=16000, mono=True)
-
-    return content
 
 
 def copy_records_with_rollback(ssh_client, resource):
@@ -246,26 +235,18 @@ def copy_records(ssh_client, resource_id, transcript_record, audio_record):
         tmp.close()
         return False
 
-    # Extract copied file content
+    # Convert copied audio file
     try:
-        print("{0} - Extracting audio content".format(resource_id))
-        audio_content = extract_audio(tmp.name, audio_record["fileFormat"])
-        print("{0} - Extracting audio content - Done".format(resource_id))
-    except ValueError as e:
-        print("{0} - Extracting audio content - Failed.".format(resource_id), e)
+        print("{0} - Converting copied audio".format(resource_id))
+        check_call(["ffmpeg", "-y", "-i", "{0}".format(tmp.name), "-acodec", "pcm_s16le", "-ac", "1", "-ar", "16000",
+                    "{0}/{1}.wav".format(dst_path, resource_id)])
+        print("{0} - Converting copied audio - Done".format(resource_id))
+    except CalledProcessError as e:
+        print("{0} - Converting copied audio - Failed.".format(resource_id), e)
         tmp.close()
         return False
 
     tmp.close()
-
-    # Write extracted file content
-    try:
-        print("{0} - Writing extracted audio file".format(resource_id))
-        soundfile.write("{0}/{1}.wav".format(dst_path, resource_id), audio_content, 16000)
-        print("{0} - Writing extracted audio file - Done".format(resource_id))
-    except IOError as e:
-        print("{0} - Writing extracted audio file - Failed.".format(resource_id), e)
-        return False
 
     print("{0} - Copying audio - Done".format(resource_id))
 
