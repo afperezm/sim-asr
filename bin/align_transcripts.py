@@ -43,6 +43,17 @@ def compute_transcript_headings(transcript_files):
                                        "  ", contents_replaced, flags=re.IGNORECASE)
             contents_replaced = re.sub(r"\s*Nombre(s)?\stranscriptor(a|es)?:?\s?(\s\w+)+\s{2}",
                                        "  ", contents_replaced, flags=re.IGNORECASE)
+            # Custom replacements for expressions that could not be captured otherwise without messing things up
+            contents_replaced = re.sub(r"\s*Nombre\stranscriptora:\s{3}"
+                                       r"Juliana\sRobles\s\(00:00-0:30:24\)\s{2}"
+                                       r"Esteban\sZapata\s\(0:30:24 -0:47:00\)\s{2}"
+                                       r"Ivonne\sEspitia\s\(0:47:00 – 1:04:00\)\s{2}"
+                                       r"Isabel\sGil\s\(1:04:00 -2:00:00\)\s{2}"
+                                       r"Juliana\sMateus\s\(2:00:00-2:40:00\)",
+                                       "  ", contents_replaced)
+            contents_replaced = re.sub(r"\s*Código\stranscriptora:\s{3}03\s{2}06\s{2}04\s{2}05\s{2}02",
+                                       "  ", contents_replaced)
+            # End of custom replacements
             contents_replaced = re.sub(r"\s*\**Código\s?(de)?\s?(del)?\s?transcriptor(a|es)?:?\**\s+\d{0,3}\s?\**\s{2}",
                                        "  ", contents_replaced, flags=re.IGNORECASE)
             contents_replaced = re.sub(r"\s*\**Fecha\s?final\s?de\s?(la)?\s?transcripción:?\**\s*"
@@ -72,7 +83,7 @@ def compute_transcript_headings(transcript_files):
             contents_replaced = re.sub(r"^\s*Entrevistado:\sTEST", "  ", contents_replaced)
             contents_replaced = re.sub(r"^\s*Testimoniante:\sTEST", "  ", contents_replaced)
             contents_replaced = re.sub(r"^(\s*Interlocutora?\sdesconocid[oa]:\sX[12])+", "  ", contents_replaced)
-            contents_replaced = re.sub(r"^(\s*Entrevistador(a)?\s\(ENT[12]?\):\s?(\s\w+)*\s{2})+", "  ",
+            contents_replaced = re.sub(r"^(\s*Entrevistador(a)?\s\(ENT[12]?\):?\s?(\s\w+)*\s{2})+", "  ",
                                        contents_replaced, flags=re.IGNORECASE)
             contents_replaced = re.sub(r"^\s*Testimoniante\s\(TEST\):\s?(\s\w+)*\.?\s{2}", "  ",
                                        contents_replaced, flags=re.IGNORECASE)
@@ -101,10 +112,11 @@ def compute_transcript_headings(transcript_files):
                                        "  ", contents_replaced)
             contents_replaced = re.sub(r"^\s*Información\sincluida:\s[\[{]INC[\]\}]", "  ", contents_replaced)
             contents_replaced = re.sub(r"^\s*Transliteración:\s\[TRA\]", "  ", contents_replaced)
-            contents_replaced = re.sub(r"^\s*Lenguaje\sno\sverbal\s\(risa\so\sllanto\):\s\[LNV\]\s*\**",
+            contents_replaced = re.sub(r"^\s*Lenguaje\sno\sverbal\s\(risa\so\sllanto\):\s\[LNV\]",
                                        "  ", contents_replaced)
             contents_replaced = re.sub(r"^\s*\[PAUSA:\s?(\d{1,2}:?\s?)*\s?-\s?(\d{1,2}:?)*\]", "  ", contents_replaced)
             contents_replaced = re.sub(r"^\s*\[CORTE:?\s?(\d{1,2}:?)*\]", "  ", contents_replaced)
+            contents_replaced = re.sub(r"^\s*\*{3}\s{2}", "  ", contents_replaced)
             # Custom first block
             contents_replaced = re.sub(r"^\s+Entrevistas", "  ", contents_replaced)
             contents_replaced = re.sub(r"^\s*Investigación\spara\sel\sesclarecimiento\sde\sla\sverdad\s"
@@ -319,7 +331,6 @@ def compute_transcript_headings(transcript_files):
             result = pattern.search(contents_replaced)
             if result is None\
                     or result.group(1) == 'Entrevistada'\
-                    or result.group(1) == 'transcriptora'\
                     or result.group(1) == 'dije'\
                     or result.group(1) == 'dice'\
                     or result.group(1) == 'Dijo':
