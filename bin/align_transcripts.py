@@ -34,40 +34,64 @@ def compute_transcript_headings(transcript_files):
                                        r"https://sim3?\.comisiondelaverdad\.co/expedientes/public/transmitir/\d{5}"
                                        r"\**\s{2}",
                                        "  ", contents_replaced, flags=re.IGNORECASE)
+            # Top block
+            contents_replaced = re.sub(r"^\s*\**(Transcripción)?\s?entrevista(número)?:?"
+                                       r"(\s?\(#\d{3,4}\))?\s?\d{3}\s?-\s?\w{2}\s?-\s?\d{3,5}\**\s?\**",
+                                       "  ", contents_replaced, flags=re.IGNORECASE)
+            # Top block
+            contents_replaced = re.sub(r"^\s*"
+                                       r"\**"
+                                       r"("
+                                       r"(\s([/\-|])?\s?)|"
+                                       r"(\d{3}[-–]\w{2}[-–]\d{5})|"
+                                       r"(\d{1,2}:\d{2}\s[apAP][mM])|"
+                                       r"(\d{2}[-/]\d{2}[-/]\d{4})"
+                                       r")+"
+                                       r"(\s|\*)*\s{2}",
+                                       "  ", contents_replaced)
+            contents_replaced = re.sub(r"^\s*\[Ficha\s?(Corta)?\]?:?([^\]]+)\]",
+                                       "  ", contents_replaced, flags=re.IGNORECASE)
+            contents_replaced = re.sub(r"^\s*\**\s*\[(Lectura\sde)?\s*consent?it?miento(\sinformado)?([^\]]+)\]\.?\**",
+                                       "  ", contents_replaced, flags=re.IGNORECASE)
+            contents_replaced = re.sub(r"^\s*Transcripción:((\s\w+)+|(\s\d+))\.?\s{2}", "  ", contents_replaced)
+            contents_replaced = re.sub(r"^\s*Inicio\sde\sentrevista:\s(\d{1,2}’{1,2}:?)+\s{2}", "  ", contents_replaced)
+            # The following expression repeats twice on interview 393-VI-00021 the full content repeats twice
+            contents_replaced = re.sub(r"^\s*\**Transcriptor:\s\d{3}(\s|\*)*\s{2}",
+                                       "  ", contents_replaced, flags=re.IGNORECASE)
+            contents_replaced = re.sub(r"^\s*\**Tiempo:\s(\d{2}:?)+\**",
+                                       "  ", contents_replaced, flags=re.IGNORECASE)
             # First block (metadata)
-            contents_replaced = re.sub(r"\**Código\s?de\s?la\s?entrevista:?\**\s+\d{2,3}\**\s*-\w{2}-\d{3,5}\s?\**"
-                                       r"(_\(\d{3}\))?"
+            contents_replaced = re.sub(r"^\s*\**Código\s?de\s?la\s?entrevista:?\**\s+\d{2,3}\**\s*-\w{2}-\d{3,5}\s?\**"
+                                       r"(_?\(\d{3,4}\)?)?"
                                        r"(___5d273a5e31c62)?",
                                        "  ", contents_replaced, flags=re.IGNORECASE)
-            contents_replaced = re.sub(r"\**Código\s?(de)?\s?(del)?\s?entrevistador:?\**\s*(\d{2,3})?\s?\**",
+            contents_replaced = re.sub(r"^\s*\**Código\s?(de)?\s?(del)?\s?entrevistador:?\**\s*(\d{2,3})?\s?\**",
                                        "  ", contents_replaced, flags=re.IGNORECASE)
-            contents_replaced = re.sub(r"\s*Nombre(s)?\stranscriptor(a|es)?:?\s?(\s\w+)+\s{2}",
+            contents_replaced = re.sub(r"^\s*Nombre(s)?\stranscriptor(a|es)?:?\s?(\s\w+)+\s{2}",
                                        "  ", contents_replaced, flags=re.IGNORECASE)
             # Custom replacements for expressions that could not be captured otherwise without messing things up
-            contents_replaced = re.sub(r"\s*Nombre\stranscriptora:\s{3}"
+            contents_replaced = re.sub(r"^\s*Nombre\stranscriptora:\s{3}"
                                        r"Juliana\sRobles\s\(00:00-0:30:24\)\s{2}"
                                        r"Esteban\sZapata\s\(0:30:24 -0:47:00\)\s{2}"
                                        r"Ivonne\sEspitia\s\(0:47:00 – 1:04:00\)\s{2}"
                                        r"Isabel\sGil\s\(1:04:00 -2:00:00\)\s{2}"
                                        r"Juliana\sMateus\s\(2:00:00-2:40:00\)",
                                        "  ", contents_replaced)
-            contents_replaced = re.sub(r"\s*Código\stranscriptora:\s{3}03\s{2}06\s{2}04\s{2}05\s{2}02",
+            contents_replaced = re.sub(r"^\s*Código\stranscriptora:\s{3}03\s{2}06\s{2}04\s{2}05\s{2}02",
                                        "  ", contents_replaced)
             # End of custom replacements
-            contents_replaced = re.sub(r"\s*\**Código\s?(de)?\s?(del)?\s?transcriptor(a|es)?:?\**\s+\d{0,3}\s?\**\s{2}",
+            contents_replaced = re.sub(r"^\s*\**Código\s?(de)?\s?(del)?\s?transcriptor(a|es)?:?\**"
+                                       r"\s+\d{0,3}\s?\**\s{2}",
                                        "  ", contents_replaced, flags=re.IGNORECASE)
-            contents_replaced = re.sub(r"\s*\**Fecha\s?final\s?de\s?(la)?\s?transcripción:?\**\s*"
-                                       r"((\d{1,2})?\s*\**((\s*de\s*)|/|-)(\w+|\d{2})((\s*de\s*)|/|-|\s)?(\d{4})?)?"
+            contents_replaced = re.sub(r"^\s*\**Fecha\s?final\s?de\s?(la)?\s?transcripción:?\**\s*"
+                                       r"((\d{1,2})?\s*\**((\s*de\s*)|/|-)(\w+|\d{2})((\s*de\s*)|/|-|\s)?(\d{2,4})?)?"
                                        r"(\s\**)?",
                                        "  ", contents_replaced, flags=re.IGNORECASE)
-            contents_replaced = re.sub(r"\s*\**Duración\s?(total)?\s?(del)?\s?(de)?\s?(la)?\s?(audio|entrevista)s?:?\s?"
+            contents_replaced = re.sub(r"^\s*\**"
+                                       r"Duración\s?(total)?\s?(del)?\s?(de)?\s?(la)?\s?(audio|entrevista)s?:?\s?"
                                        r"\**"
                                        r"(\s*(((\d{1,2}’{0,2}”?)|(\**)):?)+\s*((min\.)|(minutos))?)+"
                                        r"\s*\**",
-                                       "  ", contents_replaced, flags=re.IGNORECASE)
-            # Top block
-            contents_replaced = re.sub(r"^\s*\**(Transcripción)?\s?entrevista(número)?:?"
-                                       r"(\s?\(#\d{3,4}\))?\s?\d{3}\s?-\s?\w{2}\s?-\s?\d{3,5}\**\s?\**",
                                        "  ", contents_replaced, flags=re.IGNORECASE)
             # Top block
             contents_replaced = re.sub(r"^\s*Transcripción\sentrevista:(\s\w+)+\.?\s{2}",
@@ -201,28 +225,6 @@ def compute_transcript_headings(transcript_files):
             # Top block
             contents_replaced = re.sub(r"^\s*\**Lectura\sy\srepuesta\sdel\sconsentimiento\sinformado\s\(.*\)\**",
                                        "  ", contents_replaced)
-            # Top block
-            contents_replaced = re.sub(r"^\s*"
-                                       r"\**"
-                                       r"("
-                                       r"(\s([/\-|])?\s?)|"
-                                       r"(\d{3}[-–]\w{2}[-–]\d{5})|"
-                                       r"(\d{1,2}:\d{2}\s[apAP][mM])|"
-                                       r"(\d{2}[-/]\d{2}[-/]\d{4})"
-                                       r")+"
-                                       r"(\s|\*)*\s{2}",
-                                       "  ", contents_replaced)
-            contents_replaced = re.sub(r"^\s*\[Ficha\s?(Corta)?\]?:?([^\]]+)\]",
-                                       "  ", contents_replaced, flags=re.IGNORECASE)
-            contents_replaced = re.sub(r"^\s*\**\s*\[(Lectura\sde)?\s*consent?it?miento(\sinformado)?([^\]]+)\]\.?\**",
-                                       "  ", contents_replaced, flags=re.IGNORECASE)
-            contents_replaced = re.sub(r"^\s*Transcripción:((\s\w+)+|(\s\d+))\.?\s{2}", "  ", contents_replaced)
-            contents_replaced = re.sub(r"^\s*Inicio\sde\sentrevista:\s(\d{1,2}’{1,2}:?)+\s{2}", "  ", contents_replaced)
-            # The following expression repeats twice on interview 393-VI-00021 the full content repeats twice
-            contents_replaced = re.sub(r"^\s*\**Transcriptor:\s\d{3}(\s|\*)*\s{2}",
-                                       "  ", contents_replaced, flags=re.IGNORECASE)
-            contents_replaced = re.sub(r"^\s*\**Tiempo:\s(\d{2}:?)+\**",
-                                       "  ", contents_replaced, flags=re.IGNORECASE)
             # Top block
             contents_replaced = re.sub(r"^\s*\**\s*_?"
                                        r"INICIO\s?(TRANSCRIPCIÓN)?:?\s*"
