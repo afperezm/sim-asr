@@ -241,8 +241,6 @@ def compute_transcript_headings(transcript_files):
             contents_replaced = re.sub(r"^Explicación\sdel\strabajo\srealizado\spor\sla\sComisión\sde\sla\sVerdad\s"
                                        r"y\selconsentimiento\sinformado\s([^\]]+)\]", "  ", contents_replaced)
             contents_replaced = re.sub(r"^\s*\**\d{1,2}:\d{2}\s?(PM)?m?\**", "  ", contents_replaced)
-            # Actor tag fix
-            contents_replaced = re.sub(r"^ENT\.", "ENT:", contents_replaced)
             # Top block
             contents_replaced = re.sub(r"^\s*TEST\s1:\sMujer\.", "  ", contents_replaced)
             contents_replaced = re.sub(r"^\s*TEST\s2:\sHombre\.", "  ", contents_replaced)
@@ -253,6 +251,7 @@ def compute_transcript_headings(transcript_files):
             contents_replaced = re.sub(r"^\s*Mv\s:\sEntrevistador\sNodo\s2", "  ", contents_replaced)
             contents_replaced = re.sub(r"^\s*Me\s:\sEntrevistada", "  ", contents_replaced)
             # Custom replacements for non-generalizable expressions
+            contents_replaced = re.sub(r"^ENT\.", "ENT:", contents_replaced)
             contents_replaced = re.sub(r"^\[Información\spersonal\s-\sconsentimiento\sinformado\]([^\]]+)\]",
                                        "  ", contents_replaced)
             contents_replaced = re.sub(r"^19 6:00 pm 8:30 pm 25/11/2019 2:00 pm 4 pm 28-11-2019 2 pm - 6:30 pm",
