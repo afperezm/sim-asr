@@ -1,3 +1,4 @@
+import argparse
 import glob
 import operator
 import pprint
@@ -7,6 +8,7 @@ import re
 def compute_transcript_headings(transcript_files):
     pattern = re.compile(r"^.*?\s*?(\**-?\[?\w+(\s\(\w*\))?\]?\s?[12]?\**\s?):")
     matches = {}
+    no_matches = []
     for transcript_file in transcript_files:
         with open(transcript_file) as f:
             contents = f.read()
@@ -330,30 +332,37 @@ def compute_transcript_headings(transcript_files):
                                        "Santiago de Chile, en el FASIC. "
                                        "El tema, testimonio.", contents_replaced)
             result = pattern.search(contents_replaced)
-            if result is None\
-                    or result.group(1) == 'Entrevistada'\
-                    or result.group(1) == 'dije'\
-                    or result.group(1) == 'dice'\
-                    or result.group(1) == 'Dijo':
+            if result is None:
                 print("***{0}***".format(transcript_file))
                 print("No match")
-            elif result is not None and (result.group(1) == 'testimonios' or result.group(1) == 'Actividad'):
+                no_matches.append(transcript_file)
+            elif result is not None and (result.group(1) == 'Entrevistada'
+                                         or result.group(1) == 'dije'
+                                         or result.group(1) == 'dice'
+                                         or result.group(1) == 'Dijo'):
+                no_matches.append(transcript_file)
+            elif result is not None and (result.group(1) == 'testimonios' or
+                                         result.group(1) == 'Actividad'):
                 print("***{0}***".format(transcript_file))
                 print("Cannot be used")
             else:
                 if result.group(1) not in matches.keys():
                     matches[result.group(1)] = []
                 matches[result.group(1)].append(transcript_file)
-    return matches
+    return matches, no_matches
 
 
 def main():
-    transcript_files = glob.glob('*.txt')
-    transcript_files = ["043-VI-00025.txt"]
-    matches = compute_transcript_headings(transcript_files)
-    matches.keys()
+    parser = argparse.ArgumentParser(description="Regex-fueled transcripts parser")
+    parser.add_argument("--in_dir", type=str, help="Input data directory, where copied dataset is located", required=True)
+    parser.add_argument("--out_dir", type=str, help="Output data directory, where to copy parsed transcripts", required=True)
+
+    args = parser.parse_args()
+
+    transcript_files = glob.glob("{0}/*.txt".format(args.in_dir))
+    matches, _ = compute_transcript_headings(transcript_files)
+
     pprint.pprint(sorted({key: len(matches[key]) for key in matches}.items(), key=operator.itemgetter(1)))
-    # print("Files to check manually: {0}".format(len(transcript_files) - len(matches['ENT'])))
 
 
 if __name__ == '__main__':
