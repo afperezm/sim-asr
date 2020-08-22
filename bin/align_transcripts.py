@@ -6,9 +6,10 @@ import re
 
 
 def compute_transcript_headings(transcript_files):
-    pattern = re.compile(r"^.*?\s*?(\**-?\[?\w+(\s\(\w*\))?\]?\s?[12]?\**\s?):")
+    pattern = re.compile(r"^(.*?)\s*?(\**-?\[?\w+(\s\(\w*\))?\]?\s?[12]?\**\s?):")
     matches = {}
     no_matches = []
+    intros = {}
     for transcript_file in transcript_files:
         with open(transcript_file) as f:
             contents = f.read()
@@ -336,20 +337,23 @@ def compute_transcript_headings(transcript_files):
                 print("***{0}***".format(transcript_file))
                 print("No match")
                 no_matches.append(transcript_file)
-            elif result is not None and (result.group(1) == 'Entrevistada'
-                                         or result.group(1) == 'dije'
-                                         or result.group(1) == 'dice'
-                                         or result.group(1) == 'Dijo'):
+            elif result is not None and (result.group(2) == 'Entrevistada'
+                                         or result.group(2) == 'dije'
+                                         or result.group(2) == 'dice'
+                                         or result.group(2) == 'Dijo'):
                 no_matches.append(transcript_file)
-            elif result is not None and (result.group(1) == 'testimonios' or
-                                         result.group(1) == 'Actividad'):
+            elif result is not None and (result.group(2) == 'testimonios' or
+                                         result.group(2) == 'Actividad'):
                 print("***{0}***".format(transcript_file))
                 print("Cannot be used")
             else:
-                if result.group(1) not in matches.keys():
-                    matches[result.group(1)] = []
-                matches[result.group(1)].append(transcript_file)
-    return matches, no_matches
+                if result.group(1) not in intros.keys():
+                    intros[result.group(1)] = []
+                intros[result.group(1)].append(transcript_file)
+                if result.group(2) not in matches.keys():
+                    matches[result.group(2)] = []
+                matches[result.group(2)].append(transcript_file)
+    return matches, intros
 
 
 def main():
@@ -360,7 +364,7 @@ def main():
     args = parser.parse_args()
 
     transcript_files = glob.glob("{0}/*.txt".format(args.in_dir))
-    matches, _ = compute_transcript_headings(transcript_files)
+    matches, intros = compute_transcript_headings(transcript_files)
 
     pprint.pprint(sorted({key: len(matches[key]) for key in matches}.items(), key=operator.itemgetter(1)))
 
