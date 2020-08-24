@@ -349,6 +349,46 @@ def compute_transcript_headings(transcript_files):
                                        "S: Voy a tomar el testimonio a Manuela Duque Álvarez, hoy 30 de julio en "
                                        "Santiago de Chile, en el FASIC. "
                                        "El tema, testimonio.", contents_replaced)
+            contents_replaced = re.sub(r"^ENTBuenos días, Doña Ana Graciela\.",
+                                       "ENT: Buenos días, Doña Ana Graciela.",
+                                       contents_replaced)
+            contents_replaced = re.sub(r"^Entonces en este momento nos encontramos con la señora Amparo",
+                                       "ENT: Entonces en este momento nos encontramos con la señora Amparo",
+                                       contents_replaced)
+            contents_replaced = re.sub(r"^TEST\. Eso fue en el mandato de Laureano Gomez",
+                                       "TEST: Eso fue en el mandato de Laureano Gomez",
+                                       contents_replaced)
+            contents_replaced = re.sub(r"^\s*9 de noviembre de 2019 estamoscon",
+                                       "ENT: 9 de noviembre de 2019 estamoscon",
+                                       contents_replaced)
+            contents_replaced = re.sub(r"^\s*Siendo las 11 y diez de la mañana",
+                                       "ENT: Siendo las 11 y diez de la mañana",
+                                       contents_replaced)
+            contents_replaced = re.sub(r"^\s*En este momento siendo las 10 y 55 de la mañana",
+                                       "ENT: En este momento siendo las 10 y 55 de la mañana",
+                                       contents_replaced)
+            contents_replaced = re.sub(r"^\s*Buenos días, nos encontramos con el señor Eustaquio Cárdenas Díaz",
+                                       "ENT: Buenos días, nos encontramos con el señor Eustaquio Cárdenas Flores",
+                                       contents_replaced)
+            contents_replaced = re.sub(r"^\s*ENT Bueno muchas gracias, primero que todo por acceder",
+                                       "ENT: Bueno muchas gracias, primero que todo por acceder",
+                                       contents_replaced)
+            contents_replaced = re.sub(r"^\s*Listo, entonces buenas tardes hoy 12 de septiembre",
+                                       "ENT: Listo, entonces buenas tardes hoy 12 de septiembre",
+                                       contents_replaced)
+            contents_replaced = re.sub(r"^\s*Municipio de San Vicente de Chucurí, con la señora Olga Diaz Rueda\.",
+                                       "ENT: Entonces muy buenos días mi nombres Audrey Robayo Sanchez y me encuentro "
+                                       "en el municipio de San Vicente de Chucurí, con la señora Hilda Diaz Rueda.",
+                                       contents_replaced)
+            contents_replaced = re.sub(r"^\s*Entonces, nos encontramos en Puerto Concordia Meta",
+                                       "ENT: Listo.  "
+                                       "TEST: Uhm ya.  "
+                                       "ENT: Entonces, nos encontramos en Puerto Concordia Meta",
+                                       contents_replaced)
+            contents_replaced = re.sub(r"^\s*Para que quede en la grabación hoy es",
+                                       "TEST: [PAUSA: 00:00-00:35] Okay.  "
+                                       "ENT: Vale, gracias. Entonces pues para que quede en la grabación hoy es",
+                                       contents_replaced)
             result = pattern.search(contents_replaced)
             if result is None:
                 print("***{0}***".format(transcript_file))
