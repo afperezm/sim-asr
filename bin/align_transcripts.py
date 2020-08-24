@@ -25,13 +25,16 @@ def compute_transcript_headings(transcript_files):
                                        r"and Ctrl\+J to insert the current timestamp\.",
                                        "  ", contents_replaced, flags=re.IGNORECASE)
             # Top block
-            contents_replaced = re.sub(r"^\**\[?"
+            contents_replaced = re.sub(r"^\s*\**\[?"
                                        r"(\d{3}-\w{2}-\d{3,5}\s\d{3}-\w{2}-\d{3,5}_\s\(\d{5}\)\s_)?"
-                                       r"Audio(\sde\sla\sentrevista)?:?\s?"
+                                       r"(\d{3}-\w{2}-\d{5}_\(\d{5}\)_)?"
+                                       r"Audio(\s?de\sla\s?entrevista)?:?\s?"
                                        r"(\s\(#\d{3,4}\)\s)?"
                                        r"(\d{3}-\w{2}-\d{3,5})?"
                                        r"((-|_|\s)?\(\d{3,5}\)(([\s_]\w+)+)?(\.wav)?(\s\(cifrado\))?)?"
-                                       r":?\]?\.?\**\s{1,2}",
+                                       r"(_\(\*{2}\s\*{2}\d{5}\s\))?"
+                                       r"(\.(wav)?(mp3)?\s\(cifrado\))?"
+                                       r":?\]?\.?\s*\**\s{1,2}",
                                        "  ", contents_replaced, flags=re.IGNORECASE)
             contents_replaced = re.sub(r"^\s*"
                                        r"https://sim3?\.comisiondelaverdad\.co/expedientes/public/transmitir/\d{5}"
@@ -43,14 +46,22 @@ def compute_transcript_headings(transcript_files):
                                        "  ", contents_replaced, flags=re.IGNORECASE)
             # Top block
             contents_replaced = re.sub(r"^\s*"
+                                       r"("
+                                       r"(\*{4}\s{2})?"
                                        r"\**"
                                        r"("
+                                       r"(\(#\d{4}\))|"
                                        r"(\s([/\-|])?\s?)|"
-                                       r"(\d{3}[-–]\w{2}[-–]\d{5})|"
+                                       r"(\d{3}\s?[ -–]\s?\w{2}\s?[ -–]\s?\d{4,6})|"
+                                       r"(\d{3}-\d{5})|"
                                        r"(\d{1,2}:\d{2}\s[apAP][mM])|"
-                                       r"(\d{2}[-/]\d{2}[-/]\d{4})"
+                                       r"(\d{2}[-/]\d{2}[-/]\d{4})|"
+                                       r"(_?\s?\(?\d{4,5}\s?\)?)|"
+                                       r"(-TF-\d{3})"
                                        r")+"
-                                       r"(\s|\*|_)*\s{2}",
+                                       r"(\s+\*{2}\s+\*{2})*"
+                                       r"(\s|\*|_)*\.?\s{2}"
+                                       r"){1,2}",
                                        "  ", contents_replaced)
             contents_replaced = re.sub(r"^\s*\[Ficha\s?(Corta)?\]?:?([^\]]+)\]",
                                        "  ", contents_replaced, flags=re.IGNORECASE)
