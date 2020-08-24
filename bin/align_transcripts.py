@@ -275,6 +275,23 @@ def compute_transcript_headings(transcript_files):
                                        "  ", contents_replaced)
             contents_replaced = re.sub(r"\[Consentimiento\sinformado:\s00\.00:00\s-\s00:08:00\]",
                                        "  ", contents_replaced)
+            contents_replaced = re.sub(r"^\s*[_*]+\s{2}", "   ", contents_replaced)
+            contents_replaced = re.sub(r"^Ingresa tu transcripción aquí\.{3}", "   ", contents_replaced)
+            contents_replaced = re.sub(r"^María\ses\sla\sTEST1", "   ", contents_replaced)
+            contents_replaced = re.sub(r"^\s*Bolívar\ses\sel\sTEST2", "   ", contents_replaced)
+            contents_replaced = re.sub(r"^\s*Nieta\ses\sel\sTEST3", "   ", contents_replaced)
+            contents_replaced = re.sub(r"^\s*TRANSCRIPCION\sDE\sENTREVISTA\sCODIGO\sTRANSCRIPCIÓN\s423-VII-00424",
+                                       "   ", contents_replaced)
+            contents_replaced = re.sub(r"^ENTREVISTA\s68", "   ", contents_replaced)
+            contents_replaced = re.sub(r"^ENTREVISTA\s{4}67", "   ", contents_replaced)
+            contents_replaced = re.sub(r"^ENTEVISTA\s220-VI-00047", "   ", contents_replaced)
+            contents_replaced = re.sub(r"^TEST\s\(JuanBautista\sCaicedo\)\s{2}X1\s\(Yolanda\sRegalado\)",
+                                       "   ", contents_replaced)
+            contents_replaced = re.sub(r"^Bogotá\s27\sde\senero\sde\s2020\s{2}"
+                                       r"\*\*Entrevista\srealizada\sa\sla\sseñora\sFlor\sAlba\sDonato\sBarrios\s"
+                                       r"CC39\.548\.628\*\*\s{2}"
+                                       r"Entrevista\sNo\.\s347-VI-00004",
+                                       "   ", contents_replaced)
             # Fixes for wrong transcriptions
             contents_replaced = re.sub(r"^\s*\[(ENT|TEST)\]", "[ENT]:", contents_replaced)
             contents_replaced = re.sub(r"^Yo\sa\sel\ses\sno\slo\stengo,\scon\susted",
