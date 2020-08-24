@@ -30,7 +30,7 @@ def compute_transcript_headings(transcript_files):
                                        r"Audio(\sde\sla\sentrevista)?:?\s?"
                                        r"(\s\(#\d{3,4}\)\s)?"
                                        r"(\d{3}-\w{2}-\d{3,5})?"
-                                       r"((-|_|\s)?\(\d{3,5}\)(([\s_]\w+)+)?(\.wav)?)?"
+                                       r"((-|_|\s)?\(\d{3,5}\)(([\s_]\w+)+)?(\.wav)?(\s\(cifrado\))?)?"
                                        r":?\]?\.?\**\s{1,2}",
                                        "  ", contents_replaced, flags=re.IGNORECASE)
             contents_replaced = re.sub(r"^\s*"
@@ -39,7 +39,7 @@ def compute_transcript_headings(transcript_files):
                                        "  ", contents_replaced, flags=re.IGNORECASE)
             # Top block
             contents_replaced = re.sub(r"^\s*\**(Transcripción)?\s?entrevista(número)?:?"
-                                       r"(\s?\(#\d{3,4}\))?\s?\d{3}\s?-\s?\w{2}\s?-\s?\d{3,5}\**\s?\**",
+                                       r"(\s?\(#\d{3,4}\))?\s?\d{3}\s?-\s?\w{2}\s?-\s?\d{3,6}\s*\**\s*\**",
                                        "  ", contents_replaced, flags=re.IGNORECASE)
             # Top block
             contents_replaced = re.sub(r"^\s*"
@@ -50,7 +50,7 @@ def compute_transcript_headings(transcript_files):
                                        r"(\d{1,2}:\d{2}\s[apAP][mM])|"
                                        r"(\d{2}[-/]\d{2}[-/]\d{4})"
                                        r")+"
-                                       r"(\s|\*)*\s{2}",
+                                       r"(\s|\*|_)*\s{2}",
                                        "  ", contents_replaced)
             contents_replaced = re.sub(r"^\s*\[Ficha\s?(Corta)?\]?:?([^\]]+)\]",
                                        "  ", contents_replaced, flags=re.IGNORECASE)
@@ -239,7 +239,7 @@ def compute_transcript_headings(transcript_files):
             contents_replaced = re.sub(r"^\s*\[INAD([^\]]+)\]", "  ", contents_replaced)
             contents_replaced = re.sub(r"^\s*\[PAUSA([^\]]+)\]", "  ", contents_replaced, flags=re.IGNORECASE)
             contents_replaced = re.sub(r"^\s*\[SIL([^\]]+)\]", "  ", contents_replaced)
-            contents_replaced = re.sub(r"^\s*\[Datos:([^\]]+)\]", "  ", contents_replaced)
+            contents_replaced = re.sub(r"^\s*\[Datos:([^\]]+)\]\.?", "  ", contents_replaced)
             contents_replaced = re.sub(r"^\s*\[INC:([^\]]+)\]", "  ", contents_replaced)
             contents_replaced = re.sub(r"^Explicación\sdel\strabajo\srealizado\spor\sla\sComisión\sde\sla\sVerdad\s"
                                        r"y\selconsentimiento\sinformado\s([^\]]+)\]", "  ", contents_replaced)
