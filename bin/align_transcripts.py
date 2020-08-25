@@ -25,16 +25,23 @@ def compute_transcript_headings(transcript_files):
                                        r"and Ctrl\+J to insert the current timestamp\.",
                                        "  ", contents_replaced, flags=re.IGNORECASE)
             # Top block
-            contents_replaced = re.sub(r"^\s*\**\[?"
+            contents_replaced = re.sub(r"^\s*"
+                                       r"("
+                                       r"\**\[?"
                                        r"(\d{3}-\w{2}-\d{3,5}\s\d{3}-\w{2}-\d{3,5}_\s\(\d{5}\)\s_)?"
-                                       r"(\d{3}-\w{2}-\d{5}_\(\d{5}\)_)?"
+                                       r"(\d{3}-\w{2}-\d{5}_\s?\(\d{4,5}\)\s?_)?"
+                                       r"(\d{3}-\w{2}-\d{5}\s{2}\*{2})?"
                                        r"Audio(\s?de\sla\s?entrevista)?:?\s?"
                                        r"(\s\(#\d{3,4}\)\s)?"
-                                       r"(\d{3}-\w{2}-\d{3,5})?"
+                                       r"(\d{3}[\s\-_]\w{2}[\-_]\d{3,6})?"
+                                       r"([\-_]\(?\d{5}\)?)?"
                                        r"((-|_|\s)?\(\d{3,5}\)(([\s_]\w+)+)?(\.wav)?(\s\(cifrado\))?)?"
+                                       r"(_?\(\w+\s\w+\.wav\))?"
                                        r"(_\(\*{2}\s\*{2}\d{5}\s\))?"
                                        r"(\.(wav)?(mp3)?\s\(cifrado\))?"
-                                       r":?\]?\.?\s*\**\s{1,2}",
+                                       r":?\]?\.?[\s*]*"
+                                       r"){1,2}"
+                                       r"\s{1,2}",
                                        "  ", contents_replaced, flags=re.IGNORECASE)
             contents_replaced = re.sub(r"^\s*"
                                        r"https://sim3?\.comisiondelaverdad\.co/expedientes/public/transmitir/\d{5}"
@@ -50,14 +57,17 @@ def compute_transcript_headings(transcript_files):
                                        r"(\*{4}\s{2})?"
                                        r"\**"
                                        r"("
-                                       r"(\(#\d{4}\))|"
+                                       r"((\d{2})?\.?\(#\s?\d{4}\)\s?)|"
+                                       r"(Entrevista\s(audio)?\s?)|"
+                                       r"(ENT\s)|"
                                        r"(\s([/\-|])?\s?)|"
-                                       r"(\d{3}\s?[ -–]\s?\w{2}\s?[ -–]\s?\d{4,6})|"
+                                       r"(\d{2}\s{4})|"
+                                       r"(O?\d{2,3}\s?\d?\s?[ -–]\s?\w{2}\s?[ -–]\s?\d{3,6}\/?)|"
                                        r"(\d{3}-\d{5})|"
                                        r"(\d{1,2}:\d{2}\s[apAP][mM])|"
-                                       r"(\d{2}[-/]\d{2}[-/]\d{4})|"
-                                       r"(_?\s?\(?\d{4,5}\s?\)?)|"
-                                       r"(-TF-\d{3})"
+                                       r"(\d{1,2}[-/]\d{2}[-/]\d{4})|"
+                                       r"(_?\s?\(?\s?\d{4,5}\s?\)?)|"
+                                       r"(\s?\\?-(TF-)?\s?\d{3})"
                                        r")+"
                                        r"(\s+\*{2}\s+\*{2})*"
                                        r"(\s|\*|_)*\.?\s{2}"
@@ -280,22 +290,32 @@ def compute_transcript_headings(transcript_files):
             contents_replaced = re.sub(r"^\s*\*\*Lugar\sde\slos\sHechos\*\*\s:\sPuerto\sSiare,\sMapiripán,\sMeta\.",
                                        "  ", contents_replaced)
             contents_replaced = re.sub(r"^\s*\*\*Entrevista:\*\*\s23", "  ", contents_replaced)
+            contents_replaced = re.sub(r"^\s*\*\*Audio\s098-VI-00023-\(36584\)\*\*", "  ", contents_replaced)
             contents_replaced = re.sub(r"\[Consentimiento\sInformado:\s00:50\s–\s5:30\]",
                                        "  ", contents_replaced)
             contents_replaced = re.sub(r"\[Consentimiento\sInformado:\s00:39\s-\s8:36\]",
                                        "  ", contents_replaced)
             contents_replaced = re.sub(r"\[Consentimiento\sinformado:\s00\.00:00\s-\s00:08:00\]",
                                        "  ", contents_replaced)
-            contents_replaced = re.sub(r"^\s*[_*]+\s{2}", "   ", contents_replaced)
+            contents_replaced = re.sub(r"^\s*[ _*]+\s{2}", "   ", contents_replaced)
             contents_replaced = re.sub(r"^Ingresa tu transcripción aquí\.{3}", "   ", contents_replaced)
             contents_replaced = re.sub(r"^María\ses\sla\sTEST1", "   ", contents_replaced)
             contents_replaced = re.sub(r"^\s*Bolívar\ses\sel\sTEST2", "   ", contents_replaced)
             contents_replaced = re.sub(r"^\s*Nieta\ses\sel\sTEST3", "   ", contents_replaced)
             contents_replaced = re.sub(r"^\s*TRANSCRIPCION\sDE\sENTREVISTA\sCODIGO\sTRANSCRIPCIÓN\s423-VII-00424",
                                        "   ", contents_replaced)
-            contents_replaced = re.sub(r"^ENTREVISTA\s68", "   ", contents_replaced)
-            contents_replaced = re.sub(r"^ENTREVISTA\s{4}67", "   ", contents_replaced)
             contents_replaced = re.sub(r"^ENTEVISTA\s220-VI-00047", "   ", contents_replaced)
+            contents_replaced = re.sub(r"^Entrevista\s002", "   ", contents_replaced)
+            contents_replaced = re.sub(r"^Entrevista\s6", "   ", contents_replaced)
+            contents_replaced = re.sub(r"^Entrevista\s15", "   ", contents_replaced)
+            contents_replaced = re.sub(r"^ENTREVISTA\s51", "   ", contents_replaced)
+            contents_replaced = re.sub(r"^ENTREVISTA\s52\s{3}AUDIO\s191127_0067", "   ", contents_replaced)
+            contents_replaced = re.sub(r"^ENTREVISTA\s53\s{3}AUDIO\s191206_0069", "   ", contents_replaced)
+            contents_replaced = re.sub(r"^ENTREVISTA\s58\s{3}AUDIO", "   ", contents_replaced)
+            contents_replaced = re.sub(r"^ENTREVISTA\s66…", "   ", contents_replaced)
+            contents_replaced = re.sub(r"^ENTREVISTA\s{4}67", "   ", contents_replaced)
+            contents_replaced = re.sub(r"^ENTREVISTA\s68", "   ", contents_replaced)
+            contents_replaced = re.sub(r"^667", "   ", contents_replaced)
             contents_replaced = re.sub(r"^TEST\s\(JuanBautista\sCaicedo\)\s{2}X1\s\(Yolanda\sRegalado\)",
                                        "   ", contents_replaced)
             contents_replaced = re.sub(r"^Bogotá\s27\sde\senero\sde\s2020\s{2}"
@@ -303,6 +323,17 @@ def compute_transcript_headings(transcript_files):
                                        r"CC39\.548\.628\*\*\s{2}"
                                        r"Entrevista\sNo\.\s347-VI-00004",
                                        "   ", contents_replaced)
+            contents_replaced = re.sub(r"^2277-VI-00008", "   ", contents_replaced)
+            contents_replaced = re.sub(r"^\s*AUDIO\s070-VI-00001\s\(280\)", "   ", contents_replaced)
+            contents_replaced = re.sub(r"^\s*ENTREVISTA-\s036-VI-00060", "   ", contents_replaced)
+            contents_replaced = re.sub(r"^\[17min\]", "   ", contents_replaced)
+            contents_replaced = re.sub(r"^\s*Audio\s01", "   ", contents_replaced)
+            contents_replaced = re.sub(r"^\s*Audio\s045-VI-00001\(460\)", "   ", contents_replaced)
+            contents_replaced = re.sub(r"^\s*VI-00007", "   ", contents_replaced)
+            contents_replaced = re.sub(r"^\s*AUDIO\s191206_0069", "   ", contents_replaced)
+            contents_replaced = re.sub(r"^175-00025-18-11-2019-205min", "   ", contents_replaced)
+            contents_replaced = re.sub(r"^070\s-\s00053", "   ", contents_replaced)
+            contents_replaced = re.sub(r"^\.\s{2}", "   ", contents_replaced)
             # Fixes for wrong transcriptions
             contents_replaced = re.sub(r"^\s*\[(ENT|TEST)\]", "[ENT]:", contents_replaced)
             contents_replaced = re.sub(r"^Yo\sa\sel\ses\sno\slo\stengo,\scon\susted",
@@ -399,6 +430,15 @@ def compute_transcript_headings(transcript_files):
             contents_replaced = re.sub(r"^\s*Para que quede en la grabación hoy es",
                                        "TEST: [PAUSA: 00:00-00:35] Okay.  "
                                        "ENT: Vale, gracias. Entonces pues para que quede en la grabación hoy es",
+                                       contents_replaced)
+            contents_replaced = re.sub(r"^\s*\{ENT: Bueno estoy acá en Yondó",
+                                       "ENT: Bueno estoy acá en Yondó",
+                                       contents_replaced)
+            contents_replaced = re.sub(r"^\s*\{ENT: Bueno estoy acá en Yondó",
+                                       "ENT: Bueno estoy acá en Yondó",
+                                       contents_replaced)
+            contents_replaced = re.sub(r"^\s*\*{2}\sENT:\slisto,\sentonces,\strata\sde\shablar",
+                                       "ENT: listo, entonces, trata de hablar",
                                        contents_replaced)
             result = pattern.search(contents_replaced)
             if result is None:
