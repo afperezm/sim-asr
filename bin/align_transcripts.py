@@ -7,10 +7,23 @@ import re
 
 def compute_transcript_headings(transcript_files):
     pattern = re.compile(r"^(.*?)\s*?(\**-?\[?\w+(\s\(\w*\))?\]?\s?[12]?\**\s?):")
+    pattern_transcript = re.compile(r"^(\d{3}-\w{2}-\d{5})\.txt$")
     matches = {}
     no_matches = []
     intros = {}
     for transcript_file in transcript_files:
+        result = pattern_transcript.search(transcript_file)
+        if result is not None and (result.group(1) == '198-VI-00025' or
+                                   result.group(1) == '469-VI-00001' or
+                                   result.group(1) == '126-VI-00031' or
+                                   result.group(1) == '341-VI-00006'):
+            print("***{0}***".format(transcript_file))
+            print("Cannot be used since audio and transcript don't correspond")
+            continue
+        elif result is not None and result.group(1) == '149-VI-00001':
+            print("***{0}***".format(transcript_file))
+            print("Cannot be used since transcript is a pilot and not so accurate")
+            continue
         with open(transcript_file) as f:
             contents = f.read()
             contents_replaced = re.sub("\n", " ", contents)
