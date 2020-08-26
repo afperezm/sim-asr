@@ -8,9 +8,10 @@ import re
 def compute_transcript_headings(transcript_files):
     pattern = re.compile(r"^(.*?)\s*?(\**-?\[?\w+(\s\(\w*\))?\]?\s?[12]?\**\s?):")
     pattern_transcript = re.compile(r"^(\d{3}-\w{2}-\d{5})\.txt$")
-    matches = {}
-    no_matches = []
-    intros = {}
+    clean_intros = {}
+    clean_matches = {}
+    dirty_intros = {}
+    dirty_matches = {}
     for transcript_file in transcript_files:
         result = pattern_transcript.search(transcript_file)
         if result is not None and (result.group(1) == '198-VI-00025' or
@@ -526,15 +527,23 @@ def compute_transcript_headings(transcript_files):
             if result is None:
                 print("***{0}***".format(transcript_file))
                 print("No match")
-                no_matches.append(transcript_file)
             else:
-                if result.group(1) not in intros.keys():
-                    intros[result.group(1)] = []
-                intros[result.group(1)].append(transcript_file)
-                if result.group(2) not in matches.keys():
-                    matches[result.group(2)] = []
-                matches[result.group(2)].append(transcript_file)
-    return matches, intros
+                is_clean_match = contents_replaced == re.sub("\n", " ", contents)
+                if is_clean_match:
+                    if result.group(1) not in clean_intros.keys():
+                        clean_intros[result.group(1)] = []
+                    clean_intros[result.group(1)].append(transcript_file)
+                    if result.group(2) not in clean_matches.keys():
+                        clean_matches[result.group(2)] = []
+                    clean_matches[result.group(2)].append(transcript_file)
+                else:
+                    if result.group(1) not in dirty_intros.keys():
+                        dirty_intros[result.group(1)] = []
+                    dirty_intros[result.group(1)].append(transcript_file)
+                    if result.group(2) not in dirty_matches.keys():
+                        dirty_matches[result.group(2)] = []
+                    dirty_matches[result.group(2)].append(transcript_file)
+    return clean_matches, clean_intros, dirty_matches, dirty_intros
 
 
 def main():
@@ -547,10 +556,10 @@ def main():
     transcript_files = glob.glob("{0}/*.txt".format(args.in_dir))
     # transcript_files = "ddd-ww-ddddd.txt".split(" ")
     # transcript_files = ["{0}/{1}".format(args.in_dir, transcript_file) for transcript_file in transcript_files]
-    matches, intros = compute_transcript_headings(transcript_files)
+    intros_and_matches = compute_transcript_headings(transcript_files)
 
-    pprint.pprint(sorted({key: len(matches[key]) for key in matches}.items(), key=operator.itemgetter(1)))
-    pprint.pprint(sorted({key: len(intros[key]) for key in intros}.items(), key=operator.itemgetter(1)))
+    for elem in intros_and_matches:
+        pprint.pprint(sorted({key: len(elem[key]) for key in elem}.items(), key=operator.itemgetter(1)))
 
 
 if __name__ == '__main__':
