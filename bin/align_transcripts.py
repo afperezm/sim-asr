@@ -24,6 +24,13 @@ def compute_transcript_headings(transcript_files):
             print("***{0}***".format(transcript_file))
             print("Cannot be used since transcript is a pilot and not so accurate")
             continue
+        elif result is not None and (result.group(1) == '802-VI-00001' or
+                                     result.group(1) == '778-VI-00004' or
+                                     result.group(1) == '422-VI-00001' or
+                                     result.group(1) == '778-VI-00003'):
+            print("***{0}***".format(transcript_file))
+            print("Skipping since transcript is not annotated with actor tags")
+            continue
         with open(transcript_file) as f:
             contents = f.read()
             contents_replaced = re.sub("\n", " ", contents)
@@ -520,15 +527,6 @@ def compute_transcript_headings(transcript_files):
                 print("***{0}***".format(transcript_file))
                 print("No match")
                 no_matches.append(transcript_file)
-            elif result is not None and (result.group(2) == 'Entrevistada'
-                                         or result.group(2) == 'dije'
-                                         or result.group(2) == 'dice'
-                                         or result.group(2) == 'Dijo'):
-                no_matches.append(transcript_file)
-            elif result is not None and (result.group(2) == 'testimonios' or
-                                         result.group(2) == 'Actividad'):
-                print("***{0}***".format(transcript_file))
-                print("Cannot be used")
             else:
                 if result.group(1) not in intros.keys():
                     intros[result.group(1)] = []
