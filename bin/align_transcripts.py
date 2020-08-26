@@ -547,6 +547,8 @@ def main():
     args = parser.parse_args()
 
     transcript_files = glob.glob("{0}/*.txt".format(args.in_dir))
+    # transcript_files = "ddd-ww-ddddd.txt".split(" ")
+    # transcript_files = ["{0}/{1}".format(args.in_dir, transcript_file) for transcript_file in transcript_files]
     matches, intros = compute_transcript_headings(transcript_files)
 
     pprint.pprint(sorted({key: len(matches[key]) for key in matches}.items(), key=operator.itemgetter(1)))
