@@ -256,10 +256,6 @@ def compute_transcript_headings(transcript_files):
             contents_replaced = re.sub(r"^\s*TEST\s{2}Testimoniante", "  ", contents_replaced)
             contents_replaced = re.sub(r"^\s*X\s{2}Interlocutor\sdesconocido", "  ", contents_replaced)
             # Top block
-            contents_replaced = re.sub(r"^(\s*\[Lengua(indígena)?\sembera\skatío([^\]]+)\]"
-                                       r"(\sMartha\sCecilia\sDomicó\sDomicó)?)+",
-                                       "  ", contents_replaced)
-            # Top block
             contents_replaced = re.sub(r"^\s*\**Lectura\sy\srepuesta\sdel\sconsentimiento\sinformado\s\(.*\)\**",
                                        "  ", contents_replaced)
             # Top block
@@ -308,8 +304,6 @@ def compute_transcript_headings(transcript_files):
                                        "  ", contents_replaced)
             contents_replaced = re.sub(r"\[Consentimiento\sInformado:\s00:39\s-\s8:36\]",
                                        "  ", contents_replaced)
-            contents_replaced = re.sub(r"\[Consentimiento\sinformado:\s00\.00:00\s-\s00:08:00\]",
-                                       "  ", contents_replaced)
             contents_replaced = re.sub(r"^\s*[ _*]+\s{2}", "   ", contents_replaced)
             contents_replaced = re.sub(r"^Ingresa tu transcripción aquí\.{3}", "   ", contents_replaced)
             contents_replaced = re.sub(r"^María\ses\sla\sTEST1", "   ", contents_replaced)
@@ -347,6 +341,17 @@ def compute_transcript_headings(transcript_files):
             contents_replaced = re.sub(r"^175-00025-18-11-2019-205min", "   ", contents_replaced)
             contents_replaced = re.sub(r"^070\s-\s00053", "   ", contents_replaced)
             contents_replaced = re.sub(r"^\.\s{2}", "   ", contents_replaced)
+            contents_replaced = re.sub(r"^\s*\[No\spermite\spublicar\ssu\snombre\sen\sel\sinforme\sfinal\]",
+                                       "   ", contents_replaced)
+            contents_replaced = re.sub(r"^Bogotá\s19\sde\snoviembre\sde\s2020\s\s"
+                                       r"\*\*Entrevista\srealizada\sal\sSeñor\s"
+                                       r"Jesús\sAntonio\sCórdoba\sCC\s19057927\*\*\s\s"
+                                       r"Entrevista\sNo\.\s4419\s-347-VI-00002",
+                                       "  ", contents_replaced)
+            contents_replaced = re.sub(r"^\[El\saudio\sempieza\scuando\sya\sestaba\shablando\sel\sentrevistado\]",
+                                       "  ", contents_replaced)
+            contents_replaced = re.sub(r"^\[AUDIOARRANCA\sCORTADO\]", "  ", contents_replaced)
+            contents_replaced = re.sub(r"^\s*Mauricia\.", "  ", contents_replaced)
             # Fixes for wrong transcriptions
             contents_replaced = re.sub(r"^\s*\[(ENT|TEST)\]", "[ENT]:", contents_replaced)
             contents_replaced = re.sub(r"^Yo\sa\sel\ses\sno\slo\stengo,\scon\susted",
@@ -453,6 +458,63 @@ def compute_transcript_headings(transcript_files):
             contents_replaced = re.sub(r"^\s*\*{2}\sENT:\slisto,\sentonces,\strata\sde\shablar",
                                        "ENT: listo, entonces, trata de hablar",
                                        contents_replaced)
+            contents_replaced = re.sub(r"^Continuamos\s*ENT1:\sSe\scompró\ssu\smotorcito",
+                                       "ENT2: Continuamos.  "
+                                       "TEST: Bueno así como les cuento.  "
+                                       "ENT1: Se compró su motorcito.",
+                                       contents_replaced)
+            contents_replaced = re.sub(r"^Mire\sahí\sestá\sgrabando,\svuelva\sy\.{3}",
+                                       "X: Mire ahí está grabando, vuelva y...",
+                                       contents_replaced)
+            contents_replaced = re.sub(r"^Entrevista\sOsias\sQuejada\s{2}Realizada\sen\sSoacha\s"
+                                       r"\(comuna\scuatro,\sAltos\sde\sCazucá\)\s\s\s\s\s\s\s\sINT:",
+                                       "INT: [INICIO: 00:00:11] ",
+                                       contents_replaced)
+            contents_replaced = re.sub(r"^\s*\(Diligenciamiento\sde\sformatos\)\s{2}"
+                                       r"No\sautoriza\scolocar\sel\snombre\spara\sel\sinforme\sfinal\s{8}"
+                                       r"ENT:\slos\snombres\sno\sse\spublican\sen\sel\sinforme\sque\sva\sa\squedar\.",
+                                       "ENT: [INICIO: 00:02:38] Los nombres no se publican en el informe",
+                                       contents_replaced)
+            contents_replaced = re.sub(r"Explicación\sypresentación\sde\slas\stareas\sde\sla\scomisión\sde\sla\s"
+                                       r"verdad\sy\sel\sconsentimiento\sinformado\sy\sexplicación\ssobre\spormenores\s"
+                                       r"de\sla\sentrevista\sen\smodo\svirtual\s"
+                                       r"\[Consentimiento\sinformado:\s00\.00:00\s-\s00:08:00\]\.\s{2}"
+                                       r"ENT:\s",
+                                       "ENT: [INICIO: 00:07:58] ", contents_replaced)
+            contents_replaced = re.sub(r"^\s*Carlos\sLlanos\sDíazgranados\s{2}ENT:\s",
+                                       "ENT: [INICIO: 00:00:33] ", contents_replaced)
+            contents_replaced = re.sub(r"^Si\sme\sdices\sy\ste\straigo\salgo,\ste\svoy\sa\sponer\sal\slado\sdel\stodo\s"
+                                       r"lo\sque\snecesito\syo\.\s{4}TEST:\s",
+                                       "TEST: [INICIO: 00:00:12] ", contents_replaced)
+            contents_replaced = re.sub(r"^Piñalito\sVista\sHermosa,\sMeta\s18\sde\sjunio\sdel\s2019,\sinicio\s"
+                                       r"entrevista\s{10}ENT:\s",
+                                       "ENT: Piñalito Vista Hermosa, Meta 18 de junio del 2019, inicio entrevista. ",
+                                       contents_replaced)
+            contents_replaced = re.sub(r"^Buenas\stardes\.\sHoy\sestamos\sa\s11\sde\sjulio\sde\s2019",
+                                       "ENT: Buenas tardes. Hoy estamos a 11 de julio de 2019",
+                                       contents_replaced)
+            contents_replaced = re.sub(r"^\s*Buenas\stardes,\smi\snombre\ses\sAndrés\sRodrigo\sBuitrago\sFranco,\s"
+                                       r"pertenezco\sa\sLa Comisión de la Verdad",
+                                       "ENT: Buenas tardes, mi nombre es Andrés Rodrigo Buitrago Franco, "
+                                       "pertenezco a La Comisión de la Verdad",
+                                       contents_replaced)
+            contents_replaced = re.sub(r"^\s*Para\sefectos\sde\sregistro,\sse\sda\sinicio\sa\sla\sentrevista\sde\s"
+                                       r"carácter\sindividual",
+                                       "ENT: Para efectos de registro, se da inicio a la entrevista de "
+                                       "carácter individual",
+                                       contents_replaced)
+            contents_replaced = re.sub(r"^Bueno\sDoña\sFidelia", "ENT: Bueno Doña Fidelia", contents_replaced)
+            contents_replaced = re.sub(r"^(\s*\[Lengua(indígena)?\sembera\skatío([^\]]+)\]"
+                                       r"(\sMartha\sCecilia\sDomicó\sDomicó)?)+"
+                                       r"\s*Buenas\stardes\.{3}",
+                                       "TEST: [INICIO: 00:00:09] Buenas tardes...", contents_replaced)
+            contents_replaced = re.sub(r"^HABLADURÍAS\s*TEST:\s¿Entonces\shice\sbien\so\shice\smal?",
+                                       "TEST: [INICIO: 00:00:13] ¿Cierto entonces hice bien o hice mal?",
+                                       contents_replaced)
+            contents_replaced = re.sub(r"^\s*RUIDO\sEXTERIOR\s{2}"
+                                       r"TEST:\s\[INAD:\s00:00\s-\s00:10\]\slo\sconvierte\sen\senemigo",
+                                       "TEST: [INICIO: 00:00:08] Cuando ya a uno el estado lo convierte en enemigo",
+                                       contents_replaced)
             result = pattern.search(contents_replaced)
             if result is None:
                 print("***{0}***".format(transcript_file))
@@ -488,6 +550,7 @@ def main():
     matches, intros = compute_transcript_headings(transcript_files)
 
     pprint.pprint(sorted({key: len(matches[key]) for key in matches}.items(), key=operator.itemgetter(1)))
+    pprint.pprint(sorted({key: len(intros[key]) for key in intros}.items(), key=operator.itemgetter(1)))
 
 
 if __name__ == '__main__':
