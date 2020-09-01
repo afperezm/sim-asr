@@ -7,28 +7,28 @@ import re
 
 def compute_transcript_headings(transcript_files):
     pattern = re.compile(r"^(.*?)\s*?(\**-?\[?\w+(\s\(\w*\))?\]?\s?[12]?\**\s?):")
-    pattern_transcript = re.compile(r"^(\d{3}-\w{2}-\d{5})\.txt$")
+    pattern_transcript = re.compile(r"^(/.+/?)+(\d{3}-\w{2}-\d{5})\.txt$")
     clean_intros = {}
     clean_matches = {}
     dirty_intros = {}
     dirty_matches = {}
-    for transcript_file in transcript_files:
+    for transcript_file in sorted(transcript_files):
         result = pattern_transcript.search(transcript_file)
-        if result is not None and (result.group(1) == '198-VI-00025' or
-                                   result.group(1) == '469-VI-00001' or
-                                   result.group(1) == '126-VI-00031' or
-                                   result.group(1) == '341-VI-00006'):
+        if result is not None and (result.group(2) == '198-VI-00025' or
+                                   result.group(2) == '469-VI-00001' or
+                                   result.group(2) == '126-VI-00031' or
+                                   result.group(2) == '341-VI-00006'):
             print("***{0}***".format(transcript_file))
             print("Cannot be used since audio and transcript don't correspond")
             continue
-        elif result is not None and result.group(1) == '149-VI-00001':
+        elif result is not None and result.group(2) == '149-VI-00001':
             print("***{0}***".format(transcript_file))
             print("Cannot be used since transcript is a pilot and not so accurate")
             continue
-        elif result is not None and (result.group(1) == '802-VI-00001' or
-                                     result.group(1) == '778-VI-00004' or
-                                     result.group(1) == '422-VI-00001' or
-                                     result.group(1) == '778-VI-00003'):
+        elif result is not None and (result.group(2) == '802-VI-00001' or
+                                     result.group(2) == '778-VI-00004' or
+                                     result.group(2) == '422-VI-00001' or
+                                     result.group(2) == '778-VI-00003'):
             print("***{0}***".format(transcript_file))
             print("Skipping since transcript is not annotated with actor tags")
             continue
