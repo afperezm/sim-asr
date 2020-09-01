@@ -549,7 +549,6 @@ def compute_transcript_headings(transcript_files):
 def main():
     parser = argparse.ArgumentParser(description="Regex-fueled transcripts parser")
     parser.add_argument("--in_dir", type=str, help="Input data directory, where copied dataset is located", required=True)
-    parser.add_argument("--out_dir", type=str, help="Output data directory, where to copy parsed transcripts", required=True)
 
     args = parser.parse_args()
 
