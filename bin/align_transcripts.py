@@ -614,7 +614,7 @@ def main():
                         '160-VI-00049', '307-VI-00033']
 
     main_transcription_tags = [
-        # r"\[(INAD|DUD):?(\s?(\d{1,2}:?)+)+\]?\}?",
+        r"\[(INAD|DUD|INTERRUP):?(\s?(\d{1,2}:?)+)+\]?\}?",
         r"\[INTERRUP\}",
         r"\[de,\sde,\sde\}",
         # r"\[INTERRUP([^\]]+)\]",
@@ -729,11 +729,83 @@ def main():
         contents = re.sub(r"\[Plan\sde\sAtención\sAsistencia\sy\sReparación\sIntegral,",
                           "[Plan de Atención Asistencia y Reparación Integral],", contents)
         contents = re.sub(r"\[INT\[", "[INT]", contents)
-        contents = re.sub(r"\[Risas\[", "[Risas]", contents)
+        contents = re.sub(r"\[Risas\[", "[Risas]", contents, flags=re.IGNORECASE)
         contents = re.sub(r"Jorge\s40\s\[baja\sla\svoz", "Jorge 40 [baja la voz]", contents)
         contents = re.sub(r"\[Unidad para la Atención y Reparación Integral de las\nVíctimas?",
                           "[Unidad para la Atención y Reparación Integral de las\n Víctimas]?", contents)
         contents = re.sub(r"\[\ssúper\scomplicada\.", "[súper complicada].", contents)
+        contents = re.sub(r"\[INAD\[", "[INAD]", contents)
+        contents = re.sub(r"\[INAD:\s,", "[INAD:],", contents)
+        contents = re.sub(r"\[INC: Parques\nNacionales Naturales de Colombia\?",
+                          "[INC: Parques\nNacionales Naturales de Colombia]?", contents)
+        contents = re.sub(r"\[INAD:\n\nENT:\sDentro\sde\sla\scaja", "[INAD:]\n\nENT: Dentro de la caja.", contents)
+        contents = re.sub(r"INTERRUP\]\[", "[INTERRUP]", contents)
+        contents = re.sub(r"\[Ahhh\}", "[Ahhh]", contents)
+        contents = re.sub(r"\[INC:\sE\.S\.E\.\sHospital\sSan\nVicente\sde\sPaul,\s¿cierto\?",
+                          "[INC: E.S.E. Hospital San\nVicente de Paul], ¿cierto?", contents)
+        contents = re.sub(r"\[Diligenciamiento\sde\sfichas:\s00:20\s-\s00:55",
+                          "[Diligenciamiento de fichas: 00:20 - 00:55]", contents)
+        contents = re.sub(r"\[la\npaz\}", "[la\npaz]", contents)
+        contents = re.sub(r"\[INAD\}", "[INAD]", contents)
+        contents = re.sub(r"\[risa\}", "[risa]", contents)
+        contents = re.sub(r"\[INC:\sINSTITUTO\sNACIONAL\sDE\sVIVIENDA\sDE\sINTERÉS\sSOCIAL\sY\sREFORMA\sURBANA\)",
+                          "[INC: INSTITUTO NACIONAL DE VIVIENDA DE INTERÉS SOCIAL Y REFORMA URBANA]", contents)
+        contents = re.sub(r"\[DUD:\s¿Jaider\?\s27:20\s¿Heider\?", "[DUD: 27:20] Jaider", contents)
+        contents = re.sub(r"\[estuve\strabajando", "estuve trabajando", contents)
+        contents = re.sub(r"\[CONT: 11 y media de la noche", "[CONT:] 11 y media de la noche", contents)
+        contents = re.sub(r"\[eh\}", "[eh]", contents)
+        contents = re.sub(r"\[de lo\}", "{de lo}", contents)
+        contents = re.sub(r"\[audio:\s¿um\?", "[audio: ¿um?]", contents)
+        contents = re.sub(r"\[INC:\sUniversidad\sSurcolombiana\?", "[INC: Universidad Surcolombiana]?", contents)
+        contents = re.sub(r"\[pícara", "pícara", contents)
+        contents = re.sub(r"\[llanto\}", "[llanto]", contents)
+        contents = re.sub(r"\[DUD: cedió 03:44", "se dió", contents)
+        contents = re.sub(r"\[Ficha\sCorta:\s00:45\s03:29", "", contents)
+        contents = re.sub(r"\[CONT\n\nTEST:\sSí,\sseñor\.", "[CONT]\n\nTEST: Sí, señor.", contents)
+        contents = re.sub(r"\[INC:\sentonces\}", "[INC: entonces]", contents)
+        contents = re.sub(r"\[INTERRUPT\n\nENT:\s¿Cómo\ses\sque\sse\sllamaba\?",
+                          "[INTERRUPT]\n\nENT: ¿Cómo es que se llamaba?", contents)
+        contents = re.sub(r"\[INTERRUP]\n\nTEST:\sSi,\ses\sque\sLeonardo\sy\sel\sPadre\sEduardo\sDiaz",
+                          "[INTERRUP]\n\nTEST: Si, es que Leonardo y el Padre Eduardo Diaz", contents)
+        contents = re.sub(r"\[risas\+", "[risas]", contents)
+        contents = re.sub(r"\[INAD:\s09:53\s09:54\[", "[INAD: 09:53 09:54]", contents)
+        contents = re.sub(r"\[Llanto,", "[Llanto],", contents)
+        contents = re.sub(r"\[INAD:\sy\sla\shija\sestá\sen\sBogotá,",
+                          "[INAD:] y la hija está en Bogotá,", contents)
+        contents = re.sub(r"\[Datos\sPersonales:\s20:02\?", "[Datos Personales: 20:02]?", contents)
+        contents = re.sub(r"\[INC:\sÉL\sle\srespondió", "[INC:] Él le respondió", contents)
+        contents = re.sub(r"\[surniar\}", "[surniar]", contents)
+        contents = re.sub(r"\[Audio:\s¿mmmm\?", "[Audio:] ¿mmmm?", contents, flags=re.IGNORECASE)
+        contents = re.sub(r"\[Mmm, déjeme quieto", "Mmm, déjeme quieto", contents)
+        contents = re.sub(r"\[Análisis\nEstratégico\sB2\"", "[Análisis\nEstratégico B2]", contents)
+        contents = re.sub(r"si\susted\sve\sla\sgente\sde\nlos\scarros\.\.\.\s\[",
+                          "si usted ve la gente de\nlos carros...", contents)
+        contents = re.sub(r"Los\sparamilitares,\sla\sguerrilla\sno\.\.\.\[INTERRUP",
+                          "Los paramilitares, la guerrilla no...[INTERRUP]", contents)
+        contents = re.sub(r"organización\s\[INA\.", "organización [INAUD].", contents)
+        contents = re.sub(r"\[homosexuales,\slesbianas,\stravestis\)\?",
+                          "[homosexuales, lesbianas, travestis]?", contents)
+        contents = re.sub(r"\[INC:\sUnidad\sde\sAtención\nde\sVictimas\.",
+                          "[INC: Unidad de Atención\nde Victimas].", contents)
+        contents = re.sub(r"\[CORTE:43:30", "[CORTE:43:30]", contents)
+        contents = re.sub(r"\[Datos personales26:22 -26:39",
+                          "[Datos personales: 26:22-26:39]", contents)
+        contents = re.sub(r"\[Fuerzas\sArmadas\nRevolucionarias\sde\sColombia\?",
+                          "[Fuerzas Armadas\nRevolucionarias de Colombia]?", contents)
+        contents = re.sub(r"\[Porque no querían dejar rastro",
+                          "Porque no querían dejar rastro", contents)
+        contents = re.sub(r"\[INAP: 1:20:40 - 1:20:42", "[INAUD:1:20:40-1:20:42]", contents)
+        contents = re.sub(r"\[FICHA\s00:46-0", "[FICHA 00:46-0]", contents)
+        contents = re.sub(r"\[INTERRUp\n\nENT:\sSe\slo\sllevaba", "[INTERRUP]\n\nENT: Se lo llevaba", contents)
+        contents = re.sub(r"\[Continuación\saudio\spor\smódulo\sde\scapture",
+                          "[Continuación audio por módulo de capture]", contents)
+        contents = re.sub(r"\[INTERRUP\n\nTES:\sHubieron\s4\smuertos",
+                          "[INTERRUP]\n\nTES: Hubieron 4 muertos", contents)
+        contents = re.sub(r"ah’\[i", "ahí", contents)
+        contents = re.sub(r"\[INTERRUP\n\n\s\s\n\nTEST:\sUn\ssubsidio\sde\svivienda\.",
+                          "[INTERRUP]\n\n\n\nTEST: Un subsidio de vivienda.", contents)
+        contents = re.sub(r"toes\s\[INC:\sentonces", "toes [INC: entonces]", contents)
+        contents = re.sub(r"\[sorprendida¨", "[sorprendida]", contents)
 
         contents_replaced = re.sub(r"|".join(main_transcription_tags), "", contents)
 
