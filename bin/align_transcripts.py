@@ -635,7 +635,7 @@ def main():
 
     for transcript_file in sorted(transcript_files):
 
-        # print("Processing... {0}".format(transcript_file))
+        print("Processing... {0}".format(transcript_file))
 
         with open("{0}/{1}.txt".format(args.in_dir, transcript_file)) as f:
             contents = f.read()
@@ -846,7 +846,7 @@ def main():
         # with open("{0}/{1}.txt".format(args.out_dir, transcript_file), "wt") as file:
         #     file.write(contents_replaced)
 
-        # print("Done")
+        print("Done")
 
     # pprint.pprint(sorted({tag: actor_tags.count(tag) for tag in actor_tags}.items(), key=operator.itemgetter(1)))
 
