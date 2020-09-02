@@ -806,6 +806,17 @@ def main():
                           "[INTERRUP]\n\n\n\nTEST: Un subsidio de vivienda.", contents)
         contents = re.sub(r"toes\s\[INC:\sentonces", "toes [INC: entonces]", contents)
         contents = re.sub(r"\[sorprendida¨", "[sorprendida]", contents)
+        contents = re.sub(r"\[jumm\}", "[jumm]", contents)
+        contents = re.sub(r"\[DUD:\nautoridad\?\scarretera\?\s13:49",
+                          "[DUD:\nautoridad? carretera? 13:49]", contents)
+        contents = re.sub(r"\[INC:\shaya\}", "[INC: haya]", contents)
+        contents = re.sub(r"\[CONT:\sBueno,\sla\sguerrilla", "[CONT] Bueno, la guerrilla", contents)
+        contents = re.sub(r"\[audio:\s¿mm\?", "[audio: ¿mm?]", contents)
+        contents = re.sub(r"\[INTERRUP\n\nTEST:\sSi,\ses\sque\sLeonardo\sy\sel\sPadre\sEduardo\sDiaz",
+                          "[INTERRUP]\n\nTEST: Si, es que Leonardo y el Padre Eduardo Diaz", contents)
+        contents = re.sub(r"¡Ustedes\ssalían\shasta\sBarranca\s\[INC:\sBarrancabermeja!",
+                          "¡Ustedes salían hasta Barranca [INC: Barrancabermeja]!", contents)
+        contents = re.sub(r"ENT:\s¿Cuánto\s\[INTERRUP\?", "ENT: ¿Cuánto [INTERRUP]?", contents)
 
         contents_replaced = re.sub(r"|".join(main_transcription_tags), "", contents)
 
