@@ -615,8 +615,6 @@ def main():
 
     main_transcription_tags = [
         r"\[(INAD|DUD|INTERRUP):?(\s?(\d{1,2}:?)+)+\]?\}?",
-        r"\[INTERRUP\}",
-        r"\[de,\sde,\sde\}",
         # r"\[INTERRUP([^\]]+)\]",
         # r"\[CONT([^\]]+)\]",
         # r"\[INAD([^\]]+)\]",
@@ -640,75 +638,48 @@ def main():
         with open("{0}/{1}.txt".format(args.in_dir, transcript_file)) as f:
             contents = f.read()
 
-        if transcript_file == '266-VI-00011':
-            contents = re.sub(r"\[INTERRUP\n\n\s\s\n\nENT:\sUno\sde\sellos\.",
-                              "[INTERRUP]\n\nENT: Uno de ellos.", contents)
-        elif transcript_file == '216-VI-00001':
-            contents = re.sub(r"\[Departamento\sdel\sSur\sde\sColombia\?",
-                              "[Departamento del Sur de Colombia]", contents)
-        elif transcript_file == '266-VI-00009':
-            contents = re.sub(r"\[INTERRUP\}", "[INTERRUP]", contents)
-        elif transcript_file == '098-VI-00036':
-            contents = re.sub(r"\[INAD\n1:35:02\}", "[INAD\n1:35:02]", contents)
-        elif transcript_file == '175-VI-00027':
-            contents = re.sub(r"\[INAD: Los helenos", "[INAD:] Los helenos", contents)
-            contents = re.sub(r"\[INBAD:38:04", "[INBAD:38:04]", contents)
-        elif transcript_file == '229-VI-00023':
-            contents = re.sub(r"\[INBAD:38:04", "[INBAD:38:04]", contents)
-            contents = re.sub(r"\[Fondo\sde\sSolidaridad\scon\slos\nJueces\sColombianos\?",
-                              "[Fondo de Solidaridad con los\nJueces Colombianos]", contents)
-        elif transcript_file == '299-VI-00013':
-            contents = re.sub(r"\[INTERRUP\.", "[INTERRUP].", contents)
-        elif transcript_file == '112-VI-00009':
-            contents = re.sub(r"\[INTERRUP\n\n\s\s\n\nENT:\sAdicción", "[INTERRUP]\n\n\n\nENT: Adicción", contents)
-        elif transcript_file == '070-VI-00005':
-            contents = re.sub(r"\[Ismaelina", "Ismaelina", contents)
-        elif transcript_file == '159-VI-00010':
-            contents = re.sub(r"¿Cuántos\s\[cuántos\sson\sniños\?", "¿Cuántos cuántos son niños?", contents)
-        elif transcript_file == '248-VI-00006':
-            contents = re.sub(r"\[PAUSA:\s38:51-39:03\?", "[PAUSA: 38:51-39:03]", contents)
-        elif transcript_file == '043-VI-00005':
-            contents = re.sub(r"\[audio:\s¿mm\?\?", "[audio: ¿mm?]", contents)
-        elif transcript_file == '160-VI-00071':
-            contents = re.sub(r"\[INTERRUP\n\nENT:\sLo\sque\sle\sdecía\sÓscar",
-                              "[INTERRUP]\n\nENT: Lo que le decía Óscar", contents)
-        elif transcript_file == '173-VI-00026':
-            contents = re.sub(r"\[PAUSA\s18:40\s-\s18:50", "[PAUSA 18:40 - 18:50]", contents)
-        elif transcript_file == '301-VI-00001':
-            contents = re.sub(r"\[INC:\sAsociación\sde\sCabildos\sIndígenas\ndel\sValle\"",
-                              "[INC: Asociación de Cabildos Indígenas\ndel Valle]", contents)
-        elif transcript_file == '215-VI-00017':
-            contents = re.sub(r"\[que\}", "[que]", contents)
-        elif transcript_file == '130-VI-00006':
-            contents = re.sub(r"INTERRUP\[", "[INTERRUP]", contents)
-        elif transcript_file == '056-VI-00042':
-            contents = re.sub(r"\[susurro\}", "[susurro]", contents)
-        elif transcript_file == '098-VI-00022':
-            contents = re.sub(r"\[INTERRUP\n\n\s\s\n\nENT:\s¿Medico,\senfermeros\so\?",
-                              "[INTERRUP]\n\n\n\nENT: ¿Medico, enfermeros o?", contents)
-        elif transcript_file == '100-VI-00033':
-            contents = re.sub(r"\[INTERRUP\.", "[INTERRUP].", contents)
-        elif transcript_file == '199-VI-00023':
-            contents = re.sub(r"\[susurra\}", "[susurro]", contents)
-        elif transcript_file == '227-VI-00025':
-            contents = re.sub(r"vuelticas\s\[\sde\scomida",
-                              "vuelticas de comida", contents)
-        elif transcript_file == '071-VI-00001':
-            contents = re.sub(r"\[PAUSA\s00:28\s00:56", "[PAUSA 00:28 00:56]", contents)
-        elif transcript_file == '228-VI-00062':
-            contents = re.sub(r"\[FORMATO\n00:37:34\s-\s00:", "[FORMATO\n00:37:34 - 00:]", contents)
-        elif transcript_file == '215-VI-00026':
-            contents = re.sub(r"\[y\[", "[y]", contents)
-        elif transcript_file == '036-VI-00042':
-            contents = re.sub(r"\[INC:\sAutodefensas\sUnidas\sde\nColombia\.",
-                              "[INC: Autodefensas Unidas de\nColombia]", contents)
-        elif transcript_file == '176-VI-00004':
-            contents = re.sub(r"\[Fuerzas\sArmadas\sRevolucionarias\sde\sColombia\?",
-                              "[Fuerzas Armadas Revolucionarias de Colombia]", contents)
-        elif transcript_file == '079-VI-00017':
-            contents = re.sub(r"\[INAD:\s13:26-13:28\[", "[INAD: 13:26-13:28]", contents)
-        elif transcript_file == '238-VI-00041':
-            contents = re.sub(r"\[INAUD:\s00:22:41\?", "[INAUD: 00:22:41]", contents)
+        contents = re.sub(r"\[de,\sde,\sde\}", "[de, de, de]", contents)
+        contents = re.sub(r"\[INTERRUP\n\n\s\s\n\nENT:\sUno\sde\sellos\.", "[INTERRUP]\n\nENT: Uno de ellos.", contents)
+        contents = re.sub(r"\[Departamento\sdel\sSur\sde\sColombia\?", "[Departamento del Sur de Colombia]?", contents)
+        contents = re.sub(r"\[INTERRUP\}", "[INTERRUP]", contents)
+        contents = re.sub(r"\[INAD\n1:35:02\}", "[INAD\n1:35:02]", contents)
+        contents = re.sub(r"\[INAD: Los helenos", "[INAD:] Los helenos", contents)
+        contents = re.sub(r"\[INBAD:38:04", "[INBAD:38:04]", contents)
+        contents = re.sub(r"\[INBAD:38:04", "[INBAD:38:04]", contents)
+        contents = re.sub(r"\[Fondo\sde\sSolidaridad\scon\slos\nJueces\sColombianos\?",
+                          "[Fondo de Solidaridad con los\nJueces Colombianos]", contents)
+        contents = re.sub(r"presentó\s\[INTERRUP\]\.", "presentó [INTERRUP].", contents)
+        contents = re.sub(r"\[INTERRUP\n\n\s\s\n\nENT:\sAdicción", "[INTERRUP]\n\n\n\nENT: Adicción", contents)
+        contents = re.sub(r"\[Ismaelina", "Ismaelina", contents)
+        contents = re.sub(r"¿Cuántos\s\[cuántos\sson\sniños\?", "¿Cuántos cuántos son niños?", contents)
+        contents = re.sub(r"\[PAUSA:\s38:51-39:03\?", "[PAUSA: 38:51-39:03]", contents)
+        contents = re.sub(r"\[audio:\s¿mm\?\?", "[audio: ¿mm?]", contents)
+        contents = re.sub(r"\[INTERRUP\n\nENT:\sLo\sque\sle\sdecía\sÓscar",
+                          "[INTERRUP]\n\nENT: Lo que le decía Óscar", contents)
+        contents = re.sub(r"\[PAUSA\s18:40\s-\s18:50", "[PAUSA 18:40 - 18:50]", contents)
+        contents = re.sub(r"\[INC:\sAsociación\sde\sCabildos\sIndígenas\ndel\sValle\"",
+                          "[INC: Asociación de Cabildos Indígenas\ndel Valle]", contents)
+        contents = re.sub(r"\[que\}", "[que]", contents)
+        contents = re.sub(r"TEST:\sBueno,\scuando,\svuelvo\sy\sle\srepito,\sellos\sincursionan\.\.\.\n\nINTERRUP\[",
+                          "TEST: Bueno, cuando, vuelvo y le repito, ellos incursionan...\n\n[INTERRUP]", contents)
+        contents = re.sub(r"\[susurro\}", "[susurro]", contents)
+        contents = re.sub(r"\[INTERRUP\n\n\s\s\n\nENT:\s¿Medico,\senfermeros\so\?",
+                          "[INTERRUP]\n\n\n\nENT: ¿Medico, enfermeros o?", contents)
+        contents = re.sub(r"Allá\scerca\sde\sCartagena,\sen\suna\s\[INTERRUP\.",
+                          "Allá cerca de Cartagena, en una [INTERRUP].", contents)
+        contents = re.sub(r"\[susurra\}", "[susurro]", contents)
+        contents = re.sub(r"vuelticas\s\[\sde\scomida", "vuelticas de comida", contents)
+        contents = re.sub(r"\[PAUSA\s00:28\s00:56", "[PAUSA 00:28 00:56]", contents)
+        contents = re.sub(r"\[FORMATO\n00:37:34\s-\s00:", "[FORMATO\n00:37:34 - 00:]", contents)
+        contents = re.sub(r"\[y\[", "[y]", contents)
+        contents = re.sub(r"TEST:\sen\sese\sentonces\sera\sde\sla\sAutodefensa\s"
+                          r"\[INC:\sAutodefensas\sUnidas\sde\nColombia\.",
+                          "TEST: en ese entonces era de la Autodefensa "
+                          "[INC: Autodefensas Unidas de\nColombia].", contents)
+        contents = re.sub(r"\[Fuerzas\sArmadas\sRevolucionarias\sde\sColombia\?",
+                          "[Fuerzas Armadas Revolucionarias de Colombia]?", contents)
+        contents = re.sub(r"\[INAD:\s13:26-13:28\[", "[INAD: 13:26-13:28]", contents)
+        contents = re.sub(r"\[INAUD:\s00:22:41\?", "[INAUD: 00:22:41]", contents)
         contents = re.sub(r"\[INTERRUP\[", "[INTERRUP]", contents)
         contents = re.sub(r"\[CONT\[", "[CONT]", contents)
         contents = re.sub(r"\[INC:\nComunidad\sde\sPaz\sde\sSan\sJosé\sde\sApartadó\?",
