@@ -854,9 +854,11 @@ def main():
         print("Done")
 
     # pprint.pprint(sorted({tag: actor_tags.count(tag) for tag in actor_tags}.items(), key=operator.itemgetter(1)))
+    # pprint.pprint(sorted({tag: transcription_tags.count(tag) for tag in transcription_tags}.items(),
+    #                      key=operator.itemgetter(1)))
 
-    pprint.pprint(sorted({tag: len(actor_tags[tag]) for tag in actor_tags}.items(),
-                         key=operator.itemgetter(1)))
+    pprint.pprint(actor_tags)
+    pprint.pprint(sorted({tag: len(actor_tags[tag]) for tag in actor_tags}.items(), key=operator.itemgetter(1)))
 
 
 if __name__ == '__main__':
