@@ -816,8 +816,8 @@ def main():
         content_actor_tags = list(
             set(re.findall(r"\n\n(\**-?\[?\w+\s?\(?\w*\)?\]?\s?#?[12]?\**\s?):", "\n\n" + contents_replaced)))
 
-        print("Actor tags: {0}".format(" ".join(content_actor_tags)))
-        print("Transcription tags: {0}".format(" ".join(content_transcription_tags)))
+        # print("Actor tags: {0}".format(" ".join(content_actor_tags)))
+        # print("Transcription tags: {0}".format(" ".join(content_transcription_tags)))
 
         x = actor_tags
         y = {tag: [transcript_file] for tag in content_actor_tags}
