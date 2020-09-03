@@ -614,11 +614,11 @@ def main():
                         '160-VI-00049', '307-VI-00033']
 
     actor_tags = {}
-    transcription_tags = []
+    trans_tags = {}
 
     for transcript_file in sorted(transcript_files):
 
-        print("Processing... {0}".format(transcript_file))
+        # print("Processing... {0}".format(transcript_file))
 
         with open("{0}/{1}.txt".format(args.in_dir, transcript_file)) as f:
             contents = f.read()
@@ -869,68 +869,134 @@ def main():
                           "[CONT: 06:16]", contents)
         contents = re.sub(r"\[PAUSA\]1:41:05\]",
                           "[PAUSA: 1:41:05]", contents)
+        contents = re.sub(r"TEST:1:",
+                          "TEST1:", contents)
+        contents = re.sub(r"\[DUD\n\n33:22\sQuintines\]",
+                          "[DUD: 33:22] Quintines", contents)
+        contents = re.sub(r"T:EST:",
+                          "TEST:", contents)
+        contents = re.sub(r"TES:T",
+                          "TEST:", contents)
+        contents = re.sub(r"\[Ficha\scorta:\s1:14:38\s1:23:24",
+                          "[Ficha corta: 1:14:38-1:23:24]", contents)
 
+        # Custom replacements for non-generalizable expressions
         contents = re.sub(r"\n\**(\d{1,2}:?)+\**\s*\n",
                           "", contents)
-
         contents = re.sub(r"Quick tips:\n\n"
                           r"\\-\s_Ctrl\+I_\sadds\s_italic_\sformatting\sand\s"
                           r"\*\*Ctrl\+B\*\*\sadds\s\*\*bold\*\* formatting\.\n\n"
                           r"\\-\sPress\sESC\sto\splay/pause,\sand\s"
                           r"Ctrl\+J\sto\sinsert\sthe\scurrent\stimestamp\.\n\n$",
                           "", contents)
+        contents = re.sub(r"Tiempo\stranscrito:\s23:37",
+                          "", contents)
+        contents = re.sub(r"En:\s1:35m:12s\.",
+                          "", contents)
 
-        contents_replaced = re.sub(r"\[(INAD|DUD|INTERRUP):?(\s?(\d{1,2}:?)+)+\]?\}?",
-                                   "", contents)
+        standard_actor_tags = [
+            r'ENT:',
+            r'TEST:',
+            r'X:',
+            r'ACOMP:',
+            r'ASIST:',
+            r'TRD:'
+        ]
 
-        content_transcription_tags = re.findall(r"\[[\w\s]+[^\]]+\]", contents_replaced)
-        contents_replaced = re.sub(r"\[[\w\s]+[^\]]+\]", "", contents_replaced)
-        content_actor_tags = list(
-            set(re.findall(r"\n\n(\**-?\[?\w+\s?\(?\w*\)?\]?\s?#?[12]?\**\s?):", "\n\n" + contents_replaced)))
+        standard_trans_tags = [
+            r'\[INTERRUP:?(\s?(\d{1,2}:?)+-?)*\]',
+            r'\[CONT:?(\s?(\d{1,2}:?)+-?)*\]',
+            r'\[INAU?D:?\n{0,2}(\s?(\d{1,2}:?)+-?)*\]',
+            r'\[DUDA?U?:?\n{0,2}(\s?(\d{1,2}:?)+-?)*\]',
+            r'\[CORTE:?(\s?(\d{1,2}:?)+-?)*\]',
+            r'\[PAUSA:?(\s?(\d{1,2}:?)+-?)*\]',
+            r'\[INC:?(\s\w+)+]',
+            r'\[Datos sensibles:?(\s?(\d{1,2}:?)+-?)*\]',
+            r'\[Datos personales:?(\s?(\d{1,2}:?)+-?)*\]',
+            r'\[Consentimiento Informado:?(\s?(\d{1,2}:?)+-?)*\]'
+        ]
 
-        # print("Actor tags: {0}".format(" ".join(content_actor_tags)))
-        # print("Transcription tags: {0}".format(" ".join(content_transcription_tags)))
+        contents_cleared = contents
 
-        x = actor_tags
+        # Replace standard transcript tags
+        for trans_tag in standard_trans_tags:
+            contents_cleared = re.sub(trans_tag, "", contents_cleared)
+
+        # Replace predictable variations of standard tags
+        contents_cleared = re.sub(r"\[(INAD|DUD|INTERRUP):?(\s?(\d{1,2}:?)+-?)*",
+                                  "", contents_cleared)
+
+        # Find non-standard transcript tags
+        content_trans_tags = re.findall(r"\[[\w\s]+[^\]]+\]", contents_cleared)
+        content_trans_tags = list(set(content_trans_tags))
+
+        # Replace non-standard transcript tags (needs to be done before finding actor tags)
+        contents_cleared = re.sub(r"\[[\w\s]+[^\]]+\]",
+                                  "", contents_cleared)
+
+        # Replace standard actor tags
+        for actor_tag in standard_actor_tags:
+            contents_cleared = re.sub(actor_tag, "", contents_cleared)
+
+        # Find non-standard actor tags
+        content_actor_tags = re.findall(r"\n\n(\**-?\[?\w+\s?\(?\w*\)?\]?\s?#?[12]?\**\s?):", "\n\n" + contents_cleared)
+        content_actor_tags = list(set(content_actor_tags))
+
+        # Update full set of actor tags
         y = {tag: [transcript_file] for tag in content_actor_tags}
+        actor_tags = {key: actor_tags.get(key, []) + y.get(key, []) for key in
+                      set(list(actor_tags.keys()) + list(y.keys()))}
 
-        actor_tags = {key: x.get(key, []) + y.get(key, []) for key in set(list(x.keys()) + list(y.keys()))}
-        transcription_tags.extend(content_transcription_tags)
+        # Update full set of transcription tags
+        y = {tag: [transcript_file] for tag in content_trans_tags}
+        trans_tags = {key: trans_tags.get(key, []) + y.get(key, []) for key in
+                      set(list(trans_tags.keys()) + list(y.keys()))}
 
-        contents_replaced = re.sub(r"\n", " ", contents_replaced)
+        # THIS BLOCK PRODUCES AN ALIGNMENT READY TRANSCRIPTION
+        # # Replace newlines with spaces
+        # contents_replaced = re.sub(r"\n", " ", contents)
+        #
+        # # Replace standard and found transcription tags
+        # content_trans_tags = [re.escape(tag) for tag in content_trans_tags]
+        # for trans_tag in standard_trans_tags + content_trans_tags:
+        #     contents_replaced = re.sub(trans_tag, "", contents_replaced)
+        #
+        # # Replace standard and found actor tags
+        # content_actor_tags = [re.escape(tag) for tag in content_actor_tags]
+        # for actor_tag in standard_actor_tags + content_actor_tags:
+        #     contents_replaced = re.sub(r"{0}:\s*".format(actor_tag), "\n\n", contents_replaced)
+        #
+        # # Trim trailing and duplicated whitespaces
+        # contents_replaced = re.sub(r"^\s+", "", contents_replaced)
+        # contents_replaced = re.sub(r"\s+", " ", contents_replaced)
+        # contents_replaced = re.sub(r"\s+$", "", contents_replaced)
+        #
+        # # Split transcriptions by sentences
+        # contents_replaced = re.sub(r"\.{3}", "[ELLIPSIS]", contents_replaced)
+        # contents_replaced = re.sub(r"\.\s+", ".\n\n", contents_replaced)
+        # contents_replaced = re.sub(r"\[ELLIPSIS\]", "...", contents_replaced)
+        # contents_replaced = re.sub(r"\?\s+", "?\n\n", contents_replaced)
+        # contents_replaced = re.sub(r"!\s+", "!\n\n", contents_replaced)
+        #
+        # # TODO Normalize non-spanish alphabet characters
+        # # contents_replaced = unicodedata.normalize("NFKD", contents_replaced)
+        # # contents_replaced = contents_replaced.encode("ascii", "ignore").decode("ascii", "ignore")
+        #
+        # # TODO Verbalize numbers
+        #
+        # # with open("{0}/{1}.txt".format(args.out_dir, transcript_file), "wt") as file:
+        # #     file.write(contents_replaced)
 
-        contents_replaced = re.sub(r"|".join([re.escape(tag) for tag in content_transcription_tags]), "", contents_replaced)
+        # print("Done")
 
-        for actor_tag in content_actor_tags:
-            contents_replaced = re.sub(r"{0}:\s*".format(re.escape(actor_tag)), "\n\n", contents_replaced)
-
-        contents_replaced = re.sub(r"^\s+", "", contents_replaced)
-        contents_replaced = re.sub(r"\s+", " ", contents_replaced)
-        contents_replaced = re.sub(r"\s+$", "", contents_replaced)
-
-        contents_replaced = re.sub(r"\.{3}", "[ELLIPSIS]", contents_replaced)
-        contents_replaced = re.sub(r"\.\s+", ".\n\n", contents_replaced)
-        contents_replaced = re.sub(r"\[ELLIPSIS\]", "...", contents_replaced)
-        contents_replaced = re.sub(r"\?\s+", "?\n\n", contents_replaced)
-        contents_replaced = re.sub(r"!\s+", "!\n\n", contents_replaced)
-
-        # TODO Normalize non-spanish alphabet characters
-        # contents_replaced = unicodedata.normalize("NFKD", contents_replaced)
-        # contents_replaced = contents_replaced.encode("ascii", "ignore").decode("ascii", "ignore")
-
-        # TODO Verbalize numbers
-
-        # with open("{0}/{1}.txt".format(args.out_dir, transcript_file), "wt") as file:
-        #     file.write(contents_replaced)
-
-        print("Done")
-
-    # pprint.pprint(sorted({tag: actor_tags.count(tag) for tag in actor_tags}.items(), key=operator.itemgetter(1)))
-    # pprint.pprint(sorted({tag: transcription_tags.count(tag) for tag in transcription_tags}.items(),
+    # Print found tags
+    # print("Non-standard actor tags:")
+    # pprint.pprint(actor_tags)
+    # pprint.pprint(sorted({tag: len(actor_tags[tag]) for tag in actor_tags}.items(),
     #                      key=operator.itemgetter(1)))
-
-    pprint.pprint(actor_tags)
-    pprint.pprint(sorted({tag: len(actor_tags[tag]) for tag in actor_tags}.items(), key=operator.itemgetter(1)))
+    # print("Non-standard transcript tags:")
+    # pprint.pprint(sorted({tag: len(trans_tags[tag]) for tag in trans_tags}.items(),
+    #                      key=operator.itemgetter(1)))
 
 
 if __name__ == '__main__':
