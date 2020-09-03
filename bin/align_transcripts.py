@@ -628,7 +628,7 @@ def main():
         # r"\[Consentimiento Informado([^\]]+)\]"
     ]
 
-    actor_tags = []
+    actor_tags = {}
     transcription_tags = []
 
     for transcript_file in sorted(transcript_files):
@@ -799,7 +799,10 @@ def main():
         print("Actor tags: {0}".format(" ".join(content_actor_tags)))
         print("Transcription tags: {0}".format(" ".join(content_transcription_tags)))
 
-        actor_tags.extend(content_actor_tags)
+        x = actor_tags
+        y = {tag: [transcript_file] for tag in content_actor_tags}
+
+        actor_tags = {key: x.get(key, []) + y.get(key, []) for key in set(list(x.keys()) + list(y.keys()))}
         transcription_tags.extend(content_transcription_tags)
 
         contents_replaced = re.sub(r"\n", " ", contents_replaced)
@@ -832,7 +835,7 @@ def main():
 
     # pprint.pprint(sorted({tag: actor_tags.count(tag) for tag in actor_tags}.items(), key=operator.itemgetter(1)))
 
-    pprint.pprint(sorted({tag: transcription_tags.count(tag) for tag in transcription_tags}.items(),
+    pprint.pprint(sorted({tag: len(actor_tags[tag]) for tag in actor_tags}.items(),
                          key=operator.itemgetter(1)))
 
 
