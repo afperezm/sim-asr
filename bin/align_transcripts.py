@@ -788,6 +788,26 @@ def main():
         contents = re.sub(r"¡Ustedes\ssalían\shasta\sBarranca\s\[INC:\sBarrancabermeja!",
                           "¡Ustedes salían hasta Barranca [INC: Barrancabermeja]!", contents)
         contents = re.sub(r"ENT:\s¿Cuánto\s\[INTERRUP\?", "ENT: ¿Cuánto [INTERRUP]?", contents)
+        contents = re.sub(r"ENTENT:\sENT:", "ENT:", contents)
+        contents = re.sub(r"ENT:\s¿ENTENT:\s¿ENENT:", "ENT:", contents)
+        contents = re.sub(r"INAD:05:46-05:55", "[INAD:05:46-05:55]", contents)
+        contents = re.sub(r"A\spartir\sdel\s1:12:00\sse\sencuentran\sllenando\sla\sficha\slar\so\scorta-\s1:12:54\n\n"
+                          r"1:12:55",
+                          "[A partir del 1:12:00 se encuentran llenando la ficha lar o corta- 1:12:54\n\n"
+                          "1:12:55]", contents)
+        contents = re.sub(r"\[INTERRUP\]06:12", "[INTERRUP: 06:12]", contents)
+        contents = re.sub(r"06:16\s\[CONT\]", "[CONT: 06:16]", contents)
+        contents = re.sub(r"\[PAUSA\]1:41:05\]", "[PAUSA: 1:41:05]", contents)
+
+        # Fixes for wrong transcriptions
+        contents = re.sub(r"\n\**(\d{1,2}:?)+\**\s*\n", "\n", contents)
+
+        contents = re.sub(r"Quick tips:\n\n"
+                          r"\\-\s_Ctrl\+I_\sadds\s_italic_\sformatting\sand\s"
+                          r"\*\*Ctrl\+B\*\*\sadds\s\*\*bold\*\* formatting\.\n\n"
+                          r"\\-\sPress\sESC\sto\splay/pause,\sand\s"
+                          r"Ctrl\+J\sto\sinsert\sthe\scurrent\stimestamp\.\n\n$",
+                          "\n", contents)
 
         contents_replaced = re.sub(r"|".join(main_transcription_tags), "", contents)
 
