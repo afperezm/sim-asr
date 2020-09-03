@@ -613,21 +613,6 @@ def main():
                         '426-VI-00013', '226-VI-02917', '398-VI-00008', '261-VI-00046',
                         '160-VI-00049', '307-VI-00033']
 
-    main_transcription_tags = [
-        r"\[(INAD|DUD|INTERRUP):?(\s?(\d{1,2}:?)+)+\]?\}?",
-        # r"\[INTERRUP([^\]]+)\]",
-        # r"\[CONT([^\]]+)\]",
-        # r"\[INAD([^\]]+)\]",
-        # r"\[INAUD([^\]]+)\]",
-        # r"\[DUD([^\]]+)\]",
-        # r"\[CORTE([^\]]+)\]",
-        # r"\[PAUSA([^\]]+)\]",
-        # r"\[INC([^\]]+)\]",
-        # r"\[Datos sensibles([^\]]+)\]",
-        # r"\[Datos personales([^\]]+)\]",
-        # r"\[Consentimiento Informado([^\]]+)\]"
-    ]
-
     actor_tags = {}
     transcription_tags = []
 
@@ -638,6 +623,7 @@ def main():
         with open("{0}/{1}.txt".format(args.in_dir, transcript_file)) as f:
             contents = f.read()
 
+        # Fixes for wrong transcriptions
         contents = re.sub(r"\[de,\sde,\sde\}", "[de, de, de]", contents)
         contents = re.sub(r"\[INTERRUP\n\n\s\s\n\nENT:\sUno\sde\sellos\.", "[INTERRUP]\n\nENT: Uno de ellos.", contents)
         contents = re.sub(r"\[Departamento\sdel\sSur\sde\sColombia\?", "[Departamento del Sur de Colombia]?", contents)
@@ -799,17 +785,18 @@ def main():
         contents = re.sub(r"06:16\s\[CONT\]", "[CONT: 06:16]", contents)
         contents = re.sub(r"\[PAUSA\]1:41:05\]", "[PAUSA: 1:41:05]", contents)
 
-        # Fixes for wrong transcriptions
-        contents = re.sub(r"\n\**(\d{1,2}:?)+\**\s*\n", "\n", contents)
+        contents = re.sub(r"\n\**(\d{1,2}:?)+\**\s*\n",
+                          "", contents)
 
         contents = re.sub(r"Quick tips:\n\n"
                           r"\\-\s_Ctrl\+I_\sadds\s_italic_\sformatting\sand\s"
                           r"\*\*Ctrl\+B\*\*\sadds\s\*\*bold\*\* formatting\.\n\n"
                           r"\\-\sPress\sESC\sto\splay/pause,\sand\s"
                           r"Ctrl\+J\sto\sinsert\sthe\scurrent\stimestamp\.\n\n$",
-                          "\n", contents)
+                          "", contents)
 
-        contents_replaced = re.sub(r"|".join(main_transcription_tags), "", contents)
+        contents_replaced = re.sub(r"\[(INAD|DUD|INTERRUP):?(\s?(\d{1,2}:?)+)+\]?\}?",
+                                   "", contents)
 
         content_transcription_tags = re.findall(r"\[[\w\s]+[^\]]+\]", contents_replaced)
         contents_replaced = re.sub(r"\[[\w\s]+[^\]]+\]", "", contents_replaced)
