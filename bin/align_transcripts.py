@@ -879,6 +879,30 @@ def main():
                           "TEST:", contents)
         contents = re.sub(r"\[Ficha\scorta:\s1:14:38\s1:23:24",
                           "[Ficha corta: 1:14:38-1:23:24]", contents)
+        contents = re.sub(r"\[\[",
+                          "[", contents)
+        contents = re.sub(r",:\s\[\suna\ses\sel\scambio\sclimático",
+                          ", una es el cambio climático", contents)
+        contents = re.sub(r"\[mm,\smmm\}",
+                          "[mm, mmm]", contents)
+        contents = re.sub(r"\[Heee\}",
+                          "[Heee]", contents)
+        contents = re.sub(r"\[de\saquí\sde\saquí\}",
+                          "[de aquí de aquí]", contents)
+        contents = re.sub(r"\[que\[",
+                          "[que]", contents)
+        contents = re.sub(r"\[tenía\)",
+                          "[tenía]", contents)
+        contents = re.sub(r"\[voy\sbien\scon\sla\sPersonera",
+                          "[voy bien] con la Personera", contents)
+        contents = re.sub(r"\[Contesta\ssu\steléfono\scelular",
+                          "[Contesta su teléfono celular]", contents)
+        contents = re.sub(r"\[balbucea\s1:00:40",
+                          "[balbucea 1:00:40]", contents)
+        contents = re.sub(r"\[el\sdía\sque\ssacaron\slas\sarmas",
+                          "[el día que sacaron las armas]", contents)
+        contents = re.sub(r"Consentimiento\s07:32",
+                          "[Consentimiento 07:32]", contents)
 
         # Custom replacements for non-generalizable expressions
         contents = re.sub(r"\n\**(\d{1,2}:?)+\**\s*\n",
@@ -923,7 +947,7 @@ def main():
             contents_cleared = re.sub(trans_tag, "", contents_cleared)
 
         # Replace predictable variations of standard tags
-        contents_cleared = re.sub(r"\[(INAD|DUD|INTERRUP):?(\s?(\d{1,2}:?)+-?)*",
+        contents_cleared = re.sub(r"\[(INAD|DUD|INTERRUP|CONT|INC|PAUSA|XXX):?(\s?(\d{1,2}:?)+-?)*",
                                   "", contents_cleared)
 
         # Find non-standard transcript tags
