@@ -613,8 +613,8 @@ def main():
                         '426-VI-00013', '226-VI-02917', '398-VI-00008', '261-VI-00046',
                         '160-VI-00049', '307-VI-00033']
 
-    actor_tags = {}
-    trans_tags = {}
+    # actor_tags = {}
+    # trans_tags = {}
 
     for transcript_file in sorted(transcript_files):
 
@@ -966,15 +966,21 @@ def main():
         content_actor_tags = re.findall(r"\n\n(\**-?\[?\w+\s?\(?\w*\)?\]?\s?#?[12]?\**\s?):", "\n\n" + contents_cleared)
         content_actor_tags = list(set(content_actor_tags))
 
-        # Update full set of actor tags
-        y = {tag: [transcript_file] for tag in content_actor_tags}
-        actor_tags = {key: actor_tags.get(key, []) + y.get(key, []) for key in
-                      set(list(actor_tags.keys()) + list(y.keys()))}
+        print("non-standard actor tags")
+        print(content_actor_tags)
 
-        # Update full set of transcription tags
-        y = {tag: [transcript_file] for tag in content_trans_tags}
-        trans_tags = {key: trans_tags.get(key, []) + y.get(key, []) for key in
-                      set(list(trans_tags.keys()) + list(y.keys()))}
+        print("non-standard transcription tags")
+        print(content_trans_tags)
+
+        # # Update full set of actor tags
+        # y = {tag: [transcript_file] for tag in content_actor_tags}
+        # actor_tags = {key: actor_tags.get(key, []) + y.get(key, []) for key in
+        #               set(list(actor_tags.keys()) + list(y.keys()))}
+        #
+        # # Update full set of transcription tags
+        # y = {tag: [transcript_file] for tag in content_trans_tags}
+        # trans_tags = {key: trans_tags.get(key, []) + y.get(key, []) for key in
+        #               set(list(trans_tags.keys()) + list(y.keys()))}
 
         # THIS BLOCK PRODUCES AN ALIGNMENT READY TRANSCRIPTION
         # # Replace newlines with spaces
@@ -1013,12 +1019,17 @@ def main():
 
         # print("Done")
 
-    # Print found tags
+    # Print full set of actor tags
     # print("Non-standard actor tags:")
     # pprint.pprint(actor_tags)
+    # print("Non-standard actor tags count:")
     # pprint.pprint(sorted({tag: len(actor_tags[tag]) for tag in actor_tags}.items(),
     #                      key=operator.itemgetter(1)))
-    # print("Non-standard transcript tags:")
+
+    # Print full set of transcription tags
+    # print("Non-standard transcription tags:")
+    # pprint.pprint(trans_tags)
+    # print("Non-standard transcription tags count:")
     # pprint.pprint(sorted({tag: len(trans_tags[tag]) for tag in trans_tags}.items(),
     #                      key=operator.itemgetter(1)))
 
