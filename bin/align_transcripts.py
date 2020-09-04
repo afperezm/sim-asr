@@ -919,9 +919,9 @@ def main():
                           "", contents)
 
         standard_actor_tags = [
-            r'ENT:',
-            r'TEST:',
-            r'X:',
+            r'ENT([2-9]|1[0-2])?:',
+            r'TEST([2-9]|1[0-2])?:',
+            r'X([2-9]|1[0-2])?:',
             r'ACOMP:',
             r'ASIST:',
             r'TRD:'
