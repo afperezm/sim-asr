@@ -1001,7 +1001,7 @@ def main():
         # contents_replaced = re.sub(r"\s+", " ", contents_replaced)
         # contents_replaced = re.sub(r"\s+$", "", contents_replaced)
         #
-        # # Split transcriptions by sentences
+        # # Split transcription at sentence level
         # contents_replaced = re.sub(r"\.{3}", "[ELLIPSIS]", contents_replaced)
         # contents_replaced = re.sub(r"\.\s+", ".\n\n", contents_replaced)
         # contents_replaced = re.sub(r"\[ELLIPSIS\]", "...", contents_replaced)
@@ -1014,6 +1014,7 @@ def main():
         #
         # # TODO Verbalize numbers
         #
+        # # Write out formatted transcription
         # # with open("{0}/{1}.txt".format(args.out_dir, transcript_file), "wt") as file:
         # #     file.write(contents_replaced)
 
