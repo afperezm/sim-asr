@@ -842,8 +842,8 @@ def main():
                           "[sorprendida]", contents)
         contents = re.sub(r"\[jumm\}",
                           "[jumm]", contents)
-        contents = re.sub(r"\[DUD:\nautoridad\?\scarretera\?\s13:49",
-                          "[DUD:\nautoridad? carretera? 13:49]", contents)
+        contents = re.sub(r"en la \[DUD:\nautoridad\?\scarretera\?\s13:49",
+                          "a estudiar", contents)
         contents = re.sub(r"\[INC:\shaya\}",
                           "[INC: haya]", contents)
         contents = re.sub(r"\[CONT:\sBueno,\sla\sguerrilla",
