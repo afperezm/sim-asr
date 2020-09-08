@@ -1226,40 +1226,42 @@ def main():
                       set(list(trans_tags.keys()) + list(y.keys()))}
 
         # THIS BLOCK PRODUCES AN ALIGNMENT READY TRANSCRIPTION
-        # # Replace newlines with spaces
-        # contents_replaced = re.sub(r"\n", " ", contents)
-        #
-        # # Replace standard and found transcription tags
-        # content_trans_tags = [re.escape(tag) for tag in content_trans_tags]
-        # for trans_tag in standard_trans_tags + content_trans_tags:
-        #     contents_replaced = re.sub(trans_tag, "", contents_replaced)
-        #
-        # # Replace standard and found actor tags
-        # content_actor_tags = [re.escape(tag) for tag in content_actor_tags]
-        # for actor_tag in standard_actor_tags + content_actor_tags:
-        #     contents_replaced = re.sub(r"{0}:\s*".format(actor_tag), "\n\n", contents_replaced)
-        #
-        # # Trim trailing and duplicated whitespaces
-        # contents_replaced = re.sub(r"^\s+", "", contents_replaced)
-        # contents_replaced = re.sub(r"\s+", " ", contents_replaced)
-        # contents_replaced = re.sub(r"\s+$", "", contents_replaced)
-        #
-        # # Split transcription at sentence level
-        # contents_replaced = re.sub(r"\.{3}", "[ELLIPSIS]", contents_replaced)
-        # contents_replaced = re.sub(r"\.\s+", ".\n\n", contents_replaced)
-        # contents_replaced = re.sub(r"\[ELLIPSIS\]", "...", contents_replaced)
-        # contents_replaced = re.sub(r"\?\s+", "?\n\n", contents_replaced)
-        # contents_replaced = re.sub(r"!\s+", "!\n\n", contents_replaced)
-        #
-        # # TODO Normalize non-spanish alphabet characters
-        # # contents_replaced = unicodedata.normalize("NFKD", contents_replaced)
-        # # contents_replaced = contents_replaced.encode("ascii", "ignore").decode("ascii", "ignore")
-        #
-        # # TODO Verbalize numbers
-        #
-        # # Write out formatted transcription
-        # # with open("{0}/{1}.txt".format(args.out_dir, transcript_file), "wt") as file:
-        # #     file.write(contents_replaced)
+        contents_replaced = contents
+
+        # Replace standard and found transcription tags
+        content_trans_tags = [re.escape(tag) for tag in content_trans_tags]
+        for trans_tag in standard_trans_tags + content_trans_tags:
+            contents_replaced = re.sub(trans_tag, "", contents_replaced)
+
+        # Replace standard and found actor tags
+        content_actor_tags = [re.escape(tag) for tag in content_actor_tags]
+        for actor_tag in standard_actor_tags + content_actor_tags:
+            contents_replaced = re.sub(r"{0}:\s*".format(actor_tag), "\n\n", contents_replaced)
+
+        # Replace newlines with spaces
+        contents_replaced = re.sub(r"\n", " ", contents_replaced)
+
+        # Trim trailing and duplicated whitespaces
+        contents_replaced = re.sub(r"^\s+", "", contents_replaced)
+        contents_replaced = re.sub(r"\s+", " ", contents_replaced)
+        contents_replaced = re.sub(r"\s+$", "", contents_replaced)
+
+        # Split transcription at sentence level
+        contents_replaced = re.sub(r"\.{3}", "[ELLIPSIS]", contents_replaced)
+        contents_replaced = re.sub(r"\.\s+", ".\n\n", contents_replaced)
+        contents_replaced = re.sub(r"\[ELLIPSIS\]", "...", contents_replaced)
+        contents_replaced = re.sub(r"\?\s+", "?\n\n", contents_replaced)
+        contents_replaced = re.sub(r"!\s+", "!\n\n", contents_replaced)
+
+        # TODO Normalize non-spanish alphabet characters
+        # contents_replaced = unicodedata.normalize("NFKD", contents_replaced)
+        # contents_replaced = contents_replaced.encode("ascii", "ignore").decode("ascii", "ignore")
+
+        # TODO Verbalize numbers
+
+        # Write out formatted transcription
+        with open("{0}/{1}.txt".format(args.out_dir, transcript_file), "wt") as file:
+            file.write(contents_replaced)
 
         print("Done")
 
