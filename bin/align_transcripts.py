@@ -1149,12 +1149,12 @@ def main():
                           "", contents)
 
         standard_actor_tags = [
-            r'ENT([2-9]|1[0-2])?:',
-            r'TEST([2-9]|1[0-2])?:',
-            r'X([2-9]|1[0-2])?:',
-            r'ACOMP:',
-            r'ASIST:',
-            r'TRD:'
+            r'ENT([2-9]|1[0-2])?',
+            r'TEST([2-9]|1[0-2])?',
+            r'X([2-9]|1[0-2])?',
+            r'ACOMP',
+            r'ASIST',
+            r'TRD'
         ]
 
         standard_trans_tags = [
@@ -1190,7 +1190,7 @@ def main():
 
         # Replace standard actor tags
         for actor_tag in standard_actor_tags:
-            contents_cleared = re.sub(actor_tag, "", contents_cleared)
+            contents_cleared = re.sub(r"{0}:".format(actor_tag), "", contents_cleared)
 
         # Find non-standard actor tags
         content_actor_tags = re.findall(r"\n\n(\**-?\[?\w+\s?\(?\w*\)?\]?\s?#?[12]?\**\s?):", "\n\n" + contents_cleared)
