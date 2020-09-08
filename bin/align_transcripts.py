@@ -1184,11 +1184,11 @@ def main():
             contents_cleared = re.sub(trans_tag, "", contents_cleared)
 
         # Find non-standard transcript tags
-        content_trans_tags = re.findall(r"\[[\w\s]+[^\]]+\]", contents_cleared)
+        content_trans_tags = re.findall(r"\[[^\]]+\]", contents_cleared)
         content_trans_tags = list(set(content_trans_tags))
 
         # Replace non-standard transcript tags (needs to be done before finding actor tags)
-        contents_cleared = re.sub(r"\[[\w\s]+[^\]]+\]",
+        contents_cleared = re.sub(r"\[[^\]]+\]",
                                   "", contents_cleared)
 
         # Replace standard actor tags
