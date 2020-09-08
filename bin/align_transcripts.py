@@ -2,7 +2,6 @@ import argparse
 import operator
 import pprint
 import re
-import unicodedata
 
 
 def main():
