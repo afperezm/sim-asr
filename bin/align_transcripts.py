@@ -1139,6 +1139,14 @@ def main():
                           "", contents)
         contents = re.sub(r"En:\s1:35m:12s\.",
                           "", contents)
+        contents = re.sub(r"\[INTERRUP:\sAgua\]",
+                          "", contents)
+        contents = re.sub(r"25:41\s25:41",
+                          "", contents)
+        contents = re.sub(r"\[\]",
+                          "", contents)
+        contents = re.sub(r"\[INFORMACIÓN\sCONFIDENCIAL:\sXXXXX\s19:14\s\]",
+                          "", contents)
 
         standard_actor_tags = [
             r'ENT([2-9]|1[0-2])?:',
