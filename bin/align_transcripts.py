@@ -1157,17 +1157,24 @@ def main():
             r'TRD'
         ]
 
+        # Includes predictable variations of standard transcript tags
         standard_trans_tags = [
-            r'\[INTERRUP:?(\s?(\d{1,2}:?)+-?)*\]',
-            r'\[CONT:?(\s?(\d{1,2}:?)+-?)*\]',
-            r'\[INAU?D:?\n{0,2}(\s?(\d{1,2}:?)+-?)*\]',
-            r'\[DUDA?U?:?\n{0,2}(\s?(\d{1,2}:?)+-?)*\]',
+            r'[\[\(\{]\[?\s?i?I?INTERRUPP?C?T?(IÓN)?:?(\s?(\d{1,2}:?)+\s?-?\s?)*´?¨?\]?[\}\)\]]',
+            r'[\[\{\{]\[?\s?I?CONTE?I?N?:?(\s?(\d{1,2}:?)+-?)*[\}\)\]]',
+            r'[\[\(\{]\[?\s?INAU?DU?\s?:?;?_?\.?\n{0,2}(\s?(:?\d{1,2}\s?:?;?\.?_?;?)+\s?\\?-?–?a?\s?)*[\}\)\]]',
+            r'[\[\(\{]\[?\s?(DUD|DUDA|DUDE|DUDU|IDUD):?;?\n{0,2}\s*((\d{1,2}\s?:?;?)+\s?\\?-?–?\.?/?\s?)*[\}\)\]]',
             r'\[CORTE:?(\s?(\d{1,2}:?)+-?)*\]',
-            r'\[PAUSA:?(\s?(\d{1,2}:?)+-?)*\]',
-            r'\[INC:?(\s\w+)+]',
+            r'[\[\(]'
+            r'\s?PAUSA(\sDE\sCAFÉ)?(\spor\sllamada)?(\sCORTA)?:?\.?(\s?(:?\d{1,2}\.?:?\s?)+\s?\\?_?-?–?—?_?/?\s?)*'
+            r'[\)\]]',
+            r'[\[\{\{](INC|INCLUD|INCLUID):?(([^\w]+)\w+)+\s?[\}\)\]]',
             r'\[Datos sensibles:?(\s?(\d{1,2}:?)+-?)*\]',
             r'\[Datos personales:?(\s?(\d{1,2}:?)+-?)*\]',
-            r'\[Consentimiento Informado:?(\s?(\d{1,2}:?)+-?)*\]'
+            r'\[Consentimiento Informado:?(\s?(\d{1,2}:?)+\s?\\?-?\s?)*\]',
+            r'\[(\d{1,2}:?)+\s(INAD|DUD)\]',
+            r'\[(INAD|DUD|INTERRUP|CONT|INC|PAUSA|XXX):?(\s?(\d{1,2}:?)+\s?-?)*',
+            r'(INAD|DUD|INTERRUP|CONT|INC|PAUSA|XXX):?(\s?(\d{1,2}:?)+\s?-?)*\]',
+            r'(INAD|DUD):?\s?(\d{1,2}:?)+'
         ]
 
         contents_cleared = contents
@@ -1175,10 +1182,6 @@ def main():
         # Replace standard transcript tags
         for trans_tag in standard_trans_tags:
             contents_cleared = re.sub(trans_tag, "", contents_cleared)
-
-        # Replace predictable variations of standard tags
-        contents_cleared = re.sub(r"\[(INAD|DUD|INTERRUP|CONT|INC|PAUSA|XXX):?(\s?(\d{1,2}:?)+-?)*",
-                                  "", contents_cleared)
 
         # Find non-standard transcript tags
         content_trans_tags = re.findall(r"\[[\w\s]+[^\]]+\]", contents_cleared)
