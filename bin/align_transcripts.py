@@ -613,8 +613,8 @@ def main():
                         '426-VI-00013', '226-VI-02917', '398-VI-00008', '261-VI-00046',
                         '160-VI-00049', '307-VI-00033']
 
-    # actor_tags = {}
-    # trans_tags = {}
+    actor_tags = {}
+    trans_tags = {}
 
     actor_tags_black_list = ['Transcriptor', 'Y dijieron', 'Objetivos principales', 'Y', 'Primer fracaso', 'Dije',
                              'Papá', 'Dijo ', 'Entonces dijo ', 'Entonces dije', 'Ella dice', 'Y allá', 'Bueno',
@@ -1215,15 +1215,15 @@ def main():
         # print("non-standard transcription tags")
         # print(content_trans_tags)
 
-        # # Update full set of actor tags
-        # y = {tag: [transcript_file] for tag in content_actor_tags}
-        # actor_tags = {key: actor_tags.get(key, []) + y.get(key, []) for key in
-        #               set(list(actor_tags.keys()) + list(y.keys()))}
-        #
-        # # Update full set of transcription tags
-        # y = {tag: [transcript_file] for tag in content_trans_tags}
-        # trans_tags = {key: trans_tags.get(key, []) + y.get(key, []) for key in
-        #               set(list(trans_tags.keys()) + list(y.keys()))}
+        # Update full set of actor tags
+        y = {tag: [transcript_file] for tag in content_actor_tags}
+        actor_tags = {key: actor_tags.get(key, []) + y.get(key, []) for key in
+                      set(list(actor_tags.keys()) + list(y.keys()))}
+
+        # Update full set of transcription tags
+        y = {tag: [transcript_file] for tag in content_trans_tags}
+        trans_tags = {key: trans_tags.get(key, []) + y.get(key, []) for key in
+                      set(list(trans_tags.keys()) + list(y.keys()))}
 
         # THIS BLOCK PRODUCES AN ALIGNMENT READY TRANSCRIPTION
         # # Replace newlines with spaces
