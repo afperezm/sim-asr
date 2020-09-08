@@ -616,6 +616,16 @@ def main():
     # actor_tags = {}
     # trans_tags = {}
 
+    actor_tags_black_list = ['Transcriptor', 'Y dijieron', 'Objetivos principales', 'Y', 'Primer fracaso', 'Dije',
+                             'Papá', 'Dijo ', 'Entonces dijo ', 'Entonces dije', 'Ella dice', 'Y allá', 'Bueno',
+                             'Después decía', '**Me dijo', 'Otro', 'Don Dilson', 'Vea', 'Cuando dijo', 'Él dijo ',
+                             'Dije yo', 'yo ', 'Entonces', 'Pausa', 'Y entonces', 'Tonces decía', 'Y yo', 'Ella dijo',
+                             'Toes dijimos', 'habían ahí', 'Decían', 'Y dijeron', 'Y nosotros', 'Pues mire',
+                             'Y nosotras', 'Dice', 'Dijo alberto', 'Aquí está', 'Él decía', 'Monté tutelas',
+                             'Le cuento', 'Yo digo', 'El contexto', 'Dijeron', 'A ver', 'Datos', 'PAUSA', 'Me dijeron',
+                             'Les dijeron', 'Entonces dijeron', 'Ya dijeron', 'Les dije', 'Y dijo', 'Yo dije',
+                             'Le dije', 'Entonces dijo', 'Dijo']
+
     for transcript_file in sorted(transcript_files):
 
         print("Processing... {0}".format(transcript_file))
@@ -1197,7 +1207,7 @@ def main():
 
         # Find non-standard actor tags
         content_actor_tags = re.findall(r"\n\n(\**-?\[?\w+\s?\(?\w*\)?\]?\s?#?[12]?\**\s?):", "\n\n" + contents_cleared)
-        content_actor_tags = list(set(content_actor_tags))
+        content_actor_tags = list(set(content_actor_tags) - set(actor_tags_black_list))
 
         print("non-standard actor tags")
         print(content_actor_tags)
