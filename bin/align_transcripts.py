@@ -1209,11 +1209,11 @@ def main():
         content_actor_tags = re.findall(r"\n\n(\**-?\[?\w+\s?\(?\w*\)?\]?\s?#?[12]?\**\s?):", "\n\n" + contents_cleared)
         content_actor_tags = list(set(content_actor_tags) - set(actor_tags_black_list))
 
-        print("non-standard actor tags")
-        print(content_actor_tags)
+        # print("non-standard actor tags")
+        # print(content_actor_tags)
 
-        print("non-standard transcription tags")
-        print(content_trans_tags)
+        # print("non-standard transcription tags")
+        # print(content_trans_tags)
 
         # # Update full set of actor tags
         # y = {tag: [transcript_file] for tag in content_actor_tags}
