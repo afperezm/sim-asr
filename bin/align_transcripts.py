@@ -1268,16 +1268,16 @@ def main():
     # Print full set of actor tags
     # print("Non-standard actor tags:")
     # pprint.pprint(actor_tags)
-    # print("Non-standard actor tags count:")
-    # pprint.pprint(sorted({tag: len(actor_tags[tag]) for tag in actor_tags}.items(),
-    #                      key=operator.itemgetter(1)))
+    print("Non-standard actor tags count:")
+    pprint.pprint(sorted({tag: len(actor_tags[tag]) for tag in actor_tags}.items(),
+                         key=operator.itemgetter(1)))
 
     # Print full set of transcription tags
     # print("Non-standard transcription tags:")
     # pprint.pprint(trans_tags)
-    # print("Non-standard transcription tags count:")
-    # pprint.pprint(sorted({tag: len(trans_tags[tag]) for tag in trans_tags}.items(),
-    #                      key=operator.itemgetter(1)))
+    print("Non-standard transcription tags count:")
+    pprint.pprint(sorted({tag: len(trans_tags[tag]) for tag in trans_tags}.items(),
+                         key=operator.itemgetter(1)))
 
 
 if __name__ == '__main__':
