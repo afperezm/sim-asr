@@ -852,13 +852,13 @@ def main():
         for trans_tag in standard_trans_tags + content_trans_tags:
             contents_replaced = re.sub(trans_tag, "", contents_replaced)
 
+        # Replace newlines with spaces
+        contents_replaced = re.sub(r"\n", " ", contents_replaced)
+
         # Replace standard and found actor tags
         content_actor_tags = [re.escape(tag) for tag in content_actor_tags]
         for actor_tag in standard_actor_tags + content_actor_tags:
             contents_replaced = re.sub(r"{0}:\s*".format(actor_tag), "\n\n", contents_replaced)
-
-        # Replace newlines with spaces
-        contents_replaced = re.sub(r"\n", " ", contents_replaced)
 
         # Trim trailing and duplicated whitespaces
         contents_replaced = re.sub(r"^\s+", "", contents_replaced)
