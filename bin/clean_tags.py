@@ -5,10 +5,10 @@ import re
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Aeneas-based transcripts aligner")
-    parser.add_argument("--in_dir", type=str, help="Input data directory, where intro-clean dataset is located",
+    parser = argparse.ArgumentParser(description="Regex-based transcripts tag cleaner")
+    parser.add_argument("--in_dir", type=str, help="Input data directory, where intro-clean transcripts are located",
                         required=True)
-    parser.add_argument("--out_dir", type=str, help="Output data directory, where to copy full-clean transcripts",
+    parser.add_argument("--out_dir", type=str, help="Output data directory, where to copy tag-clean transcripts",
                         required=True)
 
     args = parser.parse_args()
