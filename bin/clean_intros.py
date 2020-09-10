@@ -546,7 +546,10 @@ def compute_transcript_headings(transcript_files):
                     if result.group(2) not in dirty_matches.keys():
                         dirty_matches[result.group(2)] = []
                     dirty_matches[result.group(2)].append(transcript_file)
-    return clean_matches, clean_intros, dirty_matches, dirty_intros
+    return {'Clean matches': clean_matches,
+            'Clean intros': clean_intros,
+            'Dirty matches': dirty_matches,
+            'Dirty intros': dirty_intros}
 
 
 def copy_transcriptions(transcript_files, out_dir):
