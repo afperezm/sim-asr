@@ -1,4 +1,5 @@
 import argparse
+import functools
 import glob
 import operator
 import os
@@ -568,8 +569,12 @@ def main():
     # transcript_files = ["{0}/{1}".format(args.in_dir, transcript_file) for transcript_file in transcript_files]
     intros_and_matches = compute_transcript_headings(transcript_files)
 
-    for elem in intros_and_matches:
-        pprint.pprint(sorted({key: len(elem[key]) for key in elem}.items(), key=operator.itemgetter(1)))
+    # Print count of intros and matches
+    for res_key in intros_and_matches:
+        dict_elem = intros_and_matches[res_key]
+        dict_elem_count = functools.reduce((lambda count, dict_elem_value: count + len(dict_elem_value)),
+                                           dict_elem.values(), 0)
+        print("{0}: {1}".format(res_key, dict_elem_count))
 
 
 if __name__ == '__main__':
