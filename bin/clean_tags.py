@@ -4,6 +4,8 @@ import operator
 import os
 import pprint
 import re
+# import unicodedata
+# from num2words import num2words
 
 
 def main():
@@ -900,7 +902,18 @@ def main():
         # contents_replaced = unicodedata.normalize("NFKD", contents_replaced)
         # contents_replaced = contents_replaced.encode("ascii", "ignore").decode("ascii", "ignore")
 
+        # TODO Verbalize hours
+        # content_hours = re.findall(r"\d{1,2}:\d{2}", contents_replaced)
+        # content_hours = list(set(content_hours))
+        # print("")
+        # print(content_hours)
+
         # TODO Verbalize numbers
+        # content_numbers = re.findall(r"\d+", contents_replaced)
+        # content_numbers = list(set(content_numbers))
+        # content_numbers.sort(key=lambda s: len(s), reverse=True)
+        # print(content_numbers)
+        # [num2words(number, lang="es_CO") for number in sorted(content_numbers)]
 
         # Write out formatted transcription
         with open("{0}/{1}.txt".format(args.out_dir, basename), "wt") as file:
