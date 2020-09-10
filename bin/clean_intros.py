@@ -562,8 +562,9 @@ def copy_transcriptions(transcript_files, out_dir):
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Regex-fueled transcripts parser")
-    parser.add_argument("--in_dir", type=str, help="Input data directory, where copied dataset is located", required=True)
+    parser = argparse.ArgumentParser(description="Regex-based transcripts intro cleaner")
+    parser.add_argument("--in_dir", type=str, help="Input data directory, where copied data is located",
+                        required=True)
 
     args = parser.parse_args()
 
