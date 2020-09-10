@@ -862,7 +862,7 @@ def main():
 
         # Trim trailing and duplicated whitespaces
         contents_replaced = re.sub(r"^\s+", "", contents_replaced)
-        contents_replaced = re.sub(r"\s+", " ", contents_replaced)
+        contents_replaced = re.sub(r"[ ]+", " ", contents_replaced)
         contents_replaced = re.sub(r"\s+$", "", contents_replaced)
 
         # Split transcription at sentence level
