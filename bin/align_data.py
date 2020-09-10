@@ -43,7 +43,7 @@ def main():
         # output sync map to file
         task.output_sync_map_file()
 
-        print("{0} - Done")
+        print("{0} - Done".format(basename))
 
 
 if __name__ == '__main__':
