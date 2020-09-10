@@ -583,6 +583,8 @@ def main():
         dict_elem_count = functools.reduce((lambda count, dict_elem_value: count + len(dict_elem_value)),
                                            dict_elem.values(), 0)
         print("{0}: {1}".format(res_key, dict_elem_count))
+        # print(res_key)
+        # pprint.pprint(sorted({key: len(dict_elem[key]) for key in dict_elem}.items(), key=operator.itemgetter(1)))
 
     # Copy clean match transcriptions
     clean_transcriptions_nested = list(intros_and_matches["Clean matches"].values())
