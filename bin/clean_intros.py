@@ -16,23 +16,24 @@ def compute_transcript_headings(transcript_files):
     dirty_intros = {}
     dirty_matches = {}
     for transcript_file in sorted(transcript_files):
+        print("Processing... {0}".format(transcript_file))
         result = pattern_transcript.search(transcript_file)
         if result is not None and (result.group(2) == '198-VI-00025' or
                                    result.group(2) == '469-VI-00001' or
                                    result.group(2) == '126-VI-00031' or
                                    result.group(2) == '341-VI-00006'):
-            print("***{0}***".format(transcript_file))
+            # print("***{0}***".format(transcript_file))
             print("Cannot be used since audio and transcript don't correspond")
             continue
         elif result is not None and result.group(2) == '149-VI-00001':
-            print("***{0}***".format(transcript_file))
+            # print("***{0}***".format(transcript_file))
             print("Cannot be used since transcript is a pilot and not so accurate")
             continue
         elif result is not None and (result.group(2) == '802-VI-00001' or
                                      result.group(2) == '778-VI-00004' or
                                      result.group(2) == '422-VI-00001' or
                                      result.group(2) == '778-VI-00003'):
-            print("***{0}***".format(transcript_file))
+            # print("***{0}***".format(transcript_file))
             print("Skipping since transcript is not annotated with actor tags")
             continue
         with open(transcript_file) as f:
@@ -528,7 +529,7 @@ def compute_transcript_headings(transcript_files):
                                        contents_replaced)
             result = pattern.search(contents_replaced)
             if result is None:
-                print("***{0}***".format(transcript_file))
+                # print("***{0}***".format(transcript_file))
                 print("No match")
             else:
                 is_clean_match = contents_replaced == re.sub("\n", " ", contents)
@@ -546,6 +547,7 @@ def compute_transcript_headings(transcript_files):
                     if result.group(2) not in dirty_matches.keys():
                         dirty_matches[result.group(2)] = []
                     dirty_matches[result.group(2)].append(transcript_file)
+        print("Done")
     return {'Clean matches': clean_matches,
             'Clean intros': clean_intros,
             'Dirty matches': dirty_matches,
