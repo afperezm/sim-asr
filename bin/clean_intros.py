@@ -1,8 +1,10 @@
 import argparse
 import glob
 import operator
+import os
 import pprint
 import re
+from shutil import copyfile
 
 
 def compute_transcript_headings(transcript_files):
@@ -544,6 +546,15 @@ def compute_transcript_headings(transcript_files):
                         dirty_matches[result.group(2)] = []
                     dirty_matches[result.group(2)].append(transcript_file)
     return clean_matches, clean_intros, dirty_matches, dirty_intros
+
+
+def copy_transcriptions(transcript_files, out_dir):
+    """Copy transcriptions to the specified output directory."""
+    for transcript_file in transcript_files:
+        basename = os.path.basename(transcript_file)
+        print("Copying... {0}".format(transcript_file))
+        copyfile(transcript_file, "{0}/{1}".format(out_dir, basename))
+        print("Done")
 
 
 def main():
