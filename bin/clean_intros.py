@@ -567,6 +567,8 @@ def main():
     parser = argparse.ArgumentParser(description="Regex-based transcripts intro cleaner")
     parser.add_argument("--in_dir", type=str, help="Input data directory, where copied data is located",
                         required=True)
+    parser.add_argument("--out_dir", type=str, help="Output data directory, where to copy intro-clean transcripts",
+                        required=True)
 
     args = parser.parse_args()
 
@@ -581,6 +583,11 @@ def main():
         dict_elem_count = functools.reduce((lambda count, dict_elem_value: count + len(dict_elem_value)),
                                            dict_elem.values(), 0)
         print("{0}: {1}".format(res_key, dict_elem_count))
+
+    # Copy clean match transcriptions
+    clean_transcriptions_nested = list(intros_and_matches["Clean matches"].values())
+    clean_transcriptions_list = [item for sublist in clean_transcriptions_nested for item in sublist]
+    copy_transcriptions(clean_transcriptions_list, args.out_dir)
 
 
 if __name__ == '__main__':
