@@ -238,8 +238,8 @@ def copy_records(ssh_client, resource_id, transcript_record, audio_record):
     # Convert copied audio file
     try:
         print("{0} - Converting copied audio".format(resource_id))
-        check_call(["ffmpeg", "-y", "-i", "{0}".format(tmp.name), "-acodec", "pcm_s16le", "-ac", "1", "-ar", "16000",
-                    "{0}/{1}.wav".format(dst_path, resource_id)], stdout=DEVNULL, stderr=STDOUT)
+        check_call(["ffmpeg", "-y", "-i", "{0}".format(tmp.name), "-map_metadata", "-1", "-acodec", "pcm_s16le", "-ac",
+                    "1", "-ar", "16000", "{0}/{1}.wav".format(dst_path, resource_id)], stdout=DEVNULL, stderr=STDOUT)
         print("{0} - Converting copied audio - Done".format(resource_id))
     except CalledProcessError as e:
         print("{0} - Converting copied audio - Failed.".format(resource_id), e)
