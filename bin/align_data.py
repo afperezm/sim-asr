@@ -32,6 +32,10 @@ def main():
 
         print("{0} - Processing transcript".format(basename))
 
+        if os.path.isfile(u"{0}/{1}.wav.srt".format(args.out_dir, basename)):
+            print("{0} - Skipping, already processed.".format(basename))
+            continue
+
         try:
             # create Task object
             config_string = u"task_language=spa|is_text_type=plain|os_task_file_format=srt"
