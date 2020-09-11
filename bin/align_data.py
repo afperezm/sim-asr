@@ -50,10 +50,10 @@ def main():
             # output sync map to file
             task.output_sync_map_file()
         except (AudioFileUnsupportedFormatError, ExecuteTaskInputError, ExecuteTaskExecutionError) as e:
-            print("Failed.", e)
+            print("{0} - Failed.".format(basename), e)
             continue
 
-        print("{0} - Done".format(basename))
+        print("{0} - Done.".format(basename))
 
 
 if __name__ == '__main__':
