@@ -1,7 +1,9 @@
 import argparse
 import glob
 import os
-from aeneas.executetask import ExecuteTask
+
+from aeneas.audiofile import AudioFileUnsupportedFormatError
+from aeneas.executetask import ExecuteTask, ExecuteTaskInputError, ExecuteTaskExecutionError
 from aeneas.task import Task
 
 
@@ -30,18 +32,22 @@ def main():
 
         print("{0} - Processing transcript".format(basename))
 
-        # create Task object
-        config_string = u"task_language=spa|is_text_type=plain|os_task_file_format=srt"
-        task = Task(config_string=config_string)
-        task.audio_file_path_absolute = u"{0}/{1}.wav".format(args.audio_dir, basename)
-        task.text_file_path_absolute = u"{0}/{1}.txt".format(args.trans_dir, basename)
-        task.sync_map_file_path_absolute = u"{0}/{1}.wav.srt".format(args.out_dir, basename)
+        try:
+            # create Task object
+            config_string = u"task_language=spa|is_text_type=plain|os_task_file_format=srt"
+            task = Task(config_string=config_string)
+            task.audio_file_path_absolute = u"{0}/{1}.wav".format(args.audio_dir, basename)
+            task.text_file_path_absolute = u"{0}/{1}.txt".format(args.trans_dir, basename)
+            task.sync_map_file_path_absolute = u"{0}/{1}.wav.srt".format(args.out_dir, basename)
 
-        # process Task
-        ExecuteTask(task).execute()
+            # process Task
+            ExecuteTask(task).execute()
 
-        # output sync map to file
-        task.output_sync_map_file()
+            # output sync map to file
+            task.output_sync_map_file()
+        except (AudioFileUnsupportedFormatError, ExecuteTaskInputError, ExecuteTaskExecutionError) as e:
+            print("Failed.", e)
+            continue
 
         print("{0} - Done".format(basename))
 
