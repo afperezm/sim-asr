@@ -11,7 +11,7 @@ def main():
     parser = argparse.ArgumentParser(description="Aeneas-based transcripts aligner")
     parser.add_argument("--trans_dir", type=str, help="Transcripts data directory, where tag-clean transcripts are "
                                                       "located", required=True)
-    parser.add_argument("--audio_dir", type=str, help="Auio data directory, where tag-clean transcripts associated "
+    parser.add_argument("--audio_dir", type=str, help="Audio data directory, where tag-clean transcripts associated "
                                                       "audios are located", required=True)
     parser.add_argument("--out_dir", type=str, help="Output data directory, where to copy audio-aligned transcripts",
                         required=True)
