@@ -1,2 +1,9 @@
-# SIM Automatic Speech Recognition
+# Automatic Speech Recognition of Colombian Dialects
 
+## Requirements
+
+## Installation
+
+## Content
+
+## Usage
