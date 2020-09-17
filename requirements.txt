@@ -6,3 +6,6 @@ pdftotext==2.1.4
 pymongo==3.9.0
 textract==1.6.3
 aeneas==1.7.3.0
+srt==3.4.1
+matplotlib==3.3.1
+pydub==0.23.1
