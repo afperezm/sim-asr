@@ -65,6 +65,8 @@ def main():
 
         for idx, sub in enumerate(audio_subs):
 
+            print("{0} - Processing segment {1}/{2}".format(sub_srt_basename, idx, len(audio_subs)))
+
             # Compose audio segment filename
             audio_segment = "{basename}-{idx:0>4d}.wav".format(basename=sub_srt_basename, idx=idx)
             audio_segment = os.path.join(waves_dir, audio_segment)
@@ -92,7 +94,9 @@ def main():
 
             writer.writerow([audio_segment, audio_transcript])
 
-        print("{0} - Done.".format(sub_srt_basename))
+            print("{0} - Done processing segment {1}/{2}".format(sub_srt_basename, idx, len(audio_subs)))
+
+        print("{0} - Done processing subtitle".format(sub_srt_basename))
 
     output_csv_file.close()
 
