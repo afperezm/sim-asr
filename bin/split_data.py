@@ -55,8 +55,6 @@ def main():
             print("{0} - Missing associated audio file".format(sub_srt_basename))
             continue
 
-        print("{0} - Processing subtitle".format(sub_srt_basename))
-
         with open(subtitle_srt) as subtitle_srt_file:
             subtitle_contents = subtitle_srt_file.read()
 
@@ -73,6 +71,7 @@ def main():
 
             # Skip already processed segments
             if os.path.isfile(audio_segment):
+                print("{0} - Skipping, already processed".format(sub_srt_basename))
                 continue
 
             # Compute subtitle start and end time in milliseconds
@@ -81,6 +80,7 @@ def main():
 
             # Skip processing subtitle if has zero length or empty content
             if (sub.end - sub.start).total_seconds() == 0.0 or not sub.content:
+                print("{0} - Skipping, zero length or empty content".format(sub_srt_basename))
                 continue
 
             # Export audio segment
@@ -94,9 +94,7 @@ def main():
 
             writer.writerow([os.path.relpath(audio_segment, output_dir), audio_transcript])
 
-            print("{0} - Done processing segment {1}/{2}".format(sub_srt_basename, idx, len(audio_subs)))
-
-        print("{0} - Done processing subtitle".format(sub_srt_basename))
+            print("{0} - Done".format(sub_srt_basename))
 
     output_csv_file.close()
 
