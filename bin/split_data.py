@@ -92,7 +92,7 @@ def main():
             audio_transcript = audio_transcript.encode("ascii", "ignore").decode("ascii", "ignore")
             audio_transcript = audio_transcript.translate(str.maketrans("", "", string.punctuation))
 
-            writer.writerow([audio_segment, audio_transcript])
+            writer.writerow([os.path.relpath(audio_segment, output_dir), audio_transcript])
 
             print("{0} - Done processing segment {1}/{2}".format(sub_srt_basename, idx, len(audio_subs)))
 
