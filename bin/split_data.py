@@ -35,7 +35,17 @@ def main():
     output_dir = os.path.abspath(args.out_dir)
     waves_dir = os.path.join(output_dir, "wavs")
 
-    os.mkdir(waves_dir)
+    if not os.path.exists(subtitles_dir):
+        os.makedirs(subtitles_dir)
+
+    if not os.path.exists(audio_dir):
+        os.makedirs(subtitles_dir)
+
+    if not os.path.exists(output_dir):
+        os.makedirs(subtitles_dir)
+
+    if not os.path.exists(waves_dir):
+        os.makedirs(waves_dir)
 
     output_csv = os.path.join(output_dir, "output.csv")
     output_csv_file = open(output_csv, "w", encoding="utf-8", newline="")
