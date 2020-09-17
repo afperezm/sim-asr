@@ -66,7 +66,7 @@ def main():
         for idx, sub in enumerate(audio_subs):
 
             # Compose audio segment filename
-            audio_segment = "{basename}_{idx:0>4d}.wav".format(basename=sub_srt_basename, idx=idx)
+            audio_segment = "{basename}-{idx:0>4d}.wav".format(basename=sub_srt_basename, idx=idx)
             audio_segment = os.path.join(waves_dir, audio_segment)
 
             # Skip already processed segments
