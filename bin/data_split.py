@@ -50,8 +50,7 @@ def main():
 
     output_csv = os.path.join(output_dir, "output.csv")
     output_csv_file = open(output_csv, "w", encoding="utf-8", newline="")
-
-    writer = csv.writer(output_csv_file, dialect=csv.excel)
+    output_csv_writer = csv.writer(output_csv_file, dialect=csv.excel)
 
     durations = {}
 
@@ -109,7 +108,8 @@ def main():
             audio_transcript = audio_transcript.encode("ascii", "ignore").decode("ascii", "ignore")
             audio_transcript = audio_transcript.translate(str.maketrans("", "", string.punctuation))
 
-            writer.writerow([os.path.relpath(audio_segment, output_dir), audio_transcript])
+            # Write audio segment path and transcript to output csv file
+            output_csv_writer.writerow([os.path.relpath(audio_segment, output_dir), audio_transcript])
 
             # Build list of audio subs duration
             durations[audio_segment] = [(sub.end - sub.start).total_seconds()]
