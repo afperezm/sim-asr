@@ -93,6 +93,10 @@ def main():
                 print("{0} - Skipping, zero length or empty content".format(sub_srt_basename))
                 continue
 
+            if (sub.end - sub.start).total_seconds() > 60:
+                print("{0} - Skipping, longer than one minute".format(sub_srt_basename))
+                continue
+
             # Export audio segment
             audio_segment_file = audio_wav_file[t1:t2]
             audio_segment_file.export(audio_segment)
