@@ -2,6 +2,7 @@ import argparse
 import csv
 import glob
 import os
+import pickle
 import srt
 import string
 import unicodedata
@@ -51,6 +52,8 @@ def main():
     output_csv_file = open(output_csv, "w", encoding="utf-8", newline="")
 
     writer = csv.writer(output_csv_file, dialect=csv.excel)
+
+    durations = {}
 
     subtitles_srt = glob.glob("{0}/*.srt".format(subtitles_dir))
 
@@ -108,9 +111,18 @@ def main():
 
             writer.writerow([os.path.relpath(audio_segment, output_dir), audio_transcript])
 
+            # Build list of audio subs duration
+            durations[audio_segment] = [(sub.end - sub.start).total_seconds()]
+
             print("{0} - Done".format(sub_srt_basename))
 
     output_csv_file.close()
+
+    # Write durations dictionary to a pickle file in the output directory
+    durations_pkl = os.path.join(output_dir, "audio_subs_duration.pkl")
+
+    with open(durations_pkl, "wb") as durations_pkl_file:
+        pickle.dump(durations, durations_pkl_file, protocol=pickle.HIGHEST_PROTOCOL)
 
 
 if __name__ == "__main__":
