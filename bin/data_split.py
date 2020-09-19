@@ -9,7 +9,7 @@ import unicodedata
 from pydub import AudioSegment
 
 
-def main():
+def parse_args():
     parser = argparse.ArgumentParser(
         description="Splitter of audio-aligned transcripts in SubRip file format."
     )
@@ -28,12 +28,13 @@ def main():
         type=str,
         help="Output data directory, where to store split audio-aligned transcripts.",
         required=True)
+    return parser.parse_args()
 
-    args = parser.parse_args()
 
-    subtitles_dir = os.path.abspath(args.subs_dir)
-    audio_dir = os.path.abspath(args.audio_dir)
-    output_dir = os.path.abspath(args.out_dir)
+def main():
+    subtitles_dir = os.path.abspath(PARAMS.subs_dir)
+    audio_dir = os.path.abspath(PARAMS.audio_dir)
+    output_dir = os.path.abspath(PARAMS.out_dir)
     waves_dir = os.path.join(output_dir, "wavs")
 
     if not os.path.exists(subtitles_dir):
@@ -126,4 +127,5 @@ def main():
 
 
 if __name__ == "__main__":
+    PARAMS = parse_args()
     main()
