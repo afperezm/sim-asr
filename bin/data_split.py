@@ -100,8 +100,8 @@ def main():
                 continue
 
             # Export audio segment
-            audio_segment_file = audio_wav_file[t1:t2]
-            audio_segment_file.export(audio_segment)
+            audio_segment_file = audio_wav_file[t1:t2].export(audio_segment, format="wav")
+            audio_segment_file.close()
 
             # Remove diacritic characters and punctuation signs
             audio_transcript = unicodedata.normalize("NFKD", sub.content.strip())
