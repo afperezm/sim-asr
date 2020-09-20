@@ -44,7 +44,7 @@ def main():
         os.makedirs(subtitles_dir)
 
     if not os.path.exists(output_dir):
-        os.makedirs(subtitles_dir)
+        os.makedirs(output_dir)
 
     if not os.path.exists(waves_dir):
         os.makedirs(waves_dir)
