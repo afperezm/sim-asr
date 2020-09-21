@@ -76,7 +76,7 @@ def one_sample(sample):
         counter["too_long"] += 1
     else:
         # This one is good - keep it for the output CSV
-        rows.append((wav_filename, file_size, label))
+        rows.append((os.path.split(wav_filename)[-1], file_size, label))
         counter["imported_time"] += frames
 
     counter["all"] += 1
