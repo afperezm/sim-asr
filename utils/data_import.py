@@ -57,6 +57,8 @@ def one_sample(sample):
     if os.path.exists(wav_filename):
         file_size = os.path.getsize(wav_filename)
         frames = int(subprocess.check_output(["soxi", "-s", wav_filename], stderr=subprocess.STDOUT))
+    else:
+        print("{} doesn't exist".format(wav_filename))
 
     label = FILTER_OBJ.filter(transcript)
     counter = get_counter()
