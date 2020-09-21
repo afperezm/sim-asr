@@ -772,6 +772,18 @@ def main():
                           "", contents)
         contents = re.sub(r"\[INFORMACIÓN\sCONFIDENCIAL:\sXXXXX\s19:14\s\]",
                           "", contents)
+        contents = re.sub(r"\("
+                          r"(Consentimiento\sInformado\s[y-]\s)?"
+                          r"Tratamiento\sde\sDatos"
+                          r"(\spersonales)?"
+                          r"(\spersonales\sy\ssensibles)?"
+                          r":?\s\d{2}:\d{2}\s-\s\d{2}:\d{2}\)",
+                          "", contents, flags=re.IGNORECASE)
+        contents = re.sub(r"\(Datos\ssensibles(:\s\d{2}:\d{2})?\)", "", contents)
+        contents = re.sub(r"\d:\d{2}:\d{2}", "", contents)
+        contents = re.sub(r"1[3-9]:\d{2}", "", contents)
+        contents = re.sub(r"[2-9]\d:\d{2}", "", contents)
+        contents = re.sub(r"PAUSA(\d{2}:\d{2})?", "", contents)
 
         standard_actor_tags = [
             r'ENT([2-9]|1[0-2])?',
