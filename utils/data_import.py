@@ -126,7 +126,7 @@ def _maybe_convert_sets(data_dir, audio_dir):
             test_writer.writerow({
                 "wav_filename": filename,
                 "wav_filesize": file_size,
-                "transcript": transcript[2]
+                "transcript": transcript
             })
 
     dev_csv = output_csv_template.format("dev")
@@ -139,7 +139,7 @@ def _maybe_convert_sets(data_dir, audio_dir):
             dev_writer.writerow({
                 "wav_filename": filename,
                 "wav_filesize": file_size,
-                "transcript": transcript[2]
+                "transcript": transcript
             })
 
     train_csv = output_csv_template.format("train")
@@ -152,7 +152,7 @@ def _maybe_convert_sets(data_dir, audio_dir):
             train_writer.writerow({
                 "wav_filename": filename,
                 "wav_filesize": file_size,
-                "transcript": transcript[2]
+                "transcript": transcript
             })
 
 
