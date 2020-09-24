@@ -1040,9 +1040,8 @@ def main():
             time_value = "{time}{noon_ind}{final_dot}".format(time=word_formatted_time,
                                                               noon_ind=word_formatted_noon_ind,
                                                               final_dot="." if time[2].endswith(".") else "")
-            # contents_replaced = contents_replaced.replace(time_key, time_value)
-            if word_formatted_noon_ind == "":
-                time_tags[time_key] = time_value
+            contents_replaced = contents_replaced.replace(time_key, time_value)
+            time_tags[time_key] = time_value
 
         # TODO Verbalize numbers
         # content_numbers = re.findall(r"\d+", contents_replaced)
