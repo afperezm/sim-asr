@@ -1031,7 +1031,8 @@ def main():
             word_formatted_hours = num2words(int(time[0]), lang="es_CO")
             word_formatted_minutes = "" if int(time[1]) == 0 else ("cuarto" if int(time[1]) == 15 else (
                 "media" if int(time[1]) == 30 else num2words(int(time[1]), lang="es_CO")))
-            word_formatted_time = " y ".join([word_formatted_hours, word_formatted_minutes])
+            word_formatted_time = word_formatted_hours if not word_formatted_minutes else "{hours} y {minutes}".format(
+                hours=word_formatted_hours, minutes=word_formatted_minutes)
             word_formatted_noon_ind = " de la mañana" if time[3] == "a" else (
                 " de la tarde" if time[3] == "p" else "")
             time_key = "{hours}:{minutes}{noon_ind}".format(hours=time[0],
