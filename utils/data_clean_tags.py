@@ -427,7 +427,7 @@ def main():
                           "vida", contents)
         contents = re.sub(r"Célimo\sPortilla\s05:14",
                           "Célimo Portilla", contents)
-        contents = re.sub(r"11+\s4:\s14\s\+4:18\+7:25",
+        contents = re.sub(r"11\+\s4:\s14\s\+4:18\+7:25",
                           "once, cuatro, catorce y cuatro diecocho y siete veinticinco", contents)
         contents = re.sub(r"\(Silencio\s33:18\s-\s33:38\)",
                           "[Silencio 33:18-33:38]", contents)
