@@ -5,7 +5,7 @@ import os
 import pprint
 import re
 # import unicodedata
-# from num2words import num2words
+from num2words import num2words
 
 
 def main():
@@ -21,6 +21,7 @@ def main():
 
     actor_tags = {}
     trans_tags = {}
+    time_tags = {}
 
     actor_tags_black_list = ['Transcriptor', 'Y dijieron', 'Objetivos principales', 'Y', 'Primer fracaso', 'Dije',
                              'Papá', 'Dijo ', 'Entonces dijo ', 'Entonces dije', 'Ella dice', 'Y allá', 'Bueno',
@@ -1024,11 +1025,24 @@ def main():
         # contents_replaced = unicodedata.normalize("NFKD", contents_replaced)
         # contents_replaced = contents_replaced.encode("ascii", "ignore").decode("ascii", "ignore")
 
-        # TODO Verbalize hours
-        # content_hours = re.findall(r"\d{1,2}:\d{2}", contents_replaced)
-        # content_hours = list(set(content_hours))
-        # print("")
-        # print(content_hours)
+        # Verbalize hours
+        hours = list(set(re.findall(r"(\d{1,2}):(\d{2})(\s?([ap])\.?m\.?)?", contents_replaced)))
+        for time in hours:
+            word_formatted_hours = num2words(int(time[0]), lang="es_CO")
+            word_formatted_minutes = "" if int(time[1]) == 0 else ("cuarto" if int(time[1]) == 15 else (
+                "media" if int(time[1]) == 30 else num2words(int(time[1]), lang="es_CO")))
+            word_formatted_time = " y ".join([word_formatted_hours, word_formatted_minutes])
+            word_formatted_noon_ind = " de la mañana" if time[3] == "a" else (
+                " de la tarde" if time[3] == "p" else "")
+            time_key = "{hours}:{minutes}{noon_ind}".format(hours=time[0],
+                                                            minutes=time[1],
+                                                            noon_ind=time[2])
+            time_value = "{time}{noon_ind}{final_dot}".format(time=word_formatted_time,
+                                                              noon_ind=word_formatted_noon_ind,
+                                                              final_dot="." if time[2].endswith(".") else "")
+            # contents_replaced = contents_replaced.replace(time_key, time_value)
+            if word_formatted_noon_ind == "":
+                time_tags[time_key] = time_value
 
         # TODO Verbalize numbers
         # content_numbers = re.findall(r"\d+", contents_replaced)
@@ -1056,6 +1070,8 @@ def main():
     print("Non-standard transcription tags count:")
     pprint.pprint(sorted({tag: len(trans_tags[tag]) for tag in trans_tags}.items(),
                          key=operator.itemgetter(1)))
+
+    pprint.pprint(time_tags)
 
 
 if __name__ == '__main__':
