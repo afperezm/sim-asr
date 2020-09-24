@@ -784,6 +784,7 @@ def main():
         contents = re.sub(r"1[3-9]:\d{2}\s?-?\s?", "", contents)
         contents = re.sub(r"[2-9]\d:\s?\d{2}\s?-?\s?", "", contents)
         contents = re.sub(r"PAUSA(\d{2}:\d{2})?", "", contents)
+        contents = re.sub(r"XXX:\s01:03", "XXX: [DUD: 1:03]", contents)
 
         standard_actor_tags = [
             r'ENT([2-9]|1[0-2])?',
