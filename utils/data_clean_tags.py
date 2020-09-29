@@ -1009,6 +1009,16 @@ def main():
                           "", contents)
         contents = re.sub(r"\(millón\sochocientos\)",
                           "", contents)
+        contents = re.sub(r"\*\*_080-VI-00013_\(3786\)_\*\*",
+                          "", contents)
+        contents = re.sub(r"Audio 205-VI-00019_\(39322\)",
+                          "", contents)
+        contents = re.sub(r"\*\*215-VI-00031\(5216\)_Otros documentos\(190730_0023\.wav\)\*\*",
+                          "", contents)
+        contents = re.sub(r"\*\*416-VI-00001_\(13545\)_Otros documentos \(000123_0004\.wav\)\*\*",
+                          "", contents)
+        contents = re.sub(r"425-VI-00004",
+                          "", contents)
 
         standard_actor_tags = [
             r'ENT([2-9]|1[0-2])?',
