@@ -998,6 +998,17 @@ def main():
         contents = re.sub(r"1[3-9]:\d{2}\s?-?\s?", "", contents)
         contents = re.sub(r"[2-9]\d:\s?\d{2}\s?\\?-?\s?", "", contents)
         contents = re.sub(r"PAUSA(\d{2}:\d{2})?", "", contents)
+        contents = re.sub(r"\(COP\)", "", contents)
+        contents = re.sub(r"\(tres\smillones\)",
+                          "", contents)
+        contents = re.sub(r"\(cuatro\smillones\)",
+                          "", contents)
+        contents = re.sub(r"\(cinco\smillones\)",
+                          "", contents)
+        contents = re.sub(r"\(cien\smillones\)",
+                          "", contents)
+        contents = re.sub(r"\(millón\sochocientos\)",
+                          "", contents)
 
         standard_actor_tags = [
             r'ENT([2-9]|1[0-2])?',
