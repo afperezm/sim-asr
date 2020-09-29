@@ -1019,6 +1019,8 @@ def main():
                           "", contents)
         contents = re.sub(r"425-VI-00004",
                           "", contents)
+        contents = re.sub(r"44\.56\sayer",
+                          "", contents)
 
         standard_actor_tags = [
             r'ENT([2-9]|1[0-2])?',
