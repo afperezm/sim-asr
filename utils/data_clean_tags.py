@@ -860,6 +860,14 @@ def main():
                           "[DUD: 03:37-39:22]", contents)
         contents = re.sub(r"\[DUD:\s34:33:\s34:35\]",
                           "[DUD: 34:33-34:35]", contents)
+        contents = re.sub(r"3\s0\s4",
+                          "3 o 4", contents)
+        contents = re.sub(r"aquí\s1\s0\s2\smuertos",
+                          "aquí 1 o 2 muertos", contents)
+        contents = re.sub(r"200\,300",
+                          "200, 300", contents)
+        contents = re.sub(r"20380/0271",
+                          "20 3 80 slash 0 2 7 1", contents)
 
         # Custom replacements for non-generalizable expressions
         contents = re.sub(r"\n\**(\d{1,2}:?)+\**\s*\n",
