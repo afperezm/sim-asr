@@ -1170,12 +1170,10 @@ def main():
             contents_replaced = contents_replaced.replace(time_key, time_value)
             time_tags[time_key] = time_value
 
-        # TODO Verbalize numbers
-        # content_numbers = re.findall(r"\d+", contents_replaced)
-        # content_numbers = list(set(content_numbers))
-        # content_numbers.sort(key=lambda s: len(s), reverse=True)
-        # print(content_numbers)
-        # [num2words(number, lang="es_CO") for number in sorted(content_numbers)]
+        # Replace arithmetic operations (allow verbalization to work properly)
+        contents_replaced = re.sub(r"(\d+)\+(\d+)", r"\1 mas \2", contents_replaced)
+        contents_replaced = re.sub(r"(\d+)\sx\s(\d+)", r"\1 por \2", contents_replaced)
+        contents_replaced = re.sub(r"(\d+)\s\*\s(\d+)", r"\1 por \2", contents_replaced)
 
         # Write out formatted transcription
         with open("{0}/{1}.txt".format(args.out_dir, basename), "wt") as file:
