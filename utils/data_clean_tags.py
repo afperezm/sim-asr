@@ -860,6 +860,8 @@ def main():
                           "[DUD: 03:37-39:22]", contents)
         contents = re.sub(r"\[DUD:\s34:33:\s34:35\]",
                           "[DUD: 34:33-34:35]", contents)
+        contents = re.sub(r"XXX:\s01:03",
+                          "XXX: [DUD: 1:03]", contents)
         contents = re.sub(r"3\s0\s4",
                           "3 o 4", contents)
         contents = re.sub(r"aquí\s1\s0\s2\smuertos",
@@ -902,7 +904,6 @@ def main():
         contents = re.sub(r"1[3-9]:\d{2}\s?-?\s?", "", contents)
         contents = re.sub(r"[2-9]\d:\s?\d{2}\s?\\?-?\s?", "", contents)
         contents = re.sub(r"PAUSA(\d{2}:\d{2})?", "", contents)
-        contents = re.sub(r"XXX:\s01:03", "XXX: [DUD: 1:03]", contents)
 
         standard_actor_tags = [
             r'ENT([2-9]|1[0-2])?',
