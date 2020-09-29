@@ -1175,6 +1175,13 @@ def main():
         contents_replaced = re.sub(r"(\d+)\sx\s(\d+)", r"\1 por \2", contents_replaced)
         contents_replaced = re.sub(r"(\d+)\s\*\s(\d+)", r"\1 por \2", contents_replaced)
 
+        # Replace currencies within parentheses
+        contents_replaced = re.sub(r"\(\$\d+([',.´’]\d{3})+\)", "", contents_replaced)
+
+        # Replace currencies separators (allow verbalization to work properly)
+        contents_replaced = re.sub(r"(\d+)[',.´’](\d{3})([',.´’](\d{3}))?([',.´’](\d{3}))?",
+                                   r"\1\2\4\6", contents_replaced)
+
         # Write out formatted transcription
         with open("{0}/{1}.txt".format(args.out_dir, basename), "wt") as file:
             file.write(contents_replaced)
