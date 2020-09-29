@@ -878,6 +878,42 @@ def main():
                           "ochenta y seis millones cero cero mil novecientos veintiséis", contents)
         contents = re.sub(r"802\.002\.153\-7",
                           "ocho cero dos punto cero cero dos punto uno cincuenta y tres guión siete guión siete", contents)
+        contents = re.sub(r"9\*8",
+                          "98", contents)
+        contents = re.sub(r"86,96,2006,2016",
+                          "86, 96, 2006, 2016", contents)
+        contents = re.sub(r"85,95,2001",
+                          "85, 95, 2001", contents)
+        contents = re.sub(r"2\'19",
+                          "2019", contents)
+        contents = re.sub(r"2009\{2009\}",
+                          "2009", contents)
+        contents = re.sub(r"1800\,1900",
+                          "1800, 1900", contents)
+        contents = re.sub(r"2\.0006",
+                          "2006", contents)
+        contents = re.sub(r"2002\,2003",
+                          "2002, 2003", contents)
+        contents = re.sub(r"2002\,2005",
+                          "2002, 2005", contents)
+        contents = re.sub(r"2004\,2005",
+                          "2004, 2005", contents)
+        contents = re.sub(r"2004\,2005\,2006\,2007",
+                          "2004, 2005, 2006, 2007", contents)
+        contents = re.sub(r"2005\,2006",
+                          "2005, 2006", contents)
+        contents = re.sub(r"2006\,2007",
+                          "2006, 2007", contents)
+        contents = re.sub(r"2007\,2007",
+                          "2007, 2007", contents)
+        contents = re.sub(r"2013\,2014",
+                          "2013, 2014", contents)
+        contents = re.sub(r"2\.109",
+                          "2.019", contents)
+        contents = re.sub(r"20002",
+                          "2002", contents)
+        contents = re.sub(r"20202",
+                          "2020", contents)
 
         # Custom replacements for non-generalizable expressions
         contents = re.sub(r"\n\**(\d{1,2}:?)+\**\s*\n",
