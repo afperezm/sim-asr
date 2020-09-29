@@ -956,6 +956,14 @@ def main():
                           "250.000 ", contents)
         contents = re.sub(r"40\.00 ",
                           "40.000 ", contents)
+        contents = re.sub(r"320-890-4748",
+                          "3 20 8 90 47 48", contents)
+        contents = re.sub(r"322-618-7730",
+                          "3 22 6 18 77 30", contents)
+        contents = re.sub(r"314-768-6050",
+                          "3 14 7 68 60 50", contents)
+        contents = re.sub(r"321-240-0477",
+                          "3 21 2 40 0 4 77", contents)
 
         # Custom replacements for non-generalizable expressions
         contents = re.sub(r"\n\**(\d{1,2}:?)+\**\s*\n",
