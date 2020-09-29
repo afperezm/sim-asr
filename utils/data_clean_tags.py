@@ -914,6 +914,48 @@ def main():
                           "2002", contents)
         contents = re.sub(r"20202",
                           "2020", contents)
+        contents = re.sub(r"2\.400\.00",
+                          "2400000", contents)
+        contents = re.sub(r"828\.16",
+                          "828160", contents)
+        contents = re.sub(r"4\'000\.0000",
+                          "4'000.000", contents)
+        contents = re.sub(r"3\.000\.0000",
+                          "3.000.000", contents)
+        contents = re.sub(r"1\'200000",
+                          "1'200.000", contents)
+        contents = re.sub(r"1\.8000\.000",
+                          "1.800.000", contents)
+        contents = re.sub(r"10\.000000",
+                          "10'000.000", contents)
+        contents = re.sub(r"20\.000000",
+                          "20'000.000", contents)
+        contents = re.sub(r"600\.0000",
+                          "600.000", contents)
+        contents = re.sub(r"7\.9000",
+                          "7.000", contents)
+        contents = re.sub(r"80\.0000",
+                          "80.000", contents)
+        contents = re.sub(r"800\.0000",
+                          "800.000", contents)
+        contents = re.sub(r"800\s\(800\.000\smil\spesos\)",
+                          "800.000 pesos", contents)
+        contents = re.sub(r"000\smil\spesos",
+                          "000 pesos", contents)
+        contents = re.sub(r"1100\'000\.000",
+                          "1.100'000.000", contents)
+        contents = re.sub(r"1000'000\.000",
+                          "1.000'000.000", contents)
+        contents = re.sub(r"\.000\.000\smillones",
+                          ".000.000", contents)
+        contents = re.sub(r"\'000\.000\smillones",
+                          "'000.000", contents)
+        contents = re.sub(r"700\s\.000\.000",
+                          "700.000.000", contents)
+        contents = re.sub(r"250\.00 ",
+                          "250.000 ", contents)
+        contents = re.sub(r"40\.00 ",
+                          "40.000 ", contents)
 
         # Custom replacements for non-generalizable expressions
         contents = re.sub(r"\n\**(\d{1,2}:?)+\**\s*\n",
