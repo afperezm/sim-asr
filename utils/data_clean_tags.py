@@ -868,6 +868,8 @@ def main():
                           "aquí 1 o 2 muertos", contents)
         contents = re.sub(r"200\,300",
                           "200, 300", contents)
+        contents = re.sub(r"120,130",
+                          "120 130", contents)
         contents = re.sub(r"20380/0271",
                           "20 3 80 slash 0 2 7 1", contents)
 
