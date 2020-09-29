@@ -872,6 +872,12 @@ def main():
                           "120 130", contents)
         contents = re.sub(r"20380/0271",
                           "20 3 80 slash 0 2 7 1", contents)
+        contents = re.sub(r"23\.\s217\.661",
+                          "23217661", contents)
+        contents = re.sub(r"86\'000\.1926",
+                          "ochenta y seis millones cero cero mil novecientos veintiséis", contents)
+        contents = re.sub(r"802\.002\.153\-7",
+                          "ocho cero dos punto cero cero dos punto uno cincuenta y tres guión siete guión siete", contents)
 
         # Custom replacements for non-generalizable expressions
         contents = re.sub(r"\n\**(\d{1,2}:?)+\**\s*\n",
