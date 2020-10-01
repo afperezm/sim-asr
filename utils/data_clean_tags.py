@@ -993,6 +993,56 @@ def main():
                           "3 21 2 40 0 4 77", contents)
         contents = re.sub(r"312 565 9845",
                           "3 12 5 65 98 45", contents)
+        contents = re.sub(r"7\.00 de la",
+                          "7:00 de la", contents)
+        contents = re.sub(r"6\.10 de",
+                          "6:10 de", contents)
+        contents = re.sub(r"10\.30 de la",
+                          "10:30 de la", contents)
+        contents = re.sub(r"12\.30 estábamos",
+                          "12:30 estábamos", contents)
+        contents = re.sub(r"11\.46 minutos",
+                          "11:46 minutos", contents)
+        contents = re.sub(r"11\.04\sam",
+                          "11:04 am", contents)
+        contents = re.sub(r"3\.00 de",
+                          "3:00 de", contents)
+        contents = re.sub(r"11\.30,\scaímos",
+                          "11:30, caímos", contents)
+        contents = re.sub(r"las 4\.30 o",
+                          "las 4:30 o", contents)
+        contents = re.sub(r"6\.00 6\.30",
+                          "6:00 6:30", contents)
+        contents = re.sub(r"4\.00-5\.00",
+                          "4:00-5:00", contents)
+        contents = re.sub(r"5\.00 de",
+                          "5:00 de", contents)
+        contents = re.sub(r"6\.30 de la",
+                          "6:30 de la", contents)
+        contents = re.sub(r"6\.30 era",
+                          "6:30 era", contents)
+        contents = re.sub(r"las 12\.20 del",
+                          "las 12:20 del", contents)
+        contents = re.sub(r"las 7\.30 de",
+                          "las 7:30 de", contents)
+        contents = re.sub(r"las 6\.00 y",
+                          "las 6:00 y", contents)
+        contents = re.sub(r"las 8\.00",
+                          "las 8:00", contents)
+        contents = re.sub(r"9\.00 de",
+                          "9:00 de", contents)
+        contents = re.sub(r"en 2\.00 que",
+                          "en 2000 que", contents)
+        contents = re.sub(r"las 2\.00 de",
+                          "las 2:00 de", contents)
+        contents = re.sub(r"a la 1\.00",
+                          "a la 1:00", contents)
+        contents = re.sub(r"las 4\.00 de",
+                          "las 4:00 de", contents)
+        contents = re.sub(r"0\.02",
+                          "cero punto cero dos", contents)
+        contents = re.sub(r"por 1\.30 era",
+                          "por un metro treinta era", contents)
 
         # Custom replacements for non-generalizable expressions
         contents = re.sub(r"\n\**(\d{1,2}:?)+\**\s*\n",
