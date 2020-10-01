@@ -1043,6 +1043,46 @@ def main():
                           "cero punto cero dos", contents)
         contents = re.sub(r"por 1\.30 era",
                           "por un metro treinta era", contents)
+        contents = re.sub(r"20/20",
+                          "20 20", contents)
+        contents = re.sub(r"14/06/2019",
+                          "14 de Junio del 2019", contents)
+        contents = re.sub(r"20/09/19",
+                          "24 0 9 del 19", contents)
+        contents = re.sub(r"7/24",
+                          "7 24", contents)
+        contents = re.sub(r"1/9 parte",
+                          "novena parte", contents)
+        contents = re.sub(r"7/23/2008",
+                          "7 23 de 2008", contents)
+        contents = re.sub(r"25/10",
+                          "25 10", contents)
+        contents = re.sub(r"3/50",
+                          "3 50", contents)
+        contents = re.sub(r"20/11/ 2019",
+                          "20 de Noviembre del 2019", contents)
+        contents = re.sub(r"28 /11/",
+                          "28 de Noviembre", contents)
+        contents = re.sub(r"01/02/1995",
+                          "primero de febrero de 1995", contents)
+        contents = re.sub(r"17/09/2002",
+                          "17 de Septiembre del 2002", contents)
+        contents = re.sub(r"14/75",
+                          "14 75", contents)
+        contents = re.sub(r"50/50",
+                          "50 50", contents)
+        contents = re.sub(r"1/4",
+                          "cuarto", contents)
+        contents = re.sub(r"3/4",
+                          "tres cuartos", contents)
+        contents = re.sub(r"15/10/2002",
+                          "15 de Octubre del 2002", contents)
+        contents = re.sub(r"Del 28/5/46",
+                          "Yo el 28 5 46", contents)
+        contents = re.sub(r"27/09/1958",
+                          "27 de Septiembre de 1958", contents)
+        contents = re.sub(r"03/06",
+                          "3 de Junio", contents)
 
         # Custom replacements for non-generalizable expressions
         contents = re.sub(r"\n\**(\d{1,2}:?)+\**\s*\n",
