@@ -985,6 +985,8 @@ def main():
                           "250.000 ", contents)
         contents = re.sub(r"40\.00 ",
                           "40.000 ", contents)
+        contents = re.sub(r"3\.000\.000.000 de pesos",
+                          "tres mil millones de pesos", contents)
         contents = re.sub(r"320-890-4748",
                           "3 20 8 90 47 48", contents)
         contents = re.sub(r"322-618-7730",
@@ -995,6 +997,8 @@ def main():
                           "3 21 2 40 0 4 77", contents)
         contents = re.sub(r"312 565 9845",
                           "3 12 5 65 98 45", contents)
+        contents = re.sub(r"321 500 0089",
+                          "321 50000 89", contents)
         contents = re.sub(r"7\.00 de la",
                           "7:00 de la", contents)
         contents = re.sub(r"6\.10 de",
@@ -1326,6 +1330,10 @@ def main():
                                    r"\1, \2, \3", contents_replaced)
         contents_replaced = re.sub(r"(\d+),(\d+)",
                                    r"\1, \2", contents_replaced)
+
+        # Split cellphone numbers
+        contents_replaced = re.sub(r"(3\d{2})(\d)(\d{2})(\d{2})(\d{2})([^\d])",
+                                   r"\1 \2 \3 \4 \5\6", contents_replaced)
 
         # Verbalize numbers
         numbers = list(set(re.findall(r"(\d+)", contents_replaced)))
