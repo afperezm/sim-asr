@@ -1343,7 +1343,7 @@ def main():
 
         # TODO Further refine list of number to verbalize to avoid wrong verbalization
         # Verbalize numbers
-        numbers = sorted(list(set(re.findall(r"(\d+)", contents_replaced))), reverse=True)
+        numbers = sorted(list(set(re.findall(r"(\d+)", contents_replaced))), key=lambda n: len(n), reverse=True)
         for number in numbers:
             word_key = number
             word_value = num2words(number, lang="es_CO")
