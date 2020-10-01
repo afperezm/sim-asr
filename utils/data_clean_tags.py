@@ -1302,6 +1302,31 @@ def main():
         contents_replaced = re.sub(r"(\d+)[',.´’](\d{3})([',.´’](\d{3}))?([',.´’](\d{3}))?",
                                    r"\1\2\4\6", contents_replaced)
 
+        # Replace decimal separator
+        contents_replaced = re.sub(r"(\d+)\.(\d)[^\d]",
+                                   r"\1 punto \2 ", contents_replaced)
+        contents_replaced = re.sub(r"(\d{2})\.(\d{2})[^\d]",
+                                   r"\1 punto \2 ", contents_replaced)
+
+        contents_replaced = re.sub(r"\#\s?(\d+)",
+                                   r"número \1 ", contents_replaced)
+
+        # Replace dot or hyphen by whitespace
+        contents_replaced = re.sub(r"(\d+)[.\-':”](\d+)",
+                                   r"\1 \2", contents_replaced)
+
+        # Add space between numbers separated with comma
+        contents_replaced = re.sub(r"(\d+),(\d+),(\d+),(\d+),(\d+),(\d+)",
+                                   r"\1, \2, \3, \4, \5, \6", contents_replaced)
+        contents_replaced = re.sub(r"(\d+),(\d+),(\d+),(\d+),(\d+)",
+                                   r"\1, \2, \3, \4, \5", contents_replaced)
+        contents_replaced = re.sub(r"(\d+),(\d+),(\d+),(\d+)",
+                                   r"\1, \2, \3, \4", contents_replaced)
+        contents_replaced = re.sub(r"(\d+),(\d+),(\d+)",
+                                   r"\1, \2, \3", contents_replaced)
+        contents_replaced = re.sub(r"(\d+),(\d+)",
+                                   r"\1, \2", contents_replaced)
+
         # Write out formatted transcription
         with open("{0}/{1}.txt".format(args.out_dir, basename), "wt") as file:
             file.write(contents_replaced)
