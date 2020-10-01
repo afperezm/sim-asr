@@ -977,6 +977,8 @@ def main():
                           ".000.000", contents)
         contents = re.sub(r"\'000\.000\smillones",
                           "'000.000", contents)
+        contents = re.sub(r"(\d+)mill",
+                          r"\1 mill", contents)
         contents = re.sub(r"700\s\.000\.000",
                           "700.000.000", contents)
         contents = re.sub(r"250\.00 ",
