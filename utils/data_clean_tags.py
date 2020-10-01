@@ -21,7 +21,6 @@ def main():
 
     actor_tags = {}
     trans_tags = {}
-    time_tags = {}
 
     actor_tags_black_list = ['Transcriptor', 'Y dijieron', 'Objetivos principales', 'Y', 'Primer fracaso', 'Dije',
                              'Papá', 'Dijo ', 'Entonces dijo ', 'Entonces dije', 'Ella dice', 'Y allá', 'Bueno',
@@ -1168,7 +1167,6 @@ def main():
                                                               noon_ind=word_formatted_noon_ind,
                                                               final_dot="." if time[2].endswith(".") else "")
             contents_replaced = contents_replaced.replace(time_key, time_value)
-            time_tags[time_key] = time_value
 
         # Replace arithmetic operations (allow verbalization to work properly)
         contents_replaced = re.sub(r"(\d+)\+(\d+)", r"\1 mas \2", contents_replaced)
@@ -1202,7 +1200,6 @@ def main():
     pprint.pprint(sorted({tag: len(trans_tags[tag]) for tag in trans_tags}.items(),
                          key=operator.itemgetter(1)))
 
-    pprint.pprint(time_tags)
 
 
 if __name__ == '__main__':
