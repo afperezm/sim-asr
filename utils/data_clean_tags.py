@@ -1089,6 +1089,12 @@ def main():
                           "27 de Septiembre de 1958", contents)
         contents = re.sub(r"03/06",
                           "3 de Junio", contents)
+        contents = re.sub(r"0050ero",
+                          "pero", contents)
+        contents = re.sub(r"01125",
+                          "0 11 25", contents)
+        contents = re.sub(r"760016000193201639809",
+                          "76 00 16 triple 0 19 32 01 63 98 09", contents)
 
         # Custom replacements for non-generalizable expressions
         contents = re.sub(r"\n\**(\d{1,2}:?)+\**\s*\n",
