@@ -875,8 +875,36 @@ def main():
                           "23217661", contents)
         contents = re.sub(r"86\'000\.1926",
                           "ochenta y seis millones cero cero mil novecientos veintiséis", contents)
-        contents = re.sub(r"802\.002\.153\-7",
-                          "ocho cero dos punto cero cero dos punto uno cincuenta y tres guión siete guión siete", contents)
+        contents = re.sub(r"41-106-860",
+                          "41 106 8 60", contents)
+        contents = re.sub(r"39-841-886",
+                          "39 8 41 8 8 6", contents)
+        contents = re.sub(r"41-886",
+                          "41 8 8 6", contents)
+        contents = re.sub(r"1-125-413-252",
+                          "1 125 4 13 2 5 2", contents)
+        contents = re.sub(r"40-077-414",
+                          "40 0 77 4 14", contents)
+        contents = re.sub(r"80-522-621",
+                          "80 522 621", contents)
+        contents = re.sub(r"37-936-583",
+                          "37 9 36 5 83", contents)
+        contents = re.sub(r"28-149-211",
+                          "28 149 211", contents)
+        contents = re.sub(r"11-51-196-487",
+                          "11 51 1 96 4 8 7", contents)
+        contents = re.sub(r"1-107-081-144",
+                          "1 107 0 81 144", contents)
+        contents = re.sub(r"60-423-995",
+                          "60 4 23 995", contents)
+        contents = re.sub(r"802\.002\.153-7",
+                          "8 0 2 punto 0 0 2 punto 1 53 guión 7 guión 7", contents)
+        contents = re.sub(r"2016-152986",
+                          "2016 15 29 86", contents)
+        contents = re.sub(r"200-2003",
+                          "2000-2003", contents)
+        contents = re.sub(r"NS200-2018",
+                          "NS 200-2018", contents)
         contents = re.sub(r"9\*8",
                           "98", contents)
         contents = re.sub(r"86,96,2006,2016",
