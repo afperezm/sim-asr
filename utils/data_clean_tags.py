@@ -1342,7 +1342,7 @@ def main():
                                    r"\1 \2 \3 \4 \5\6", contents_replaced)
 
         # Verbalize numbers
-        numbers = list(set(re.findall(r"(\d+)", contents_replaced)))
+        numbers = sorted(list(set(re.findall(r"(\d+)", contents_replaced))), reverse=True)
         for number in numbers:
             word_key = number
             word_value = num2words(number, lang="es_CO")
