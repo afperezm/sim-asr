@@ -991,6 +991,8 @@ def main():
                           "3 14 7 68 60 50", contents)
         contents = re.sub(r"321-240-0477",
                           "3 21 2 40 0 4 77", contents)
+        contents = re.sub(r"312 565 9845",
+                          "3 12 5 65 98 45", contents)
 
         # Custom replacements for non-generalizable expressions
         contents = re.sub(r"\n\**(\d{1,2}:?)+\**\s*\n",
