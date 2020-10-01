@@ -1327,6 +1327,13 @@ def main():
         contents_replaced = re.sub(r"(\d+),(\d+)",
                                    r"\1, \2", contents_replaced)
 
+        # Verbalize numbers
+        numbers = list(set(re.findall(r"(\d+)", contents_replaced)))
+        for number in numbers:
+            word_key = number
+            word_value = num2words(number, lang="es_CO")
+            contents_replaced = contents_replaced.replace(word_key, word_value)
+
         # Write out formatted transcription
         with open("{0}/{1}.txt".format(args.out_dir, basename), "wt") as file:
             file.write(contents_replaced)
