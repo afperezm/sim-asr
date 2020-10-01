@@ -1195,7 +1195,7 @@ def main():
             contents_cleared = re.sub(r"{0}:".format(actor_tag), "", contents_cleared)
 
         # Find non-standard actor tags
-        content_actor_tags = re.findall(r"\n\n(\**-?\[?\w+\s?\(?\w*\)?\]?\s?#?[12]?\**\s?):", "\n\n" + contents_cleared)
+        content_actor_tags = re.findall(r"\n\n(\**-?\[?\w+\s?\(?\w*\)?\]?\s?#?[12]?-?2?\**\s?):", "\n\n" + contents_cleared)
         content_actor_tags = list(set(content_actor_tags) - set(actor_tags_black_list))
 
         # print("non-standard actor tags")
