@@ -1341,6 +1341,7 @@ def main():
         contents_replaced = re.sub(r"(3\d{2})(\d)(\d{2})(\d{2})(\d{2})([^\d])",
                                    r"\1 \2 \3 \4 \5\6", contents_replaced)
 
+        # TODO Further refine list of number to verbalize to avoid wrong verbalization
         # Verbalize numbers
         numbers = sorted(list(set(re.findall(r"(\d+)", contents_replaced))), reverse=True)
         for number in numbers:
