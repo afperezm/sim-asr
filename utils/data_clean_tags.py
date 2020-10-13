@@ -1095,6 +1095,30 @@ def main():
                           "0 11 25", contents)
         contents = re.sub(r"760016000193201639809",
                           "76 00 16 triple 0 19 32 01 63 98 09", contents)
+        contents = re.sub(r"19999",
+                          "1999", contents)
+        contents = re.sub(r"20088",
+                          "2008", contents)
+        contents = re.sub(r"20005",
+                          "2005", contents)
+        contents = re.sub(r"20006",
+                          "2006", contents)
+        contents = re.sub(r"20011",
+                          "2001", contents)
+        contents = re.sub(r"20012",
+                          "2012", contents)
+        contents = re.sub(r"En el 20013 fuiste",
+                          "En el 2013 fuiste", contents)
+        contents = re.sub(r"en el 20013 \?",
+                          "en el 2003?", contents)
+        contents = re.sub(r"20016",
+                          "2016", contents)
+        contents = re.sub(r"20118",
+                          "2018", contents)
+        contents = re.sub(r"20019",
+                          "2019", contents)
+        contents = re.sub(r"Corte de la grabación: 01:22:30",
+                          "[Corte de la grabación: 1:22:30]", contents)
 
         # Custom replacements for non-generalizable expressions
         contents = re.sub(r"\n\**(\d{1,2}:?)+\**\s*\n",
