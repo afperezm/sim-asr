@@ -9,7 +9,7 @@ python -u DeepSpeech.py --noshow_progressbar \
        --alphabet_config_path "${data_dir}/alphabet.txt" \
        --train_files "${data_dir}/es/clips/train.csv" \
        --train_batch_size 80 \
-       --train_files "${data_dir}/es/clips/dev.csv" \
+       --dev_files "${data_dir}/es/clips/dev.csv" \
        --dev_batch_size 80 \
        --save_checkpoint_dir "${ckpt_dir}/ds-transfer-eng2spa-cv_ES/" \
        --load_checkpoint_dir "${ckpt_dir}/deepspeech-0.8.0-checkpoint/" \
