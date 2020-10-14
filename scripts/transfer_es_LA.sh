@@ -11,9 +11,9 @@ python -u DeepSpeech.py --noshow_progressbar --noearly_stop \
        --train_batch_size 80 \
        --dev_files "${data_dir}/es_LA_dev.csv" \
        --dev_batch_size 80 \
-       --save_checkpoint_dir "${ckpt_dir}/ds-transfer-eng2spa/" \
+       --save_checkpoint_dir "${ckpt_dir}/ds-transfer-eng2spa-es_LA/" \
        --load_checkpoint_dir "${ckpt_dir}/deepspeech-0.8.0-checkpoint/" \
-       --summary_dir "${summ_dir}/ds-transfer-eng2spa/" \
+       --summary_dir "${summ_dir}/ds-transfer-eng2spa-es_LA/" \
        --scorer_path '' \
        --learning_rate 0.0001 \
        --n_hidden 2048 \
