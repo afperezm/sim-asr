@@ -4,7 +4,7 @@ data_dir="/home/andresf/data/cv_ES"
 ckpt_dir="/home/andresf/checkpoints"
 summ_dir="/home/andresf/summaries"
 
-python -u DeepSpeech.py --noshow_progressbar \
+python -u DeepSpeech.py --noshow_progressbar --noearly_stop \
        --drop_source_layers 1 \
        --alphabet_config_path "${data_dir}/alphabet.txt" \
        --train_files "${data_dir}/es/clips/train.csv" \
