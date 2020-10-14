@@ -12,8 +12,8 @@ python -u DeepSpeech.py --noshow_progressbar --noearly_stop \
        --dev_batch_size 80 \
        --checkpoint_dir "${ckpt_dir}/ds-train-eng2spa-cv_ES/" \
        --summary_dir "${summ_dir}/ds-train-eng2spa-cv_ES/" \
-       --learning_rate 0.00095 \
-       --dropout_rate 0.22 \
+       --learning_rate 0.0001 \
+       --dropout_rate 0.4 \
        --n_hidden 2048 \
        --epochs 100 \
        --train_cudnn
