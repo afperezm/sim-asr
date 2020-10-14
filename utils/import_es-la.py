@@ -260,6 +260,6 @@ def parse_args():
 
 if __name__ == "__main__":
     PARAMS = parse_args()
-    SKIP_LIST = filter(None, PARAMS.skiplist.split(","))
+    SKIP_LIST = filter(None, PARAMS.skip_list.split(","))
 
     _download_and_preprocess_data(target_dir=PARAMS.target_dir)
