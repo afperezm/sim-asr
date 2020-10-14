@@ -18,5 +18,4 @@ python -u DeepSpeech.py --noshow_progressbar --noearly_stop \
        --learning_rate 0.0001 \
        --n_hidden 2048 \
        --epochs 100 \
-       --dropout_rate 0.22 \
        --train_cudnn
