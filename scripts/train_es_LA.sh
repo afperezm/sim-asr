@@ -17,5 +17,5 @@ python -u DeepSpeech.py --noshow_progressbar --noearly_stop \
        --scorer_path '' \
        --learning_rate 0.0001 \
        --n_hidden 2048 \
-       --epochs 1 \
+       --epochs 100 \
        --train_cudnn
