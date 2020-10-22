@@ -17,7 +17,7 @@ for DROP in '0.4' '0.5' '0.6'; do
                --train_batch_size "$BATCH" \
                --dev_files "${data_dir}/cv_ES/es/clips/dev.csv,${data_dir}/es_LA/es_LA_dev.csv" \
                --dev_batch_size "$BATCH" \
-               --test_files "${data_dir}/es/clips/test.csv" \
+               --test_files "${data_dir}/es/clips/test.csv,${data_dir}/es_LA/es_LA_test.csv" \
                --test_batch_size "$BATCH" \
                --save_checkpoint_dir "${ckpt_dir}/ds-transfer-eng2spa-exp${num}/" \
                --load_checkpoint_dir "${ckpt_dir}/deepspeech-0.8.0-checkpoint/" \
