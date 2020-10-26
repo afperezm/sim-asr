@@ -19,8 +19,9 @@ from multiprocessing import Pool
 
 
 FIELDNAMES = ["wav_filename", "wav_filesize", "transcript"]
-MAX_SECS = 30
 SAMPLE_RATE = 16000
+MAX_SECS = 10
+
 PARAMS = None
 FILTER_OBJ = None
 
