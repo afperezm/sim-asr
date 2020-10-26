@@ -110,7 +110,7 @@ def one_sample(sample):
     counter["all"] += 1
     counter["total_time"] += frames
 
-    return (counter, rows)
+    return counter, rows
 
 
 def _download_and_preprocess_data(target_dir):
