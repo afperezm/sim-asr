@@ -1,5 +1,7 @@
 import csv
 import os
+import re
+
 import progressbar
 import subprocess
 import unicodedata
@@ -32,7 +34,11 @@ class LabelFilter:
 
     def filter(self, label):
         if self.normalize:
+            tilde_words = re.findall(r"([a-zA-Z]+ñ[a-zA-Z]+)+", label)
             label = unicodedata.normalize("NFKD", label.strip()).encode("ascii", "ignore").decode("ascii", "ignore")
+            for word in tilde_words:
+                label = label.replace(
+                    unicodedata.normalize("NFKD", word).encode("ascii", "ignore").decode("ascii", "ignore"), word)
         label = self.validate_func(label)
         if self.alphabet and label and not self.alphabet.CanEncode(label):
             label = None
