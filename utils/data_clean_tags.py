@@ -907,6 +907,8 @@ def main():
                           "NS 200-2018", contents)
         contents = re.sub(r"9\*8",
                           "98", contents)
+        contents = re.sub(r"3 11 512 66 00",
+                          "3115126600", contents)
         contents = re.sub(r"86,96,2006,2016",
                           "86, 96, 2006, 2016", contents)
         contents = re.sub(r"85,95,2001",
@@ -1119,6 +1121,16 @@ def main():
                           "2019", contents)
         contents = re.sub(r"Corte de la grabación: 01:22:30",
                           "[Corte de la grabación: 1:22:30]", contents)
+        contents = re.sub(r"0001 del 2015",
+                          "0 0 1 del 2005", contents)
+        contents = re.sub(r"R 0218",
+                          "erre erre 0 2 18", contents)
+        contents = re.sub(r"FUNNK000385104",
+                          "efe u ene ene ca triple cero triple cero tres ochenta y cinco uno cero cuatro", contents)
+        contents = re.sub(r"048299",
+                          "0 48 2 9 9", contents)
+        contents = re.sub(r"de la entrevista 012",
+                          "de la entrevista 012.", contents)
 
         # Custom replacements for non-generalizable expressions
         contents = re.sub(r"\n\**(\d{1,2}:?)+\**\s*\n",
