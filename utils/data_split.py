@@ -91,9 +91,9 @@ def main():
             t1 = sub.start.total_seconds() * 1000
             t2 = sub.end.total_seconds() * 1000
 
-            # Skip processing subtitle if has zero length or empty content
-            if (sub.end - sub.start).total_seconds() == 0.0 or not sub.content:
-                print("{0} - Skipping, zero length or empty content".format(sub_srt_basename))
+            # Skip processing subtitle if it is too short or empty content
+            if (sub.end - sub.start).total_seconds() < 2.0 or not sub.content:
+                print("{0} - Skipping, too short or empty content".format(sub_srt_basename))
                 continue
 
             # Export audio segment
