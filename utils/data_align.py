@@ -78,6 +78,11 @@ def main():
         type=str,
         help="Output data directory, where to copy audio-aligned transcripts.",
         required=True)
+    parser.add_argument(
+        "--num_workers",
+        type=int,
+        help="Number of parallel processes to launch.",
+        default=4)
 
     args = parser.parse_args()
 
@@ -89,7 +94,7 @@ def main():
     failed = []
     success = []
 
-    pool = Pool(initializer=init_worker, initargs=(args,))
+    pool = Pool(initializer=init_worker, initargs=(args,), processes=args.num_workers)
     bar = progressbar.ProgressBar(max_value=num_transcript_files)
     for row_idx, processed in enumerate(pool.imap_unordered(align_transcript, transcript_files), start=1):
         missing += processed[0]
