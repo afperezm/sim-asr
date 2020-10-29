@@ -89,7 +89,7 @@ def one_sample(sample):
         counter["too_long"] += 1
     else:
         # This one is good - keep it for the output CSV
-        rows.append((os.path.split(wav_filename)[-1], file_size, label))
+        rows.append((os.path.split(wav_filename)[0].split("/")[-1], os.path.split(wav_filename)[-1], file_size, label))
         counter["imported_time"] += frames
 
     counter["all"] += 1
@@ -135,9 +135,9 @@ def _maybe_convert_sets(data_dir, audio_dir):
         test_writer = csv.DictWriter(test_csv_file, fieldnames=FIELDNAMES)
         test_writer.writeheader()
         bar = progressbar.ProgressBar(max_value=len(rows), widgets=SIMPLE_BAR)
-        for filename, file_size, transcript in bar([row for idx, row in enumerate(rows) if idx % 10 == 0]):
+        for directory, filename, file_size, transcript in bar([row for idx, row in enumerate(rows) if idx % 10 == 0]):
             test_writer.writerow({
-                "wav_filename": filename,
+                "wav_filename": "{}/{}".format(directory, filename),
                 "wav_filesize": file_size,
                 "transcript": transcript
             })
@@ -148,9 +148,9 @@ def _maybe_convert_sets(data_dir, audio_dir):
         dev_writer = csv.DictWriter(dev_csv_file, fieldnames=FIELDNAMES)
         dev_writer.writeheader()
         bar = progressbar.ProgressBar(max_value=len(rows), widgets=SIMPLE_BAR)
-        for filename, file_size, transcript in bar([row for idx, row in enumerate(rows) if idx % 10 == 1]):
+        for directory, filename, file_size, transcript in bar([row for idx, row in enumerate(rows) if idx % 10 == 1]):
             dev_writer.writerow({
-                "wav_filename": filename,
+                "wav_filename": "{}/{}".format(directory, filename),
                 "wav_filesize": file_size,
                 "transcript": transcript
             })
@@ -161,9 +161,9 @@ def _maybe_convert_sets(data_dir, audio_dir):
         train_writer = csv.DictWriter(train_csv_file, fieldnames=FIELDNAMES)
         train_writer.writeheader()
         bar = progressbar.ProgressBar(max_value=len(rows), widgets=SIMPLE_BAR)
-        for filename, file_size, transcript in bar([row for idx, row in enumerate(rows) if idx % 10 > 1]):
+        for directory, filename, file_size, transcript in bar([row for idx, row in enumerate(rows) if idx % 10 > 1]):
             train_writer.writerow({
-                "wav_filename": filename,
+                "wav_filename": "{}/{}".format(directory, filename),
                 "wav_filesize": file_size,
                 "transcript": transcript
             })
