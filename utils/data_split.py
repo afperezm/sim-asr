@@ -106,7 +106,7 @@ def main():
             audio_transcript = audio_transcript.translate(str.maketrans("", "", string.punctuation))
 
             # Write audio segment path and transcript to output csv file
-            output_csv_writer.writerow([os.path.relpath(audio_segment, output_dir), audio_transcript])
+            output_csv_writer.writerow([os.path.relpath(audio_segment, waves_dir), audio_transcript])
 
             # Build list of audio subs duration
             durations[audio_segment] = [(sub.end - sub.start).total_seconds()]
