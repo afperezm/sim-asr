@@ -1378,12 +1378,12 @@ def main():
                                    r"\1 \2 \3 \4 \5\6", contents_replaced)
 
         # Split zero prefixed numbers
-        contents_replaced = re.sub(r"00(\d)([^\d])",
-                                   r"0 0 \1\2", contents_replaced)
-        contents_replaced = re.sub(r"0(\d{1,2})([^\d])",
-                                   r"0 \1\2", contents_replaced)
-        contents_replaced = re.sub(r"0(\d)(\d{1,2})([^\d])",
-                                   r"0 \1 \2\3", contents_replaced)
+        contents_replaced = re.sub(r"([^\d])00(\d)([^\d])",
+                                   r"\1 0 0 \2\3", contents_replaced)
+        contents_replaced = re.sub(r"([^\d])0(\d{1,2})([^\d])",
+                                   r"\1 0 \2\3", contents_replaced)
+        contents_replaced = re.sub(r"([^\d]) 0(\d)(\d{1,2})([^\d])",
+                                   r"\1 0 \2 \3\4", contents_replaced)
 
         # TODO Further refine list of number to verbalize to avoid wrong verbalization
         # Verbalize numbers
