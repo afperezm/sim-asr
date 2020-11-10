@@ -53,9 +53,7 @@ def main():
         contents = re.sub(r"\[INAD: Los helenos",
                           "[INAD:] Los helenos", contents)
         contents = re.sub(r"\[INBAD:38:04",
-                          "[INBAD:38:04]", contents)
-        contents = re.sub(r"\[INBAD:38:04",
-                          "[INBAD:38:04]", contents)
+                          "[INAD: 38:04]", contents)
         contents = re.sub(r"\[Fondo\sde\sSolidaridad\scon\slos\nJueces\sColombianos\?",
                           "[Fondo de Solidaridad con los\nJueces Colombianos]", contents)
         contents = re.sub(r"\[INTERRUP\n\n\s\s\n\nENT:\sAdicción",
@@ -71,7 +69,7 @@ def main():
         contents = re.sub(r"\[INTERRUP\n\nENT:\sLo\sque\sle\sdecía\sÓscar",
                           "[INTERRUP]\n\nENT: Lo que le decía Óscar", contents)
         contents = re.sub(r"\[PAUSA\s18:40\s-\s18:50",
-                          "[PAUSA 18:40 - 18:50]", contents)
+                          "[PAUSA: 18:40-18:50]", contents)
         contents = re.sub(r"\[INC:\sAsociación\sde\sCabildos\sIndígenas\ndel\sValle\"",
                           "[INC: Asociación de Cabildos Indígenas\ndel Valle]", contents)
         contents = re.sub(r"\[que\}",
@@ -88,9 +86,9 @@ def main():
                           "[susurro]", contents)
         contents = re.sub(r"vuelticas\s\[\sde\scomida", "vuelticas de comida", contents)
         contents = re.sub(r"\[PAUSA\s00:28\s00:56",
-                          "[PAUSA 00:28 00:56]", contents)
+                          "[PAUSA 00:28-00:56]", contents)
         contents = re.sub(r"\[FORMATO\n00:37:34\s-\s00:",
-                          "[FORMATO\n00:37:34 - 00:]", contents)
+                          "[FORMATO:\n00:37:34]", contents)
         contents = re.sub(r"\[y\[", "[y]", contents)
         contents = re.sub(r"TEST:\sen\sese\sentonces\sera\sde\sla\sAutodefensa\s"
                           r"\[INC:\sAutodefensas\sUnidas\sde\nColombia\.",
@@ -162,13 +160,13 @@ def main():
         contents = re.sub(r"\[risa\}",
                           "[risa]", contents)
         contents = re.sub(r"\[INC:\sINSTITUTO\sNACIONAL\sDE\sVIVIENDA\sDE\sINTERÉS\sSOCIAL\sY\sREFORMA\sURBANA\)",
-                          "[INC: INSTITUTO NACIONAL DE VIVIENDA DE INTERÉS SOCIAL Y REFORMA URBANA]", contents)
+                          "[INC: INSTITUTO NACIONAL DE VIVIENDA DE INTERÉS SOCIAL Y REFORMA URBANA]", contents)
         contents = re.sub(r"\[DUD:\s¿Jaider\?\s27:20\s¿Heider\?",
                           "[DUD: 27:20] Jaider", contents)
         contents = re.sub(r"\[estuve\strabajando",
                           "estuve trabajando", contents)
         contents = re.sub(r"\[CONT: 11 y media de la noche",
-                          "[CONT:] 11 y media de la noche", contents)
+                          "[CONT] 11 y media de la noche", contents)
         contents = re.sub(r"\[eh\}",
                           "[eh]", contents)
         contents = re.sub(r"\[de lo\}",
@@ -184,7 +182,7 @@ def main():
         contents = re.sub(r"\[DUD: cedió 03:44",
                           "[DUD: 03:44] se dió", contents)
         contents = re.sub(r"\[Ficha\sCorta:\s00:45\s03:29",
-                          "[Ficha Corta: 00:45 03:29]", contents)
+                          "[Ficha Corta: 00:45-03:29]", contents)
         contents = re.sub(r"\[CONT\n\nTEST:\sSí,\sseñor\.",
                           "[CONT]\n\nTEST: Sí, señor.", contents)
         contents = re.sub(r"\[INC:\sentonces\}",
@@ -196,11 +194,11 @@ def main():
         contents = re.sub(r"\[risas\+",
                           "[risas]", contents)
         contents = re.sub(r"\[INAD:\s09:53\s09:54\[",
-                          "[INAD: 09:53 09:54]", contents)
+                          "[INAD: 09:53-09:54]", contents)
         contents = re.sub(r"\[Llanto,",
                           "[Llanto],", contents)
         contents = re.sub(r"\[INAD:\sy\sla\shija\sestá\sen\sBogotá,",
-                          "[INAD:] y la hija está en Bogotá,", contents)
+                          "[INAD] y la hija está en Bogotá,", contents)
         contents = re.sub(r"\[Datos\sPersonales:\s20:02\?",
                           "[Datos Personales: 20:02]?", contents)
         contents = re.sub(r"\[INC:\sÉL\sle\srespondió",
@@ -208,7 +206,7 @@ def main():
         contents = re.sub(r"\[surniar\}",
                           "[surniar]", contents)
         contents = re.sub(r"\[Audio:\s¿mmmm\?",
-                          "[Audio:] ¿mmmm?", contents, flags=re.IGNORECASE)
+                          "[Audio] ¿mmmm?", contents, flags=re.IGNORECASE)
         contents = re.sub(r"\[Mmm, déjeme quieto",
                           "Mmm, déjeme quieto", contents)
         contents = re.sub(r"\[Análisis\nEstratégico\sB2\"",
@@ -224,7 +222,7 @@ def main():
         contents = re.sub(r"\[INC:\sUnidad\sde\sAtención\nde\sVictimas\.",
                           "[INC: Unidad de Atención\nde Victimas].", contents)
         contents = re.sub(r"\[CORTE:43:30",
-                          "[CORTE:43:30]", contents)
+                          "[CORTE: 43:30]", contents)
         contents = re.sub(r"\[Datos personales26:22 -26:39",
                           "[Datos personales: 26:22-26:39]", contents)
         contents = re.sub(r"\[Fuerzas\sArmadas\nRevolucionarias\sde\sColombia\?",
@@ -232,9 +230,9 @@ def main():
         contents = re.sub(r"\[Porque no querían dejar rastro",
                           "Porque no querían dejar rastro", contents)
         contents = re.sub(r"\[INAP: 1:20:40 - 1:20:42",
-                          "[INAUD:1:20:40-1:20:42]", contents)
+                          "[INAUD: 1:20:40-1:20:42]", contents)
         contents = re.sub(r"\[FICHA\s00:46-0",
-                          "[FICHA 00:46-0]", contents)
+                          "[FICHA 00:46]", contents)
         contents = re.sub(r"\[INTERRUp\n\nENT:\sSe\slo\sllevaba",
                           "[INTERRUP]\n\nENT: Se lo llevaba", contents)
         contents = re.sub(r"\[Continuación\saudio\spor\smódulo\sde\scapture",
@@ -270,11 +268,10 @@ def main():
         contents = re.sub(r"ENT:\s¿ENTENT:\s¿ENENT:",
                           "ENT:", contents)
         contents = re.sub(r"INAD:05:46-05:55",
-                          "[INAD:05:46-05:55]", contents)
+                          "[INAD: 05:46-05:55]", contents)
         contents = re.sub(r"A\spartir\sdel\s1:12:00\sse\sencuentran\sllenando\sla\sficha\slar\so\scorta-\s1:12:54\n\n"
                           r"1:12:55",
-                          "[A partir del 1:12:00 se encuentran llenando la ficha lar o corta- 1:12:54\n\n"
-                          "1:12:55]", contents)
+                          "[Ficha larga o corta: 1:12:00-1:12:55]", contents)
         contents = re.sub(r"\[INTERRUP\]06:12",
                           "[INTERRUP: 06:12]", contents)
         contents = re.sub(r"06:16\s\[CONT\]",
@@ -310,19 +307,19 @@ def main():
         contents = re.sub(r"\[Contesta\ssu\steléfono\scelular",
                           "[Contesta su teléfono celular]", contents)
         contents = re.sub(r"\[balbucea\s1:00:40",
-                          "[balbucea 1:00:40]", contents)
+                          "[DUD: 1:00:40]", contents)
         contents = re.sub(r"\[el\sdía\sque\ssacaron\slas\sarmas",
                           "[el día que sacaron las armas]", contents)
         contents = re.sub(r"Consentimiento\s07:32",
-                          "[Consentimiento 07:32]", contents)
+                          "[Consentimiento informado: 07:32]", contents)
         contents = re.sub(r"Pausa:\s19:54\s-20:02\]",
-                          "[Pausa: 19:54 -20:02]", contents)
+                          "[Pausa: 19:54-20:02]", contents)
         contents = re.sub(r"PAUSA:\s37:38\s-\s37:52",
-                          "[PAUSA: 37:38 - 37:52]", contents)
+                          "[PAUSA: 37:38-37:52]", contents)
         contents = re.sub(r"\[DUD:\s00:22:01\s-\sDUD:\s00:22:03\]",
                           "[DUD: 00:22:01-00:22:03]", contents)
         contents = re.sub(r"\[DUD:43:01\s43:04\[",
-                          "[DUD:43:01-43:04", contents)
+                          "[DUD: 43:01-43:04", contents)
         contents = re.sub(r"\[INTERRUP:\s1\.27:55\]",
                           "[INTERRUP: 1:27:55]", contents)
         contents = re.sub(r"\[INTERRUP:\sesposa\s00:38:18\shasta\s00:38:30\]",
@@ -336,13 +333,13 @@ def main():
         contents = re.sub(r"\[PAUSA:\sDiligenciamiento\sde\sfichas:\s09:12-12:11\]",
                           "[PAUSA: 09:12-12:11]", contents)
         contents = re.sub(r"\[DUD:1:22:23\[",
-                          "[DUD:1:22:23]", contents)
+                          "[DUD: 1:22:23]", contents)
         contents = re.sub(r"\(INAD:\s23:15\)",
                           "[INAD: 23:15]", contents)
         contents = re.sub(r"vaina\.\s1:19:33",
-                          "vaina.", contents)
+                          "vaina. [INTERR: 1:19:33]", contents)
         contents = re.sub(r"mantiene\.\s1:10:35",
-                          "mantiene.", contents)
+                          "mantiene. [INTERR: 1:10:35]", contents)
         contents = re.sub(r"DUD\s11:09\s\\-\s11:13",
                           "[DUD: 11:09-11:13]", contents)
         contents = re.sub(r"\[PAUSA\]:\s1:17:22\s-\s1:17:25]",
@@ -356,15 +353,15 @@ def main():
         contents = re.sub(r"INAD:\s06:09-\s06:12]",
                           "[INAD: 06:09-06:12]", contents)
         contents = re.sub(r"1:00:47entonces",
-                          "entonces", contents)
+                          "[INTERR: 1:00:47] entonces", contents)
         contents = re.sub(r"\[Consentimiento\sInformado:\n1:04:42\s\\-\s1:05:12\.",
                           "[Consentimiento Informado:\n1:04:42-1:05:12]", contents)
         contents = re.sub(r"estas\s1:19:35",
-                          "estas!", contents)
+                          "estas! [DUD: 1:19:35]", contents)
         contents = re.sub(r"vendida42:10",
-                          "vendida.", contents)
+                          "vendida. [DUD: 42:10]", contents)
         contents = re.sub(r"región01:12",
-                          "región", contents)
+                          "región [DUD: 01:12]", contents)
         contents = re.sub(r"DUD:\s54:15",
                           "[DUD: 54:15]", contents)
         contents = re.sub(r"DUD:\s52:07-52:13",
@@ -392,7 +389,7 @@ def main():
         contents = re.sub(r"\[DUD:\sAllá\sla\svida\ses\sdura\s03:16\]",
                           "[DUD: 03:16]", contents)
         contents = re.sub(r"boconcita27:14",
-                          "boconcita", contents)
+                          "boconcita [DUD: 27:14]", contents)
         contents = re.sub(r"\[DUD:\ntrataban\s05:16-05:17\]",
                           "[DUD:\n05:16-05:17]", contents)
         contents = re.sub(r"DUD:14:29\.\.\.",
@@ -414,37 +411,37 @@ def main():
         contents = re.sub(r"este\sDUD:\s22:58",
                           "este [DUD: 22:58]", contents)
         contents = re.sub(r"1:08:16 Liz Vega",
-                          "Liz Vega", contents)
+                          "[DUD: 1:08:16] Liz Vega", contents)
         contents = re.sub(r"\[DUD:\sTiempo\]\s13:17\sRP\?\]",
                           "[DUD: 13:17]", contents)
         contents = re.sub(r"\[DUD:\s04:56\sconsigue\sjoda\?\]\spara\sarreglar\s10\stubos,",
-                          "Alvaro Reinaldi", contents)
+                          "[DUD: 04:56] Alvaro Reinaldi", contents)
         contents = re.sub(r"\[DUD:\s05:04\sde\slenguajes,\nentoncé\shagamó\seso,\ssino\ssá\"\?\]\.",
-                          "en ese entonces Adamos Espinoza", contents)
+                          "[DUD: 05:04] en ese entonces Adamos Espinoza", contents)
         contents = re.sub(r"05:13\sRenaldi\?\]",
-                          "Alvaro Reinaldi", contents)
+                          "[DUD: 05:13] Alvaro Reinaldi", contents)
         contents = re.sub(r"vida59:18",
-                          "vida", contents)
+                          "vida [DUD: 59:18]", contents)
         contents = re.sub(r"Célimo\sPortilla\s05:14",
-                          "Célimo Portilla", contents)
+                          "[DUD: 05:14] Célimo Portilla", contents)
         contents = re.sub(r"11\+\s4:\s14\s\+4:18\+7:25",
                           "once, cuatro, catorce y cuatro diecocho y siete veinticinco", contents)
         contents = re.sub(r"\(Silencio\s33:18\s-\s33:38\)",
-                          "[Silencio 33:18-33:38]", contents)
+                          "[Silencio: 33:18-33:38]", contents)
         contents = re.sub(r"\(silencio\)\s00:54\s-01:13",
-                          "[silencio: 00:54-01:13]", contents)
+                          "[Silencio: 00:54-01:13]", contents)
         contents = re.sub(r"30:19mucha gente",
-                          "mucha gente", contents)
+                          "[DUD: 30:19] mucha gente", contents)
         contents = re.sub(r"\(hay\sun\smomento\sen\sel\sque\sse\scorta\suna\sfrase\)\s\(35:10\)",
-                          "[hay un momento en el que se corta una frase 35:10]", contents)
+                          "[CORTE: 35:10]", contents)
         contents = re.sub(r"\[ficha\s\(corta\]\stestimonio\svíctima:\s00:55\n-\s01:14\]",
-                          "[ficha corta testimonio víctima: 00:55\n-01:14]", contents)
+                          "[Ficha corta: 00:55\n-01:14]", contents)
         contents = re.sub(r"\[inad\]\s53:10",
                           "[INAD: 53:10]", contents)
         contents = re.sub(r"\[INAD:\s\*\*\*\*\s07:13\\-\s07:14\]",
                           "[INAD: 07:13-07:14]", contents)
         contents = re.sub(r"07:15\s¡ah!",
-                          "¡ah!", contents)
+                          "[DUD: 07:15] ¡ah!", contents)
         contents = re.sub(r"\[DUD:\sMi\snombre\s06:10\]",
                           "[DUD: 06:10]", contents)
         contents = re.sub(r"\(Consentimiento\sInformado\sy\sTratamiento\sde\sDatos:\s00:50\s-\s06:19\)",
@@ -468,17 +465,17 @@ def main():
         contents = re.sub(r"\[DUD:\s1:17:54\\-\s1:17:58\"",
                           "[DUD: 1:17:54-1:17:58]", contents)
         contents = re.sub(r"Un\s1:12:50,\sun\scañamon",
-                          "Un, un cañamon", contents)
+                          "[DUD: 1:12:50] Un, un cañamon", contents)
         contents = re.sub(r"\[INAD:\s45:54\\-\s46:12\sProblemas\scon\sel\saudio,\ssuena\sentrecortado\]",
                           "[INAD: 45:54-46:12]", contents)
         contents = re.sub(r"porque\nverdaderamente\s1:11:02\s1:11:07",
-                          "porque\nverdaderamente", contents)
+                          "porque\nverdaderamente [DUD: 1:11:02-1:11:07]", contents)
         contents = re.sub(r"\[DUD:\sEl\sCascajo\s00:16\]",
                           "[DUD: 00:16]", contents)
         contents = re.sub(r"¿cómo\sel\sEstado\s1:11:14",
-                          "¿cómo el Estado?", contents)
+                          "¿cómo el Estado? [DUD: 1:11:14]", contents)
         contents = re.sub(r"eso\sno\ses\s1:10:43",
-                          "eso no es", contents)
+                          "eso no es [DUD: 1:10:43]", contents)
         contents = re.sub(r"INAD:\s04:05-04:10\]",
                           "[INAD: 04:05-04:10]", contents)
         contents = re.sub(r"DUD:18:15/18:16\]",
@@ -536,7 +533,7 @@ def main():
         contents = re.sub(r"\[Colegio\sIFI\sde\nCartagena\sDUD:\s09:24\]",
                           "Colegio IFI de\nCartagena [DUD: 09:24]", contents)
         contents = re.sub(r"\[ficha\s\(corta\]\stestimonio\svíctima:\s24:54\s-\n25:34\]",
-                          "[ficha (corta) testimonio víctima: 24:54-\n25:34]", contents)
+                          "[Ficha corta: 24:54-25:34]", contents)
         contents = re.sub(r"\[DUD:\schaparranunas09:37\]",
                           "chaparranunas [DUD: 09:37]", contents)
         contents = re.sub(r"\[DUD:\sTarcisio\sÁlvarez\s03:55\]",
@@ -554,13 +551,13 @@ def main():
         contents = re.sub(r"Datos\spersonales:\s01:00:13\]",
                           "[Datos personales: 01:00:13]", contents)
         contents = re.sub(r"\[Corte\sde\sla\sgrabación:\s01:22:30\]",
-                          "[Corte de la grabación: 01:22:30]", contents)
+                          "[CORTE: 01:22:30]", contents)
         contents = re.sub(r"\(Silencio\sal\sparecer\smuestra\sfotos\s1:23:23\)\s1:23:40",
-                          "[Silencio al parecer muestra fotos 1:23:23-1:23:40]", contents)
+                          "[Silencio: 1:23:23-1:23:40]", contents)
         contents = re.sub(r"\(1:02:39\ssilencio-1:02:47\)",
                           "[Silencio: 1:02:39-1:02:47]", contents)
         contents = re.sub(r"\[PAUSA\s\(Timbra\scelular\):1:14:01\n-1:14:43\s\]",
-                          "[PAUSA: 1:14:01\n-1:14:43]", contents)
+                          "[PAUSA: 1:14:01-1:14:43]", contents)
         contents = re.sub(r"\[DUD:\ssolenciado1:32:15\]",
                           "solenciado [DUD: 1:32:15]", contents)
         contents = re.sub(r"\[DUD:\nNaiso1:09:24\]",
@@ -678,7 +675,7 @@ def main():
         contents = re.sub(r"\[DUD: ¿Simoa\? 05:39\]",
                           "¿Simoa? [DUD: 05:39]", contents)
         contents = re.sub(r"\[ficha \(corta\] testimonio víctima: 18:34 - 24:02\]",
-                          "[ficha (corta) testimonio víctima: 18:34-24:02]", contents)
+                          "[Ficha corta: 18:34-24:02]", contents)
         contents = re.sub(r"\[DUD: \"mixtos\" 59:52\]",
                           "\"mixtos\" [DUD: 59:52]", contents)
         contents = re.sub(r"\[INC: Vale Pavas o Vale Adentro\]\n14:27\]",
@@ -788,9 +785,9 @@ def main():
         contents = re.sub(r"\(Dud:\s12:55\)",
                           "[DUD: 12:55]", contents)
         contents = re.sub(r"\(se\scorta\sun\spoco\s4:16\)",
-                          "[se corta un poco 4:16]", contents)
+                          "[CORTE: 4:16]", contents)
         contents = re.sub(r"\(Min 8:23 llora se reinicia 9:12\)",
-                          "[Min 8:23 llora se reinicia 9:12]", contents)
+                          "[INTERR: 8:23-9:12]", contents)
         contents = re.sub(r"una casa y 01:56 y uno que sigue metido entre el conflicto",
                           "una casa y [DUD: 1:56] y uno que sigue metido entre el conflicto", contents)
         contents = re.sub(r"como un 02:04 como un personal",
@@ -808,9 +805,9 @@ def main():
         contents = re.sub(r"Familiares todos, amigos, paisanos\. 06:12",
                           "Familiares todos, amigos, paisanos. [DUD: 6:12]", contents)
         contents = re.sub(r"ya paso el tiempo y06:31",
-                          "ya paso el tiempo y[DUD: 06:31]", contents)
+                          "ya paso el tiempo y [DUD: 06:31]", contents)
         contents = re.sub(r"todo \[llanto\]\. 07:12",
-                          "todo [llanto 7:12].", contents)
+                          "todo [INTERR: 7:12].", contents)
         contents = re.sub(r"hata ahí llegué\. 07:33",
                           "hasta ahí llegué. [DUD: 7:33]", contents)
         contents = re.sub(r"en adelante 09:11 hasta las 8",
@@ -842,21 +839,21 @@ def main():
         contents = re.sub(r"\[DUD: 17:35:17:37\]",
                           "[DUD: 17:35-17:37]", contents)
         contents = re.sub(r"\[INAD:\n52:!4\]",
-                          "[INAD:\n52:14]", contents)
+                          "[INAD: 52:14]", contents)
         contents = re.sub(r"\[DUD: 17:16:17:17\]",
                           "[DUD: 17:16-17:17]", contents)
         contents = re.sub(r"\[DUD: 47-53: 47:54\]",
-                          "[DUD: 47-53-47:54]", contents)
+                          "[DUD: 47:53-47:54]", contents)
         contents = re.sub(r"\[DUD: 11:11 con la ley 636\]",
                           "con la ley 636 [DUD: 11:11]", contents)
         contents = re.sub(r"\[DUD: Eso fue como en el 78\]",
-                          "Eso fue como en el 78 [DUD]", contents)
+                          "Eso fue como en el 78", contents)
         contents = re.sub(r"\[DUD 53:29, 1992\]",
                           " 1992 [DUD 53:29]", contents)
         contents = re.sub(r"\[DUD: 03:11:39:22\]",
-                          "[DUD: 03:11-39:22]", contents)
+                          "[DUD: 03:11]", contents)
         contents = re.sub(r"\[DUD:\s03:37:39:22\]",
-                          "[DUD: 03:37-39:22]", contents)
+                          "[DUD: 03:37]", contents)
         contents = re.sub(r"\[DUD:\s34:33:\s34:35\]",
                           "[DUD: 34:33-34:35]", contents)
         contents = re.sub(r"XXX:\s01:03",
