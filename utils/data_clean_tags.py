@@ -1158,9 +1158,6 @@ def main():
                           r":?\s\d{2}:\d{2}\s-\s\d{2}:\d{2}\)",
                           "", contents, flags=re.IGNORECASE)
         contents = re.sub(r"\(Datos\ssensibles(:\s\d{2}:\d{2})?\)", "", contents)
-        contents = re.sub(r"\d{1,2}:\d{2}:\s?\d{2}\s?-?\s?", "", contents)
-        contents = re.sub(r"1[3-9]:\d{2}\s?-?\s?", "", contents)
-        contents = re.sub(r"[2-9]\d:\s?\d{2}\s?\\?-?\s?", "", contents)
         contents = re.sub(r"PAUSA(\d{2}:\d{2})?", "", contents)
         contents = re.sub(r"\(COP\)", "", contents)
         contents = re.sub(r"\(tres\smillones\)",
@@ -1316,6 +1313,10 @@ def main():
         # contents_replaced = contents_replaced.encode("ascii", "ignore").decode("ascii", "ignore")
 
         # Verbalize hours
+        contents_replaced = re.sub(r"\d{1,2}:\d{2}:\s?\d{2}\s?-?\s?", "", contents_replaced)
+        contents_replaced = re.sub(r"1[3-9]:\d{2}\s?-?\s?", "", contents_replaced)
+        contents_replaced = re.sub(r"[2-9]\d:\s?\d{2}\s?\\?-?\s?", "", contents_replaced)
+
         hours = list(set(re.findall(r"(\d{1,2}):(\d{2})(\s?([ap])\.?m\.?)?", contents_replaced)))
         for time in hours:
             word_formatted_hours = num2words(int(time[0]), lang="es_CO")
