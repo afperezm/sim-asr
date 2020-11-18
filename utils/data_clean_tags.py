@@ -5,7 +5,30 @@ import os
 import pprint
 import re
 # import unicodedata
+from datetime import datetime
 from num2words import num2words
+
+
+def parse_timestamp(timestamp_value):
+    timestamp_regex = r'^(?P<start>\d{1,2}([ .,:;_]\d{1,2}){1,2})([ \\_\-–—aAy./]+(?P<end>\d{1,2}([ .,:;\-_]\d{1,2}){1,2}))*$'
+    timestamp_clean = re.sub(r'\s', '', timestamp_value).strip()
+    return re.match(timestamp_regex, timestamp_clean)
+
+
+def convert_timestamp(ts_match):
+    if ts_match is None:
+        return None
+    time_start_string = ts_match.groupdict()['start']
+    time_start_parts = re.findall(r'\d+', time_start_string)
+    time_start_format = '%H:%M:%S' if len(re.findall(r'\d+', time_start_string)) > 2 else '%M:%S'
+    time_start = datetime.strptime(':'.join(time_start_parts), time_start_format)
+    time_end_string = ts_match.groupdict()['end'] if ts_match.groupdict()['end'] else ts_match.groupdict()[
+        'start']
+    time_end_parts = re.findall(r'\d+', time_end_string)
+    time_end_format = '%H:%M:%S' if len(time_end_parts) > 2 else '%M:%S'
+    time_end = datetime.strptime(':'.join(time_end_parts), time_end_format)
+    return ((time_start - datetime(1900, 1, 1)).total_seconds(),
+            (time_end - datetime(1900, 1, 1)).total_seconds())
 
 
 def main():
