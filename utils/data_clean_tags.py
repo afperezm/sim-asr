@@ -1340,16 +1340,16 @@ def main():
         contents_replaced = contents
 
         # Replace standard and found transcription tags
-        content_trans_tags = [re.escape(tag) for tag in content_trans_tags]
-        for trans_tag in standard_trans_tags + content_trans_tags:
+        content_trans_tags_escaped = [re.escape(tag) for tag in content_trans_tags]
+        for trans_tag in standard_trans_tags + content_trans_tags_escaped:
             contents_replaced = re.sub(trans_tag, "", contents_replaced)
 
         # Replace newlines with spaces
         contents_replaced = re.sub(r"\n", " ", contents_replaced)
 
         # Replace standard and found actor tags
-        content_actor_tags = [re.escape(tag) for tag in content_actor_tags]
-        for actor_tag in standard_actor_tags + content_actor_tags:
+        content_actor_tags_escaped = [re.escape(tag) for tag in content_actor_tags]
+        for actor_tag in standard_actor_tags + content_actor_tags_escaped:
             contents_replaced = re.sub(r"{0}:\s*".format(actor_tag), "\n\n", contents_replaced)
 
         # Trim trailing and duplicated whitespaces
