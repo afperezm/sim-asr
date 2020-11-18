@@ -1336,6 +1336,27 @@ def main():
         trans_tags = {key: trans_tags.get(key, []) + y.get(key, []) for key in
                       set(list(trans_tags.keys()) + list(y.keys()))}
 
+        # THIS BLOCK SPLITS THE CONTENT INTO FRAGMENTS
+
+        ts_dict_parsed = {key: parse_timestamp(ts_dict[key]) for key in ts_dict.keys()}
+        ts_dict_converted = {key: convert_timestamp(ts_dict_parsed[key]) for key in ts_dict_parsed.keys()}
+        ts_dict_sorted = sorted({k: v for k, v in ts_dict_converted.items() if v is not None}.items(),
+                                key=operator.itemgetter(1))
+
+        ts_time_list = [[item[1][0], item[1][1]] for item in ts_dict_sorted]
+        ts_time = [0] + [ts for sublist in ts_time_list for ts in sublist] + [-1]
+
+        ts_content_list = [[contents.find(item[0]), contents.find(item[0]) + len(item[0])] for item in ts_dict_sorted]
+        ts_content = [0] + [item for sublist in ts_content_list for item in sublist] + [len(contents)]
+
+        assert (len(ts_time) == len(ts_content))
+
+        content_fragments = [{'start': ts_time[idx],
+                              'end': ts_time[idx + 1],
+                              'content': contents[ts_content[idx]:ts_content[idx + 1]]} for idx in
+                             range(len(ts_content))
+                             if idx % 2 == 0]
+
         # THIS BLOCK PRODUCES AN ALIGNMENT READY TRANSCRIPTION
         contents_replaced = contents
 
