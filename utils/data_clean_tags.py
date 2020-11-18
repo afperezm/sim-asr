@@ -1296,8 +1296,12 @@ def main():
 
         contents_cleared = contents
 
+        ts_dict = {}
+
         # Replace standard transcript tags
         for trans_tag in standard_trans_tags:
+            ts_dict.update({m.group(): m.group('time') for m in re.finditer(trans_tag, contents_cleared) if
+                                    'time' in m.groupdict().keys() and m.group('time')})
             contents_cleared = re.sub(trans_tag, "", contents_cleared)
 
         # Find non-standard transcript tags
