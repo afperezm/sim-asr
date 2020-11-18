@@ -697,7 +697,7 @@ def main():
         contents = re.sub(r"\[DUD: Neva 47:17\]",
                           "Neva [DUD: 47:17]", contents)
         contents = re.sub(r"\[PAUSA 26:50 descanso por el estado emocional de la entrevistada 27:15\]",
-                          "[PAUSA 26:50-27:15]", contents)
+                          "[PAUSA: 26:50-27:15]", contents)
         contents = re.sub(r"\[DU:31\]D\s15:24\]",
                           "[DUD: 15:24]", contents)
         contents = re.sub(r"\[DUD:\nSixe45:43\]",
@@ -1128,6 +1128,8 @@ def main():
                           "0 48 2 9 9", contents)
         contents = re.sub(r"de la entrevista 012",
                           "de la entrevista 012.", contents)
+        contents = re.sub(r"PAUSA07:00",
+                          "[PAUSA: 07:00]", contents)
 
         # Custom replacements for non-generalizable expressions
         contents = re.sub(r"\n\**(\d{1,2}:?)+\**\s*\n",
@@ -1158,7 +1160,6 @@ def main():
                           r":?\s\d{2}:\d{2}\s-\s\d{2}:\d{2}\)",
                           "", contents, flags=re.IGNORECASE)
         contents = re.sub(r"\(Datos\ssensibles(:\s\d{2}:\d{2})?\)", "", contents)
-        contents = re.sub(r"PAUSA(\d{2}:\d{2})?", "", contents)
         contents = re.sub(r"\(COP\)", "", contents)
         contents = re.sub(r"\(tres\smillones\)",
                           "", contents)
