@@ -1358,145 +1358,150 @@ def main():
                              if idx % 2 == 0]
 
         # THIS BLOCK PRODUCES AN ALIGNMENT READY TRANSCRIPTION
-        contents_replaced = contents
+        for fragment_id in range(len(content_fragments)):
+            contents_replaced = content_fragments[fragment_id]['content']
 
-        # Replace standard and found transcription tags
-        content_trans_tags_escaped = [re.escape(tag) for tag in content_trans_tags]
-        for trans_tag in standard_trans_tags + content_trans_tags_escaped:
-            contents_replaced = re.sub(trans_tag, "", contents_replaced)
+            if not contents_replaced.strip():
+                continue
 
-        # Replace newlines with spaces
-        contents_replaced = re.sub(r"\n", " ", contents_replaced)
+            # Replace standard and found transcription tags
+            content_trans_tags_escaped = [re.escape(tag) for tag in content_trans_tags]
+            for trans_tag in standard_trans_tags + content_trans_tags_escaped:
+                contents_replaced = re.sub(trans_tag, "", contents_replaced)
 
-        # Replace standard and found actor tags
-        content_actor_tags_escaped = [re.escape(tag) for tag in content_actor_tags]
-        for actor_tag in standard_actor_tags + content_actor_tags_escaped:
-            contents_replaced = re.sub(r"{0}:\s*".format(actor_tag), "\n\n", contents_replaced)
+            # Replace newlines with spaces
+            contents_replaced = re.sub(r"\n", " ", contents_replaced)
 
-        # Trim trailing and duplicated whitespaces
-        contents_replaced = re.sub(r"^\s+", "", contents_replaced)
-        contents_replaced = re.sub(r"[ ]+", " ", contents_replaced)
-        contents_replaced = re.sub(r"\s+$", "", contents_replaced)
+            # Replace standard and found actor tags
+            content_actor_tags_escaped = [re.escape(tag) for tag in content_actor_tags]
+            for actor_tag in standard_actor_tags + content_actor_tags_escaped:
+                contents_replaced = re.sub(r"{0}:\s*".format(actor_tag), "\n\n", contents_replaced)
 
-        # Split transcription at sentence level
-        contents_replaced = re.sub(r"\.{3}", "[ELLIPSIS]", contents_replaced)
-        contents_replaced = re.sub(r"\.\s+", ".\n\n", contents_replaced)
-        contents_replaced = re.sub(r"\[ELLIPSIS\]", "...", contents_replaced)
-        contents_replaced = re.sub(r"\?\s+", "?\n\n", contents_replaced)
-        contents_replaced = re.sub(r"!\s+", "!\n\n", contents_replaced)
+            # Trim trailing and duplicated whitespaces
+            contents_replaced = re.sub(r"^\s+", "", contents_replaced)
+            contents_replaced = re.sub(r"[ ]+", " ", contents_replaced)
+            contents_replaced = re.sub(r"\s+$", "", contents_replaced)
 
-        # Replace non-spanish alphabet characters
-        contents_replaced = re.sub(r"…", "...", contents_replaced)
-        contents_replaced = re.sub(r"ahý", "ahí", contents_replaced)
-        contents_replaced = re.sub(r"ý", "y", contents_replaced)
-        contents_replaced = re.sub(r"[üû]", "u", contents_replaced)
-        contents_replaced = re.sub(r"Ü", "U", contents_replaced)
-        contents_replaced = re.sub(r"[öò]", "O", contents_replaced)
-        contents_replaced = re.sub(r"ï", "i", contents_replaced)
-        contents_replaced = re.sub(r"Î", "I", contents_replaced)
-        contents_replaced = re.sub(r"ì", "í", contents_replaced)
-        contents_replaced = re.sub(r"Ë", "É", contents_replaced)
-        contents_replaced = re.sub(r"ë", "e", contents_replaced)
-        contents_replaced = re.sub(r"È", "É", contents_replaced)
-        contents_replaced = re.sub(r"è", "é", contents_replaced)
-        contents_replaced = re.sub(r"ça", "á", contents_replaced)
-        contents_replaced = re.sub(r"ça", "á", contents_replaced)
-        contents_replaced = re.sub(r"ço", "ó", contents_replaced)
-        contents_replaced = re.sub(r"çi", "í", contents_replaced)
-        contents_replaced = re.sub(r"çu", "í", contents_replaced)
-        contents_replaced = re.sub(r"ç", "", contents_replaced)
-        contents_replaced = re.sub(r"Ä", "A", contents_replaced)
-        contents_replaced = re.sub(r"[àâäå]", "a", contents_replaced)
-        contents_replaced = re.sub("\u0605", "", contents_replaced)
-        contents_replaced = re.sub("\u001B", "", contents_replaced)
-        contents_replaced = re.sub("\u00AD", "", contents_replaced)
+            # Split transcription at sentence level
+            contents_replaced = re.sub(r"\.{3}", "[ELLIPSIS]", contents_replaced)
+            contents_replaced = re.sub(r"\.\s+", ".\n\n", contents_replaced)
+            contents_replaced = re.sub(r"\[ELLIPSIS\]", "...", contents_replaced)
+            contents_replaced = re.sub(r"\?\s+", "?\n\n", contents_replaced)
+            contents_replaced = re.sub(r"!\s+", "!\n\n", contents_replaced)
 
-        # TODO Normalize non-spanish alphabet characters
-        # contents_replaced = unicodedata.normalize("NFKD", contents_replaced)
-        # contents_replaced = contents_replaced.encode("ascii", "ignore").decode("ascii", "ignore")
+            # Replace non-spanish alphabet characters
+            contents_replaced = re.sub(r"…", "...", contents_replaced)
+            contents_replaced = re.sub(r"ahý", "ahí", contents_replaced)
+            contents_replaced = re.sub(r"ý", "y", contents_replaced)
+            contents_replaced = re.sub(r"[üû]", "u", contents_replaced)
+            contents_replaced = re.sub(r"Ü", "U", contents_replaced)
+            contents_replaced = re.sub(r"[öò]", "O", contents_replaced)
+            contents_replaced = re.sub(r"ï", "i", contents_replaced)
+            contents_replaced = re.sub(r"Î", "I", contents_replaced)
+            contents_replaced = re.sub(r"ì", "í", contents_replaced)
+            contents_replaced = re.sub(r"Ë", "É", contents_replaced)
+            contents_replaced = re.sub(r"ë", "e", contents_replaced)
+            contents_replaced = re.sub(r"È", "É", contents_replaced)
+            contents_replaced = re.sub(r"è", "é", contents_replaced)
+            contents_replaced = re.sub(r"ça", "á", contents_replaced)
+            contents_replaced = re.sub(r"ça", "á", contents_replaced)
+            contents_replaced = re.sub(r"ço", "ó", contents_replaced)
+            contents_replaced = re.sub(r"çi", "í", contents_replaced)
+            contents_replaced = re.sub(r"çu", "í", contents_replaced)
+            contents_replaced = re.sub(r"ç", "", contents_replaced)
+            contents_replaced = re.sub(r"Ä", "A", contents_replaced)
+            contents_replaced = re.sub(r"[àâäå]", "a", contents_replaced)
+            contents_replaced = re.sub("\u0605", "", contents_replaced)
+            contents_replaced = re.sub("\u001B", "", contents_replaced)
+            contents_replaced = re.sub("\u00AD", "", contents_replaced)
 
-        # Verbalize hours
-        contents_replaced = re.sub(r"\d{1,2}:\d{2}:\s?\d{2}\s?-?\s?", "", contents_replaced)
-        contents_replaced = re.sub(r"1[3-9]:\d{2}\s?-?\s?", "", contents_replaced)
-        contents_replaced = re.sub(r"[2-9]\d:\s?\d{2}\s?\\?-?\s?", "", contents_replaced)
+            # TODO Normalize non-spanish alphabet characters
+            # contents_replaced = unicodedata.normalize("NFKD", contents_replaced)
+            # contents_replaced = contents_replaced.encode("ascii", "ignore").decode("ascii", "ignore")
 
-        hours = list(set(re.findall(r"(\d{1,2}):(\d{2})(\s?([ap])\.?m\.?)?", contents_replaced)))
-        for time in hours:
-            word_formatted_hours = num2words(int(time[0]), lang="es_CO")
-            word_formatted_minutes = "" if int(time[1]) == 0 else ("cuarto" if int(time[1]) == 15 else (
-                "media" if int(time[1]) == 30 else num2words(int(time[1]), lang="es_CO")))
-            word_formatted_time = word_formatted_hours if not word_formatted_minutes else "{hours} y {minutes}".format(
-                hours=word_formatted_hours, minutes=word_formatted_minutes)
-            word_formatted_noon_ind = " de la mañana" if time[3] == "a" else (
-                " de la tarde" if time[3] == "p" else "")
-            time_key = "{hours}:{minutes}{noon_ind}".format(hours=time[0],
-                                                            minutes=time[1],
-                                                            noon_ind=time[2])
-            time_value = "{time}{noon_ind}{final_dot}".format(time=word_formatted_time,
-                                                              noon_ind=word_formatted_noon_ind,
-                                                              final_dot="." if time[2].endswith(".") else "")
-            contents_replaced = contents_replaced.replace(time_key, time_value)
+            # Verbalize hours
+            contents_replaced = re.sub(r"\d{1,2}:\d{2}:\s?\d{2}\s?-?\s?", "", contents_replaced)
+            contents_replaced = re.sub(r"1[3-9]:\d{2}\s?-?\s?", "", contents_replaced)
+            contents_replaced = re.sub(r"[2-9]\d:\s?\d{2}\s?\\?-?\s?", "", contents_replaced)
 
-        # Replace arithmetic operations (allow verbalization to work properly)
-        contents_replaced = re.sub(r"(\d+)\+(\d+)", r"\1 mas \2", contents_replaced)
-        contents_replaced = re.sub(r"(\d+)\sx\s(\d+)", r"\1 por \2", contents_replaced)
-        contents_replaced = re.sub(r"(\d+)\s\*\s(\d+)", r"\1 por \2", contents_replaced)
+            hours = list(set(re.findall(r"(\d{1,2}):(\d{2})(\s?([ap])\.?m\.?)?", contents_replaced)))
+            for time in hours:
+                word_formatted_hours = num2words(int(time[0]), lang="es_CO")
+                word_formatted_minutes = "" if int(time[1]) == 0 else ("cuarto" if int(time[1]) == 15 else (
+                    "media" if int(time[1]) == 30 else num2words(int(time[1]), lang="es_CO")))
+                word_formatted_time = word_formatted_hours if not word_formatted_minutes else "{hours} y {minutes}".format(
+                    hours=word_formatted_hours, minutes=word_formatted_minutes)
+                word_formatted_noon_ind = " de la mañana" if time[3] == "a" else (
+                    " de la tarde" if time[3] == "p" else "")
+                time_key = "{hours}:{minutes}{noon_ind}".format(hours=time[0],
+                                                                minutes=time[1],
+                                                                noon_ind=time[2])
+                time_value = "{time}{noon_ind}{final_dot}".format(time=word_formatted_time,
+                                                                  noon_ind=word_formatted_noon_ind,
+                                                                  final_dot="." if time[2].endswith(".") else "")
+                contents_replaced = contents_replaced.replace(time_key, time_value)
+                # time_tags[time_key] = time_value
 
-        # Replace currencies within parentheses
-        contents_replaced = re.sub(r"\(\$\d+([',.´’]\d{3})+\)", "", contents_replaced)
+            # Replace arithmetic operations (allow verbalization to work properly)
+            contents_replaced = re.sub(r"(\d+)\+(\d+)", r"\1 mas \2", contents_replaced)
+            contents_replaced = re.sub(r"(\d+)\sx\s(\d+)", r"\1 por \2", contents_replaced)
+            contents_replaced = re.sub(r"(\d+)\s\*\s(\d+)", r"\1 por \2", contents_replaced)
 
-        # Replace currencies separators (allow verbalization to work properly)
-        contents_replaced = re.sub(r"(\d+)[',.´’](\d{3})([',.´’](\d{3}))?([',.´’](\d{3}))?",
-                                   r"\1\2\4\6", contents_replaced)
+            # Replace currencies within parentheses
+            contents_replaced = re.sub(r"\(\$\d+([',.´’]\d{3})+\)", "", contents_replaced)
 
-        # Replace decimal separator
-        contents_replaced = re.sub(r"(\d+)\.(\d)[^\d]",
-                                   r"\1 punto \2 ", contents_replaced)
-        contents_replaced = re.sub(r"(\d{2})\.(\d{2})[^\d]",
-                                   r"\1 punto \2 ", contents_replaced)
+            # Replace currencies separators (allow verbalization to work properly)
+            contents_replaced = re.sub(r"(\d+)[',.´’](\d{3})([',.´’](\d{3}))?([',.´’](\d{3}))?",
+                                       r"\1\2\4\6", contents_replaced)
 
-        contents_replaced = re.sub(r"\#\s?(\d+)",
-                                   r"número \1 ", contents_replaced)
+            # Replace decimal separator
+            contents_replaced = re.sub(r"(\d+)\.(\d)[^\d]",
+                                       r"\1 punto \2 ", contents_replaced)
+            contents_replaced = re.sub(r"(\d{2})\.(\d{2})[^\d]",
+                                       r"\1 punto \2 ", contents_replaced)
 
-        # Replace dot or hyphen by whitespace
-        contents_replaced = re.sub(r"(\d+)[.\-':”](\d+)",
-                                   r"\1 \2", contents_replaced)
+            contents_replaced = re.sub(r"\#\s?(\d+)",
+                                       r"número \1 ", contents_replaced)
 
-        # Add space between numbers separated with comma
-        contents_replaced = re.sub(r"(\d+),(\d+),(\d+),(\d+),(\d+),(\d+)",
-                                   r"\1, \2, \3, \4, \5, \6", contents_replaced)
-        contents_replaced = re.sub(r"(\d+),(\d+),(\d+),(\d+),(\d+)",
-                                   r"\1, \2, \3, \4, \5", contents_replaced)
-        contents_replaced = re.sub(r"(\d+),(\d+),(\d+),(\d+)",
-                                   r"\1, \2, \3, \4", contents_replaced)
-        contents_replaced = re.sub(r"(\d+),(\d+),(\d+)",
-                                   r"\1, \2, \3", contents_replaced)
-        contents_replaced = re.sub(r"(\d+),(\d+)",
-                                   r"\1, \2", contents_replaced)
+            # Replace dot or hyphen by whitespace
+            contents_replaced = re.sub(r"(\d+)[.\-':”](\d+)",
+                                       r"\1 \2", contents_replaced)
 
-        # Split cellphone numbers
-        contents_replaced = re.sub(r"(3\d{2})(\d)(\d{2})(\d{2})(\d{2})([^\d])",
-                                   r"\1 \2 \3 \4 \5\6", contents_replaced)
+            # Add space between numbers separated with comma
+            contents_replaced = re.sub(r"(\d+),(\d+),(\d+),(\d+),(\d+),(\d+)",
+                                       r"\1, \2, \3, \4, \5, \6", contents_replaced)
+            contents_replaced = re.sub(r"(\d+),(\d+),(\d+),(\d+),(\d+)",
+                                       r"\1, \2, \3, \4, \5", contents_replaced)
+            contents_replaced = re.sub(r"(\d+),(\d+),(\d+),(\d+)",
+                                       r"\1, \2, \3, \4", contents_replaced)
+            contents_replaced = re.sub(r"(\d+),(\d+),(\d+)",
+                                       r"\1, \2, \3", contents_replaced)
+            contents_replaced = re.sub(r"(\d+),(\d+)",
+                                       r"\1, \2", contents_replaced)
 
-        # Split zero prefixed numbers
-        contents_replaced = re.sub(r"([^\d])00(\d)([^\d])",
-                                   r"\1 0 0 \2\3", contents_replaced)
-        contents_replaced = re.sub(r"([^\d])0(\d{1,2})([^\d])",
-                                   r"\1 0 \2\3", contents_replaced)
-        contents_replaced = re.sub(r"([^\d]) 0(\d)(\d{1,2})([^\d])",
-                                   r"\1 0 \2 \3\4", contents_replaced)
+            # Split cellphone numbers
+            contents_replaced = re.sub(r"(3\d{2})(\d)(\d{2})(\d{2})(\d{2})([^\d])",
+                                       r"\1 \2 \3 \4 \5\6", contents_replaced)
 
-        # TODO Further refine list of number to verbalize to avoid wrong verbalization
-        # Verbalize numbers
-        numbers = sorted(list(set(re.findall(r"(\d+)", contents_replaced))), key=lambda n: len(n), reverse=True)
-        for number in numbers:
-            word_key = number
-            word_value = num2words(number, lang="es_CO")
-            contents_replaced = contents_replaced.replace(word_key, word_value)
+            # Split zero prefixed numbers
+            contents_replaced = re.sub(r"([^\d])00(\d)([^\d])",
+                                       r"\1 0 0 \2\3", contents_replaced)
+            contents_replaced = re.sub(r"([^\d])0(\d{1,2})([^\d])",
+                                       r"\1 0 \2\3", contents_replaced)
+            contents_replaced = re.sub(r"([^\d]) 0(\d)(\d{1,2})([^\d])",
+                                       r"\1 0 \2 \3\4", contents_replaced)
 
-        # Write out formatted transcription
-        with open("{0}/{1}.txt".format(args.out_dir, basename), "wt") as file:
-            file.write(contents_replaced)
+            # TODO Further refine list of number to verbalize to avoid wrong verbalization
+            # Verbalize numbers
+            numbers = sorted(list(set(re.findall(r"(\d+)", contents_replaced))), key=lambda n: len(n), reverse=True)
+            for number in numbers:
+                word_key = number
+                word_value = num2words(number, lang="es_CO")
+                contents_replaced = contents_replaced.replace(word_key, word_value)
+
+            # Write out formatted transcription fragment
+            with open("{0}/{1}-{2:0>4d}.txt".format(args.out_dir, basename, fragment_id), "wt") as file:
+                file.write(contents_replaced)
 
         print("Done")
 
