@@ -1130,6 +1130,60 @@ def main():
                           "de la entrevista 012.", contents)
         contents = re.sub(r"PAUSA07:00",
                           "[PAUSA: 07:00]", contents)
+        contents = re.sub(r"\[DUD: 31:64\]",
+                          "[DUD: 31:54]", contents)
+        contents = re.sub(r"\[INAD:14:75\]",
+                          "[INAD:14:57]", contents)
+        contents = re.sub(r"\[PAUSA: 23:24-23:73\]",
+                          "[PAUSA: 23:24-23:37]", contents)
+        contents = re.sub(r"\[INAD: 1:15:87\]",
+                          "[INAD: 1:15:57]", contents)
+        contents = re.sub(r"\(DUD: 30:28:51\)",
+                          "[DUD: 30:27-30:28]", contents)
+        contents = re.sub(r"\[DUD:25:29-25:25:31\]",
+                          "[DUD:25:29-25:31]", contents)
+        contents = re.sub(r"\[INAUD: 18:97\]",
+                          "[INAUD: 18:07]", contents)
+        contents = re.sub(r"\[CORTE: 2:35:69\]",
+                          "[CORTE: 2:35:59]", contents)
+        contents = re.sub(r"\[PAUSA:\n40:44-40:40:54\]",
+                          "[PAUSA:40:44-40:54]", contents)
+        contents = re.sub(r"\[DUD 11:96\]",
+                          "[DUD: 11:06]", contents)
+        contents = re.sub(r"\[PAUSA: 24:55-24:25:02\]",
+                          "[PAUSA: 24:55-25:02]", contents)
+        contents = re.sub(r"\[INAD:37:57:59\]",
+                          "[INAD:37:57-37:59]", contents)
+        contents = re.sub(r"\[INAD:58:04-58:58:10\]",
+                          "[INAD:58:04-58:10]", contents)
+        contents = re.sub(r"\[INAD:58:12:15\]",
+                          "[INAD:58:12-58:15]", contents)
+        contents = re.sub(r"\[INAD:34:34:24\]",
+                          "[INAD:34:24]", contents)
+        contents = re.sub(r"\[INAD:37:37:38\]",
+                          "[INAD:37:37-37:38]", contents)
+        contents = re.sub(r"\[PAUSA: 32:14:09-32:14:10-32:14:12-32:13-32:14-32:15]",
+                          "[PAUSA: 32:09-32:15]", contents)
+        contents = re.sub(r"\[INAD:27:28-27-27:33\]",
+                          "[INAD:27:28-27:33]", contents)
+        contents = re.sub(r"\[PAUSA: 50:53-50:51:10\]",
+                          "[PAUSA: 50:53-51:08]", contents)
+        contents = re.sub(r"\[PAUSA: 31:26-31:31:46\]",
+                          "[PAUSA: 31:26-31:46]", contents)
+        contents = re.sub(r"\[INAD: 18:96\]",
+                          "[INAD: 18:06]", contents)
+        contents = re.sub(r"\[PAUSA:51:08-51:51:12\]",
+                          "[PAUSA: 51:08-51:12]", contents)
+        contents = re.sub(r"\[DUD: 1:31: 51\]",
+                          "[DUD: 1:31:51]", contents)
+        contents = re.sub(r"\[INAUD:0053\]",
+                          "[INAUD: 00:53]", contents)
+        contents = re.sub(r"\[INAUD:0252\]",
+                          "[INAUD: 02:52]", contents)
+        contents = re.sub(r"\[INAUD:2515\]",
+                          "[INAUD: 25:15]", contents)
+        contents = re.sub(r"\[INAUD:4057\]",
+                          "[INAUD: 40:57]", contents)
 
         # Custom replacements for non-generalizable expressions
         contents = re.sub(r"\n\**(\d{1,2}:?)+\**\s*\n",
