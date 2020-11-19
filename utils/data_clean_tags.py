@@ -5,7 +5,7 @@ import os
 import pprint
 import re
 # import unicodedata
-from datetime import datetime
+from datetime import datetime, timedelta
 from num2words import num2words
 
 
@@ -1358,6 +1358,8 @@ def main():
                              if idx % 2 == 0]
 
         # THIS BLOCK PRODUCES AN ALIGNMENT READY TRANSCRIPTION
+        contents_fragmented = ""
+
         for fragment_id in range(len(content_fragments)):
             contents_replaced = content_fragments[fragment_id]['content']
 
@@ -1499,9 +1501,15 @@ def main():
                 word_value = num2words(number, lang="es_CO")
                 contents_replaced = contents_replaced.replace(word_key, word_value)
 
-            # Write out formatted transcription fragment
-            with open("{0}/{1}-{2:0>4d}.txt".format(args.out_dir, basename, fragment_id), "wt") as file:
-                file.write(contents_replaced)
+            contents_fragmented += "\n\n" if fragment_id > 0 else ""
+            contents_fragmented += "[BLOQUE: {start}-{end}]\n\n".format(
+                start=str(timedelta(seconds=content_fragments[fragment_id]['start'])),
+                end=str(timedelta(seconds=content_fragments[fragment_id]['end'])))
+            contents_fragmented += contents_replaced
+
+        # Write out formatted transcription fragments
+        with open("{0}/{1}.txt".format(args.out_dir, basename), "wt") as file:
+            file.write(contents_fragmented)
 
         print("Done")
 
