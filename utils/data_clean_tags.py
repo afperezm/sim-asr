@@ -1344,7 +1344,7 @@ def main():
                                 key=operator.itemgetter(1))
 
         ts_time_list = [[item[1][0], item[1][1]] for item in ts_dict_sorted]
-        ts_time = [0] + [ts for sublist in ts_time_list for ts in sublist] + [-1]
+        ts_time = [0] + [ts for sublist in ts_time_list for ts in sublist] + [24 * 60 * 60 - 1]
 
         ts_content_list = [[contents.find(item[0]), contents.find(item[0]) + len(item[0])] for item in ts_dict_sorted]
         ts_content = [0] + [item for sublist in ts_content_list for item in sublist] + [len(contents)]
