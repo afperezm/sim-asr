@@ -1357,6 +1357,8 @@ def main():
                              range(len(ts_content))
                              if idx % 2 == 0]
 
+        print("Found {} fragments".format(len(content_fragments)))
+
         # THIS BLOCK PRODUCES AN ALIGNMENT READY TRANSCRIPTION
         contents_fragmented = ""
 
