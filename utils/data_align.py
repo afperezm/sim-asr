@@ -89,7 +89,7 @@ def align_transcript(transcript_file):
         audio_temp_file.flush()
         audio_segment_file.close()
 
-        subtitle_temp_file = tempfile.NamedTemporaryFile(mode="w+", prefix="{}.".format(idx), suffix=".srt")
+        subtitle_temp_file = tempfile.NamedTemporaryFile(mode="w+", suffix=".srt")
 
         try:
             # create Task object
