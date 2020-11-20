@@ -68,6 +68,9 @@ def align_transcript(transcript_file):
         content_fragment = contents[fragment['content_start']:fragment['content_end']]
         content_fragment = re.sub(r'^[' + re.escape(string.punctuation) + r']+', '', content_fragment.strip()).strip()
 
+        if not content_fragment:
+            continue
+
         text_temp_file = tempfile.NamedTemporaryFile(mode="w+", suffix=".txt")
         text_temp_file.write(content_fragment)
         text_temp_file.flush()
