@@ -59,11 +59,11 @@ def align_transcript(transcript_file):
 
     audio_wav_file = AudioSegment.from_wav(u"{0}/{1}.wav".format(AUDIO_DIR, basename))
 
-    alignment_failed = False
-
     audio_subs = []
 
     for idx, fragment in enumerate(content_fragments):
+
+        alignment_failed = False
 
         content_fragment = contents[fragment['content_start']:fragment['content_end']]
         content_fragment = re.sub(r'^[' + re.escape(string.punctuation) + r']+', '', content_fragment.strip()).strip()
@@ -123,10 +123,7 @@ def align_transcript(transcript_file):
         audio_temp_file.close()
         subtitle_temp_file.close()
 
-        if alignment_failed:
-            break
-
-    if alignment_failed:
+    if len(audio_subs) == 0:
         return [], [], [basename], []
     else:
         # Write whole composed subtitles list into a single file
