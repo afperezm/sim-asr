@@ -49,9 +49,9 @@ def main():
     if not os.path.exists(waves_dir):
         os.makedirs(waves_dir)
 
-    output_csv = os.path.join(output_dir, "output.csv")
-    output_csv_file = open(output_csv, "w", encoding="utf-8", newline="")
-    output_csv_writer = csv.writer(output_csv_file, dialect=csv.excel)
+    output_tsv = os.path.join(output_dir, "output.tsv")
+    output_tsv_file = open(output_tsv, "w", encoding="utf-8", newline="")
+    output_tsv_writer = csv.writer(output_tsv_file, dialect=csv.excel_tab)
 
     durations = {}
 
@@ -101,19 +101,17 @@ def main():
             audio_segment_file.close()
 
             # Remove diacritic characters and punctuation signs
-            audio_transcript = unicodedata.normalize("NFKD", sub.content.strip())
-            audio_transcript = audio_transcript.encode("ascii", "ignore").decode("ascii", "ignore")
-            audio_transcript = audio_transcript.translate(str.maketrans("", "", string.punctuation))
+            audio_transcript = sub.content.strip()
 
             # Write audio segment path and transcript to output csv file
-            output_csv_writer.writerow([os.path.relpath(audio_segment, waves_dir), audio_transcript])
+            output_tsv_writer.writerow([os.path.relpath(audio_segment, waves_dir), audio_transcript])
 
             # Build list of audio subs duration
             durations[audio_segment] = [(sub.end - sub.start).total_seconds()]
 
             print("{0} - Done".format(sub_srt_basename))
 
-    output_csv_file.close()
+    output_tsv_file.close()
 
     # Write durations dictionary to a pickle file in the output directory
     durations_pkl = os.path.join(output_dir, "audio_subs_duration.pkl")

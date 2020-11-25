@@ -102,13 +102,13 @@ def one_sample(sample):
 
 def _maybe_convert_sets(data_dir, audio_dir):
 
-    output_csv = os.path.join(data_dir, "output.csv")
+    output_tsv = os.path.join(data_dir, "output.tsv")
     output_csv_template = os.path.join(data_dir, "output_{}.csv")
 
-    print("Loading CSV file: ", output_csv)
-    with open(output_csv, "rt") as output_csv_file:
-        output_csv_reader = csv.reader(output_csv_file, dialect=csv.excel)
-        samples = [(os.path.join(audio_dir, row[0]), row[1]) for row in output_csv_reader]
+    print("Loading TSV file: ", output_tsv)
+    with open(output_tsv, "rt") as output_tsv_file:
+        output_tsv_reader = csv.reader(output_tsv_file, dialect=csv.excel_tab)
+        samples = [(os.path.join(audio_dir, row[0]), row[1]) for row in output_tsv_reader]
 
     counter = get_counter()
     num_samples = len(samples)
