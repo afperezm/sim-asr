@@ -21,7 +21,7 @@ from multiprocessing import Pool
 FIELDNAMES = ["wav_filename", "wav_filesize", "transcript"]
 SAMPLE_RATE = 16000
 MAX_SECS = 15
-CHARS_PER_SEC = 10
+CHARS_PER_SEC = 1000 / MAX_SECS / 2
 THRESHOLD = 0.5
 
 PARAMS = None
@@ -83,7 +83,8 @@ def one_sample(sample):
     elif label is None:
         # Excluding samples that failed on label validation
         counter["invalid_label"] += 1
-    elif int(frames / SAMPLE_RATE * CHARS_PER_SEC) / len(label.replace(' ', '')) < (1 - THRESHOLD):
+    # elif int(frames / SAMPLE_RATE * CHARS_PER_SEC) / len(label.replace(' ', '')) < (1 - THRESHOLD):
+    elif int(frames / SAMPLE_RATE * CHARS_PER_SEC) < len(str(label.replace(' ', ''))):
         # Excluding samples that are too short to fit the transcript
         counter["too_short"] += 1
     elif frames / SAMPLE_RATE > MAX_SECS or int(frames / SAMPLE_RATE * CHARS_PER_SEC) / len(label.replace(' ', '')) > (1 + THRESHOLD):
