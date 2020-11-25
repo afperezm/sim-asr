@@ -87,7 +87,7 @@ def one_sample(sample):
     elif int(frames / SAMPLE_RATE * CHARS_PER_SEC) < len(str(label.replace(' ', ''))):
         # Excluding samples that are too short to fit the transcript
         counter["too_short"] += 1
-    elif frames / SAMPLE_RATE > MAX_SECS or int(frames / SAMPLE_RATE * CHARS_PER_SEC) / len(label.replace(' ', '')) > (1 + THRESHOLD):
+    elif frames / SAMPLE_RATE > MAX_SECS:
         # Excluding very long samples to keep a reasonable batch-size
         counter["too_long"] += 1
     else:
