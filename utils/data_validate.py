@@ -179,6 +179,14 @@ def _validate_data(data_dir, audio_dir):
 
     print_import_report(counter, SAMPLE_RATE, MIN_SECS, MAX_SECS)
 
+    output_tsv = os.path.join(data_dir, "output_validated.tsv")
+    print("Saving validated TSV file to: ", output_tsv)
+    with open(output_tsv, "wt", encoding="utf-8", newline="") as output_tsv_file:
+        output_tsv_writer = csv.writer(output_tsv_file, dialect=csv.excel_tab)
+        bar = progressbar.ProgressBar(max_value=len(rows), widgets=SIMPLE_BAR)
+        for directory, filename, subtitle, transcript in bar([row for idx, row in enumerate(rows)]):
+            output_tsv_writer.writerow([filename, subtitle])
+
 
 def parse_args():
     parser = get_importers_parser(
