@@ -91,12 +91,12 @@ def validate_one(sample):
     if os.path.exists(wav_filename):
         frames = int(subprocess.check_output(["soxi", "-s", wav_filename], stderr=subprocess.STDOUT))
 
-    subtitle = FILTER_OBJ.filter(subtitle)
+    subtitle_filtered = FILTER_OBJ.filter(subtitle)
     transcript = None
     counter = get_counter()
     rows = []
 
-    if subtitle is not None and MIN_SECS <= frames / SAMPLE_RATE <= MAX_SECS:
+    if subtitle_filtered is not None and MIN_SECS <= frames / SAMPLE_RATE <= MAX_SECS:
         with io.open(wav_filename, 'rb') as audio_file:
             audio_content = audio_file.read()
 
@@ -104,7 +104,7 @@ def validate_one(sample):
         config = speech.RecognitionConfig(
             encoding=speech.RecognitionConfig.AudioEncoding.LINEAR16,
             sample_rate_hertz=16000,
-            speech_contexts=[{"phrases": subtitle.split()}],
+            speech_contexts=[{"phrases": subtitle_filtered.split()}],
             language_code='es-CO',
             max_alternatives=1,
             model='default',
@@ -115,16 +115,18 @@ def validate_one(sample):
         transcript = "".join([result.alternatives[0].transcript for result in response.results])
         confidence = "+".join([str(result.alternatives[0].confidence) for result in response.results])
 
-        score = similarity_score(subtitle, transcript)
+        score = similarity_score(subtitle_filtered, transcript)
 
         filename = os.path.split(wav_filename)[-1]
-        print("*** {} ***\nSubtitle:\t{}\nTranscript:\t{}\nScore:\t\t{}\nConfidence:\t{}".format(filename, subtitle,
-                                                                                                 transcript, score,
+        print("*** {} ***\nSubtitle:\t{}\nTranscript:\t{}\nScore:\t\t{}\nConfidence:\t{}".format(filename,
+                                                                                                 subtitle_filtered,
+                                                                                                 transcript,
+                                                                                                 score,
                                                                                                  confidence))
 
     if frames == 0:
         counter['failed'] += 1
-    elif subtitle is None:
+    elif subtitle_filtered is None:
         counter['invalid_label'] += 1
     elif frames / SAMPLE_RATE < MIN_SECS:
         counter['too_short'] += 1
