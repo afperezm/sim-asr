@@ -18,6 +18,7 @@ from deepspeech_training.util.importers import (
 from ds_ctcdecoder import Alphabet
 from google.cloud import speech
 from multiprocessing import Pool
+from num2words import num2words
 
 MIN_SECS = 12
 MAX_SECS = 15
@@ -114,6 +115,12 @@ def validate_one(sample):
 
         transcript = "".join([result.alternatives[0].transcript for result in response.results])
         confidence = "+".join([str(result.alternatives[0].confidence) for result in response.results])
+
+        numbers = sorted(list(set(re.findall(r"(\d+)", transcript))), key=lambda n: len(n), reverse=True)
+        for number in numbers:
+            word_key = number
+            word_value = num2words(number, lang="es_CO")
+            transcript = transcript.replace(word_key, word_value)
 
         score = similarity_score(subtitle_filtered, transcript)
 
