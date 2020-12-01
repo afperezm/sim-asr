@@ -68,7 +68,7 @@ def print_import_report(counter, sample_rate, min_secs, max_secs):
     if counter['too_long'] > 0:
         print('Skipped %d samples that were longer than %d seconds.' % (counter['too_long'], max_secs))
     print('Final amount of imported audio: %s from %s.' % (
-    secs_to_hours(counter['imported_time'] / sample_rate), secs_to_hours(counter['total_time'] / sample_rate)))
+        secs_to_hours(counter['imported_time'] / sample_rate), secs_to_hours(counter['total_time'] / sample_rate)))
 
 
 def init_worker(params):
