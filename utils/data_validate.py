@@ -3,6 +3,8 @@ import difflib
 import io
 import os
 import pickle
+import time
+
 import progressbar
 import re
 import subprocess
@@ -123,6 +125,8 @@ def validate_one(sample):
         else:
             transcript = cached_transcripts[filename][0]
             confidence = cached_transcripts[filename][1]
+
+        time.sleep(3)
 
         # Convert numbers to spoken format if any
         numbers = sorted(list(set(re.findall(r"(\d+)", transcript))), key=lambda n: len(n), reverse=True)
