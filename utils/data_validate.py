@@ -75,7 +75,7 @@ def init_worker(params):
     FILTER_OBJ = SubtitleFilter(params.normalize, alphabet, validate_label)
 
 
-def validate_one(sample, cached_transcripts):
+def validate_one(sample):
     """ Take an audio file and validate wav and transcript """
 
     wav_filename = sample[0]
@@ -90,6 +90,10 @@ def validate_one(sample, cached_transcripts):
     subtitle_filtered = FILTER_OBJ.filter(subtitle)
     counter = get_counter()
     rows = []
+
+    cache_pkl = os.path.join("/home/andresf/data/asr-co-segments", "cache.pkl")
+    with open(cache_pkl, "rb") as cache_pkl_file:
+        cached_transcripts = pickle.load(cache_pkl_file)
 
     if subtitle_filtered is not None and MIN_SECS <= frames / SAMPLE_RATE <= MAX_SECS:
         if filename not in cached_transcripts:
@@ -179,14 +183,10 @@ def _validate_data(data_dir, audio_dir):
     num_samples = len(samples)
     rows = []
 
-    cache_pkl = os.path.join(data_dir, "cache.pkl")
-    with open(cache_pkl, "rb") as cache_pkl_file:
-        cached_transcripts = pickle.load(cache_pkl_file)
-
     print("Importing WAV files...")
     pool = Pool(initializer=init_worker, initargs=(PARAMS,))
     bar = progressbar.ProgressBar(max_value=num_samples, widgets=SIMPLE_BAR)
-    for row_idx, processed in enumerate(pool.imap_unordered(validate_one, samples, cached_transcripts), start=1):
+    for row_idx, processed in enumerate(pool.imap_unordered(validate_one, samples), start=1):
         counter += processed[0]
         rows += processed[1]
         bar.update(row_idx)
