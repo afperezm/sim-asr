@@ -2,6 +2,7 @@ import csv
 import difflib
 import io
 import os
+import pickle
 import progressbar
 import re
 import subprocess
@@ -74,13 +75,14 @@ def init_worker(params):
     FILTER_OBJ = SubtitleFilter(params.normalize, alphabet, validate_label)
 
 
-def validate_one(sample):
+def validate_one(sample, cached_transcripts):
     """ Take an audio file and validate wav and transcript """
 
     wav_filename = sample[0]
     subtitle = sample[1]
     frames = 0
     score = 0.0
+    filename = os.path.split(wav_filename)[-1]
 
     if os.path.exists(wav_filename):
         frames = int(subprocess.check_output(["soxi", "-s", wav_filename], stderr=subprocess.STDOUT))
@@ -91,27 +93,31 @@ def validate_one(sample):
     rows = []
 
     if subtitle_filtered is not None and MIN_SECS <= frames / SAMPLE_RATE <= MAX_SECS:
-        # Read utterance audio content
-        with io.open(wav_filename, 'rb') as audio_file:
-            audio_content = audio_file.read()
+        if filename not in cached_transcripts:
+            # Read utterance audio content
+            with io.open(wav_filename, 'rb') as audio_file:
+                audio_content = audio_file.read()
 
-        # Create speech recognition request
-        audio = speech.RecognitionAudio(content=audio_content)
-        config = speech.RecognitionConfig(
-            encoding=speech.RecognitionConfig.AudioEncoding.LINEAR16,
-            sample_rate_hertz=16000,
-            speech_contexts=[{"phrases": subtitle_filtered.split()}],
-            language_code='es-CO',
-            max_alternatives=1,
-            model='default',
-            use_enhanced=False)
+            # Create speech recognition request
+            audio = speech.RecognitionAudio(content=audio_content)
+            config = speech.RecognitionConfig(
+                encoding=speech.RecognitionConfig.AudioEncoding.LINEAR16,
+                sample_rate_hertz=16000,
+                speech_contexts=[{"phrases": subtitle_filtered.split()}],
+                language_code='es-CO',
+                max_alternatives=1,
+                model='default',
+                use_enhanced=False)
 
-        # Launch recognition request
-        response = CLIENT.recognize(config=config, audio=audio)
+            # Launch recognition request
+            response = CLIENT.recognize(config=config, audio=audio)
 
-        # Gather transcript and confidence results
-        transcript = "".join([result.alternatives[0].transcript for result in response.results])
-        confidence = "+".join([str(result.alternatives[0].confidence) for result in response.results])
+            # Gather transcript and confidence results
+            transcript = "".join([result.alternatives[0].transcript for result in response.results])
+            confidence = "+".join([str(result.alternatives[0].confidence) for result in response.results])
+        else:
+            transcript = cached_transcripts[filename][0]
+            confidence = cached_transcripts[filename][1]
 
         # Convert numbers to spoken format if any
         numbers = sorted(list(set(re.findall(r"(\d+)", transcript))), key=lambda n: len(n), reverse=True)
@@ -129,7 +135,6 @@ def validate_one(sample):
 
         score = difflib.SequenceMatcher(None, s1n, s2n).ratio()
 
-        filename = os.path.split(wav_filename)[-1]
         print("*** {} ***\nSubtitle:\t{}\nTranscript:\t{}\nScore:\t\t{}\nConfidence:\t{}".format(filename,
                                                                                                  subtitle_filtered,
                                                                                                  transcript,
@@ -173,10 +178,14 @@ def _validate_data(data_dir, audio_dir):
     num_samples = len(samples)
     rows = []
 
+    cache_pkl = os.path.join(data_dir, "cache.pkl")
+    with open(cache_pkl, "rb") as cache_pkl_file:
+        cached_transcripts = pickle.load(cache_pkl_file)
+
     print("Importing WAV files...")
     pool = Pool(initializer=init_worker, initargs=(PARAMS,))
     bar = progressbar.ProgressBar(max_value=num_samples, widgets=SIMPLE_BAR)
-    for row_idx, processed in enumerate(pool.imap_unordered(validate_one, samples), start=1):
+    for row_idx, processed in enumerate(pool.imap_unordered(validate_one, samples, cached_transcripts), start=1):
         counter += processed[0]
         rows += processed[1]
         bar.update(row_idx)
