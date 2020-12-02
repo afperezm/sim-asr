@@ -147,9 +147,8 @@ def validate_one(sample):
     elif score < SIMILARITY_THRESHOLD:
         counter['invalid_label'] += 1
     else:
-        directory = os.path.split(wav_filename)[0].split('/')[-1]
         filename = os.path.split(wav_filename)[-1]
-        rows.append((directory, filename, subtitle, transcript))
+        rows.append((filename, subtitle))
         counter['imported_time'] += frames
 
     counter['all'] += 1
@@ -196,8 +195,8 @@ def _validate_data(data_dir, audio_dir):
     with open(output_tsv, "wt", encoding="utf-8", newline="") as output_tsv_file:
         output_tsv_writer = csv.writer(output_tsv_file, dialect=csv.excel_tab)
         bar = progressbar.ProgressBar(max_value=len(rows), widgets=SIMPLE_BAR)
-        for directory, filename, subtitle, transcript in bar([row for idx, row in enumerate(rows)]):
-            output_tsv_writer.writerow([filename, subtitle])
+        for filename, transcript in bar([row for idx, row in enumerate(rows)]):
+            output_tsv_writer.writerow([filename, transcript])
 
 
 def parse_args():
