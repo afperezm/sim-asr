@@ -99,34 +99,33 @@ def validate_one(sample):
 
     if subtitle_filtered is not None and MIN_SECS <= frames / SAMPLE_RATE <= MAX_SECS:
         if filename not in cached_transcripts:
-            # # Read utterance audio content
-            # with io.open(wav_filename, 'rb') as audio_file:
-            #     audio_content = audio_file.read()
-            #
-            # # Create speech recognition request
-            # audio = speech.RecognitionAudio(content=audio_content)
-            # config = speech.RecognitionConfig(
-            #     encoding=speech.RecognitionConfig.AudioEncoding.LINEAR16,
-            #     sample_rate_hertz=16000,
-            #     speech_contexts=[{"phrases": subtitle_filtered.split()}],
-            #     language_code='es-CO',
-            #     max_alternatives=1,
-            #     model='default',
-            #     use_enhanced=False)
-            #
-            # # Launch recognition request
-            # response = CLIENT.recognize(config=config, audio=audio)
-            #
-            # # Gather transcript and confidence results
-            # transcript = "".join([result.alternatives[0].transcript for result in response.results])
-            # confidence = "+".join([str(result.alternatives[0].confidence) for result in response.results])
-            transcript = subtitle_filtered
-            confidence = 1.0
+            # Read utterance audio content
+            with io.open(wav_filename, 'rb') as audio_file:
+                audio_content = audio_file.read()
+
+            # Create speech recognition request
+            audio = speech.RecognitionAudio(content=audio_content)
+            config = speech.RecognitionConfig(
+                encoding=speech.RecognitionConfig.AudioEncoding.LINEAR16,
+                sample_rate_hertz=16000,
+                speech_contexts=[{"phrases": subtitle_filtered.split()}],
+                language_code='es-CO',
+                max_alternatives=1,
+                model='default',
+                use_enhanced=False)
+
+            # Launch recognition request
+            response = CLIENT.recognize(config=config, audio=audio)
+
+            # Gather transcript and confidence results
+            transcript = "".join([result.alternatives[0].transcript for result in response.results])
+            confidence = "+".join([str(result.alternatives[0].confidence) for result in response.results])
         else:
+            # Simulate delay to avoid soxi errors
+            time.sleep(3)
+            # Retrieve from cache
             transcript = cached_transcripts[filename][0]
             confidence = cached_transcripts[filename][1]
-
-        time.sleep(3)
 
         # Convert numbers to spoken format if any
         numbers = sorted(list(set(re.findall(r"(\d+)", transcript))), key=lambda n: len(n), reverse=True)
