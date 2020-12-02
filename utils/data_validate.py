@@ -88,7 +88,6 @@ def validate_one(sample, cached_transcripts):
         frames = int(subprocess.check_output(["soxi", "-s", wav_filename], stderr=subprocess.STDOUT))
 
     subtitle_filtered = FILTER_OBJ.filter(subtitle)
-    transcript = None
     counter = get_counter()
     rows = []
 
