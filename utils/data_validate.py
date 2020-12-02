@@ -51,13 +51,6 @@ class SubtitleFilter:
         return subtitle
 
 
-def similarity_score(s1, s2):
-    s1n = re.sub(r'\s*', '', s1).lower()
-    s2n = re.sub(r'\s*', '', s2).lower()
-
-    return difflib.SequenceMatcher(None, s1n, s2n).ratio()
-
-
 def print_import_report(counter, sample_rate, min_secs, max_secs):
     print('Imported %d samples.' % (get_imported_samples(counter)))
     if counter['failed'] > 0:
@@ -122,7 +115,14 @@ def validate_one(sample):
             word_value = num2words(number, lang="es_CO")
             transcript = transcript.replace(word_key, word_value)
 
-        score = similarity_score(subtitle_filtered, transcript)
+        # Compute matching score
+        s1 = subtitle_filtered
+        s2 = transcript
+
+        s1n = re.sub(r'\s*', '', s1).lower()
+        s2n = re.sub(r'\s*', '', s2).lower()
+
+        score = difflib.SequenceMatcher(None, s1n, s2n).ratio()
 
         filename = os.path.split(wav_filename)[-1]
         print("*** {} ***\nSubtitle:\t{}\nTranscript:\t{}\nScore:\t\t{}\nConfidence:\t{}".format(filename,
