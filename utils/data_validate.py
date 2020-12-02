@@ -91,9 +91,11 @@ def validate_one(sample):
     rows = []
 
     if subtitle_filtered is not None and MIN_SECS <= frames / SAMPLE_RATE <= MAX_SECS:
+        # Read utterance audio content
         with io.open(wav_filename, 'rb') as audio_file:
             audio_content = audio_file.read()
 
+        # Create speech recognition request
         audio = speech.RecognitionAudio(content=audio_content)
         config = speech.RecognitionConfig(
             encoding=speech.RecognitionConfig.AudioEncoding.LINEAR16,
@@ -104,11 +106,14 @@ def validate_one(sample):
             model='default',
             use_enhanced=False)
 
+        # Launch recognition request
         response = CLIENT.recognize(config=config, audio=audio)
 
+        # Gather transcript and confidence results
         transcript = "".join([result.alternatives[0].transcript for result in response.results])
         confidence = "+".join([str(result.alternatives[0].confidence) for result in response.results])
 
+        # Convert numbers to spoken format if any
         numbers = sorted(list(set(re.findall(r"(\d+)", transcript))), key=lambda n: len(n), reverse=True)
         for number in numbers:
             word_key = number
