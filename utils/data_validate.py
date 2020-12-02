@@ -3,12 +3,12 @@ import difflib
 import io
 import os
 import pickle
-import time
-
 import progressbar
 import re
 import subprocess
+import time
 import unicodedata
+import wave
 
 from deepspeech_training.util.downloader import SIMPLE_BAR
 from deepspeech_training.util.helpers import secs_to_hours
@@ -87,7 +87,9 @@ def validate_one(sample):
     filename = os.path.split(wav_filename)[-1]
 
     if os.path.exists(wav_filename):
-        frames = int(subprocess.check_output(["soxi", "-s", wav_filename], stderr=subprocess.STDOUT))
+        fin = wave.open(wav_filename, 'rb')
+        frames = fin.getnframes()
+        fin.close()
 
     subtitle_filtered = FILTER_OBJ.filter(subtitle)
     counter = get_counter()
