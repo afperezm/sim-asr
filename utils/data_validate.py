@@ -1,6 +1,7 @@
 import csv
 import difflib
 import io
+import numpy as np
 import os
 import pickle
 import progressbar
@@ -18,6 +19,7 @@ from deepspeech_training.util.importers import (
     get_importers_parser,
     get_validate_label
 )
+from deepspeech import Model
 from ds_ctcdecoder import Alphabet
 from google.cloud import speech
 from multiprocessing import Pool
@@ -73,7 +75,8 @@ def init_worker(params):
     global FILTER_OBJ  # pylint: disable=global-statement
     validate_label = get_validate_label(params)
     alphabet = Alphabet(params.filter_alphabet) if params.filter_alphabet else None
-    CLIENT = speech.SpeechClient()
+    # CLIENT = speech.SpeechClient()
+    CLIENT = Model('/home/andresf/models/es/output_graph_es.pbmm')
     FILTER_OBJ = SubtitleFilter(params.normalize, alphabet, validate_label)
 
 
@@ -102,26 +105,30 @@ def validate_one(sample):
     if subtitle_filtered is not None and MIN_SECS <= frames / SAMPLE_RATE < MAX_SECS:
         if filename not in cached_transcripts:
             # Read utterance audio content
-            with io.open(wav_filename, 'rb') as audio_file:
-                audio_content = audio_file.read()
+            # with io.open(wav_filename, 'rb') as audio_file:
+                # audio_content = audio_file.read()
+            with wave.open(wav_filename, 'rb') as audio_file:
+                audio = np.frombuffer(audio_file.readframes(frames), np.int16)
 
             # Create speech recognition request
-            audio = speech.RecognitionAudio(content=audio_content)
-            config = speech.RecognitionConfig(
-                encoding=speech.RecognitionConfig.AudioEncoding.LINEAR16,
-                sample_rate_hertz=16000,
-                speech_contexts=[{"phrases": subtitle_filtered.split()}],
-                language_code='es-CO',
-                max_alternatives=1,
-                model='default',
-                use_enhanced=False)
+            # audio = speech.RecognitionAudio(content=audio_content)
+            # config = speech.RecognitionConfig(
+            #     encoding=speech.RecognitionConfig.AudioEncoding.LINEAR16,
+            #     sample_rate_hertz=16000,
+            #     speech_contexts=[{"phrases": subtitle_filtered.split()}],
+            #     language_code='es-CO',
+            #     max_alternatives=1,
+            #     model='default',
+            #     use_enhanced=False)
 
             # Launch recognition request
-            response = CLIENT.recognize(config=config, audio=audio)
+            # response = CLIENT.recognize(config=config, audio=audio)
 
             # Gather transcript and confidence results
-            transcript = "".join([result.alternatives[0].transcript for result in response.results])
-            confidence = "+".join([str(result.alternatives[0].confidence) for result in response.results])
+            # transcript = "".join([result.alternatives[0].transcript for result in response.results])
+            # confidence = "+".join([str(result.alternatives[0].confidence) for result in response.results])
+            transcript = CLIENT.stt(audio)
+            confidence = 1.0
         else:
             # Simulate delay to avoid soxi errors
             time.sleep(3)
@@ -130,11 +137,11 @@ def validate_one(sample):
             confidence = cached_transcripts[filename][1]
 
         # Convert numbers to spoken format if any
-        numbers = sorted(list(set(re.findall(r"(\d+)", transcript))), key=lambda n: len(n), reverse=True)
-        for number in numbers:
-            word_key = number
-            word_value = num2words(number, lang="es_CO")
-            transcript = transcript.replace(word_key, word_value)
+        # numbers = sorted(list(set(re.findall(r"(\d+)", transcript))), key=lambda n: len(n), reverse=True)
+        # for number in numbers:
+        #     word_key = number
+        #     word_value = num2words(number, lang="es_CO")
+        #     transcript = transcript.replace(word_key, word_value)
 
         # Compute matching score
         s1 = subtitle_filtered
