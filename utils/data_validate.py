@@ -178,7 +178,7 @@ def _validate_data(data_dir, audio_dir):
     audio_dir = os.path.abspath(audio_dir)
 
     # Load audio and transcript from TSV file
-    output_tsv = os.path.join(data_dir, "output.tsv")
+    output_tsv = os.path.join(data_dir, "output_all.tsv")
     print("Loading TSV file: ", output_tsv)
     with open(output_tsv, "rt") as output_tsv_file:
         output_tsv_reader = csv.reader(output_tsv_file, dialect=csv.excel_tab)
