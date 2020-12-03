@@ -23,8 +23,8 @@ from google.cloud import speech
 from multiprocessing import Pool
 from num2words import num2words
 
-MIN_SECS = 12
-MAX_SECS = 15
+MIN_SECS = 11.65
+MAX_SECS = 12
 SAMPLE_RATE = 16000
 SIMILARITY_THRESHOLD = 0.7
 
@@ -99,7 +99,7 @@ def validate_one(sample):
     with open(cache_pkl, "rb") as cache_pkl_file:
         cached_transcripts = pickle.load(cache_pkl_file)
 
-    if subtitle_filtered is not None and MIN_SECS <= frames / SAMPLE_RATE <= MAX_SECS:
+    if subtitle_filtered is not None and MIN_SECS <= frames / SAMPLE_RATE < MAX_SECS:
         if filename not in cached_transcripts:
             # Read utterance audio content
             with io.open(wav_filename, 'rb') as audio_file:
