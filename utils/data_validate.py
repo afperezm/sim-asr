@@ -98,9 +98,10 @@ def validate_one(sample):
     counter = get_counter()
     rows = []
 
-    cache_pkl = os.path.join("/home/andresf/data/asr-co-segments", "cache.pkl")
-    with open(cache_pkl, "rb") as cache_pkl_file:
-        cached_transcripts = pickle.load(cache_pkl_file)
+    cached_transcripts = {}
+    # cache_pkl = os.path.join("/home/andresf/data/asr-co-segments", "cache.pkl")
+    # with open(cache_pkl, "rb") as cache_pkl_file:
+    #     cached_transcripts = pickle.load(cache_pkl_file)
 
     if subtitle_filtered is not None and MIN_SECS <= frames / SAMPLE_RATE < MAX_SECS:
         if filename not in cached_transcripts:
