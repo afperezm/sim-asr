@@ -22,7 +22,7 @@ To install the requirements execute the following command inside a Python enviro
 library [3] and the Google Cloud Speech Client library for Python [4] installed:
 
 ```bash
-pip3 install -r requirements.txt 
+$ pip3 install -r requirements.txt
 ```
 
 In addition, to build your own language model [5] you need a fully functioning installation of KenLM [6].
@@ -45,32 +45,32 @@ above imported datasets.
 Clean transcriptions from introductions and keep only the ones that weren't cleaned since they're easier to handle 
 on alignment phase:
 
-```
-python3 utils/data_clean_intros.py --in_dir ~/data/asr-co/ --out_dir ~/data/asr-co-intro-clean/
+```bash
+$ python3 utils/data_clean_intros.py --in_dir ~/data/asr-co/ --out_dir ~/data/asr-co-intro-clean/
 ```
 
 Clean transcriptions from content and actor tags and segment result by blocks derived from partial timestamps:
 
-```
-python3 utils/data_clean_tags.py --in_dir ~/data/asr-co-intro-clean/ --out_dir ~/data/asr-co-tag-clean/
+```bash
+$ python3 utils/data_clean_tags.py --in_dir ~/data/asr-co-intro-clean/ --out_dir ~/data/asr-co-tag-clean/
 ```
 
 Align clean blocks of transcriptions with their corresponding audio using a DTW a forced-alignment algorithm:
 
-```
-python3 utils/data_align.py --trans_dir ~/data/asr-co-tag-clean/ --audio_dir ~/data/asr-co/ --out_dir ~/data/asr-co-aligned/
+```bash
+$ python3 utils/data_align.py --trans_dir ~/data/asr-co-tag-clean/ --audio_dir ~/data/asr-co/ --out_dir ~/data/asr-co-aligned/
 ```
 
 Split resulting alignment at the utterance level:
 
-```
-python3 utils/data_split.py --subs_dir ~/data/asr-co-aligned/ --audio_dir ~/data/asr-co/ --out_dir ~/data/asr-co-segments/
+```bash
+$ python3 utils/data_split.py --subs_dir ~/data/asr-co-aligned/ --audio_dir ~/data/asr-co/ --out_dir ~/data/asr-co-segments/
 ```
 
 Import data into DeepSpeech manifest format to allow data ingestion:
 
-```
-python3 importers/import_asr-co.py --data_dir ~/data/asr-co-segments/ --validate_label_locale utils/validate_locale_spa.py --filter_alphabet ~/data/asr-co-segments/alphabet.txt --normalize
+```bash
+$ python3 importers/import_asr-co.py --data_dir ~/data/asr-co-segments/ --validate_label_locale utils/validate_locale_spa.py --filter_alphabet ~/data/asr-co-segments/alphabet.txt --normalize
 ```
 
 # References
