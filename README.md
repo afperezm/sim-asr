@@ -1,6 +1,6 @@
 # Automatic Speech Recognition of Colombian Dialects
 
-This repository contains code and scripts to train Mozilla's DeepSpeech ASR models using two different datasets of
+This repository contains code and scripts to train Mozilla's DeepSpeech ASR models using three different datasets of
 Latin American Spanish:
 
 - The first one is a 20 hours dataset of CrowdSourced Latin American Spanish [1] that contains six different dialectal
@@ -9,6 +9,8 @@ variations, namely Argentinean, Chilean, Colombian, Peruvian, Puerto Rican and V
 to Andean dialects. It is the result of a set of interviews carried out by the Colombia's "Commission for the
 Clarification of Truth, Coexistence and Non-repetition" [2] between 2018 and 2020 to victims of the Colombian armed
 conflict.
+- The third one is a XXX hours dataset of Latin American Spanish result of using a few splits from the Mozilla Common
+Voice Spanish dataset [3].
 
 ## Requirements
 - Python >= 3.6
@@ -19,13 +21,13 @@ conflict.
 ## Installation
 
 To install the requirements execute the following command inside a Python environment with DeepSpeech 0.8.0 training
-library [3] and the Google Cloud Speech Client library for Python [4] installed:
+library [4] and the Google Cloud Speech Client library for Python [5] installed:
 
 ```bash
 $ pip3 install -r requirements.txt
 ```
 
-In addition, to build your own language model [5] you need a fully functioning installation of KenLM [6].
+In addition, to build your own language model [6] you need a fully functioning installation of KenLM [7].
 
 ## Content
 
@@ -97,10 +99,12 @@ $ python3 importers/import_asr-co.py --data_dir ~/data/asr-co-segments/ --valida
 
 [2] https://comisiondelaverdad.co/
 
-[3] https://deepspeech.readthedocs.io/en/r0.8/TRAINING.html
+[3] https://commonvoice.mozilla.org/en/datasets
 
-[4] https://cloud.google.com/speech-to-text/docs/libraries
+[4] https://deepspeech.readthedocs.io/en/r0.8/TRAINING.html
 
-[5] https://deepspeech.readthedocs.io/en/r0.8/Scorer.html
+[5] https://cloud.google.com/speech-to-text/docs/libraries
 
-[6] https://github.com/kpu/kenlm/blob/master/BUILDING
+[6] https://deepspeech.readthedocs.io/en/r0.8/Scorer.html
+
+[7] https://github.com/kpu/kenlm/blob/master/BUILDING
