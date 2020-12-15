@@ -12,18 +12,31 @@ conflict.
 
 ## Requirements
 - Python >= 3.6
-- DeepSpeech 0.8.0
+- DeepSpeech GPU Training 0.8.0
+- Google Cloud Speech Client Library
 - KenLM
 
 ## Installation
 
-To install the requirements execute the following command:
+To install the requirements execute the following command inside a Python environment with DeepSpeech 0.8.0 training
+library [3] and the Google Cloud Speech Client library for Python [4] installed:
 
 ```bash
 pip3 install -r requirements.txt 
 ```
 
+In addition, to build your own language model [5] you need a fully functioning installation of KenLM [6].
+
 ## Content
+
+We provide several scripts necessary for preparing the datasets and training and testing the models. The code is
+organized in several folders as follows:
+
+- The `utils` folder contains all scripts used to create the ASR-CO dataset of Colombian Dialects.
+- The `importers` folder contains two scripts to import into DeepSpeech format the CrowdSourced Spanish Latin-America
+dataset [1] and the validated data of ASR-CO dataset of Colombian Dialects.
+- The `scripts` folder contains a set of Bash scripts used to automate the process of training the ASR models using the
+above imported datasets.
 
 ## Usage
 
@@ -63,3 +76,11 @@ python3 importers/import_asr-co.py --data_dir ~/data/asr-co-segments/ --validate
 [1] https://research.google/pubs/pub49150/
 
 [2] https://comisiondelaverdad.co/
+
+[3] https://deepspeech.readthedocs.io/en/r0.8/TRAINING.html
+
+[4] https://cloud.google.com/speech-to-text/docs/libraries
+
+[5] https://deepspeech.readthedocs.io/en/r0.8/Scorer.html
+
+[6] https://github.com/kpu/kenlm/blob/master/BUILDING
