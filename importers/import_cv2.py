@@ -120,6 +120,8 @@ def _maybe_convert_set(dataset, tsv_dir, audio_dir, filter_obj, space_after_ever
         with open(input_tsv, encoding="utf-8") as input_tsv_file:
             reader = csv.DictReader(input_tsv_file, delimiter="\t")
             for row in reader:
+                if not row["accent"] in ['rioplatense', 'chileno', 'americacentral', 'andino', 'mexicano', 'caribe']:
+                    continue
                 samples.append((os.path.join(audio_dir, row["path"]), row["sentence"], row["client_id"]))
 
         counter = get_counter()
