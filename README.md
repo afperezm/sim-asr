@@ -42,7 +42,9 @@ above imported datasets.
 
 ![workflow_overview](/uploads/29a585c3a3702cdb2d6dec541e4a5871/workflow_overview.png)
 
-### Clean Introductions
+It consists of 5 pipeline stages as shown in the diagram above: clean intros, clean tags, align, split and validate.
+
+### 1. Clean Introductions
 
 Clean transcriptions from introductions and keep only the ones that weren't cleaned since they're easier to handle 
 on alignment phase:
@@ -51,7 +53,7 @@ on alignment phase:
 $ python3 utils/data_clean_intros.py --in_dir ~/data/asr-co/ --out_dir ~/data/asr-co-intro-clean/
 ```
 
-### Clean Tags
+### 2. Clean Tags
 
 Clean transcriptions from content and actor tags and segment result by blocks derived from partial timestamps:
 
@@ -59,7 +61,7 @@ Clean transcriptions from content and actor tags and segment result by blocks de
 $ python3 utils/data_clean_tags.py --in_dir ~/data/asr-co-intro-clean/ --out_dir ~/data/asr-co-tag-clean/
 ```
 
-### Align
+### 3. Align
 
 Align clean blocks of transcriptions with their corresponding audio using a DTW a forced-alignment algorithm:
 
@@ -67,7 +69,7 @@ Align clean blocks of transcriptions with their corresponding audio using a DTW 
 $ python3 utils/data_align.py --trans_dir ~/data/asr-co-tag-clean/ --audio_dir ~/data/asr-co/ --out_dir ~/data/asr-co-aligned/
 ```
 
-### Split
+### 4. Split
 
 Split resulting alignment at the utterance level:
 
@@ -75,9 +77,9 @@ Split resulting alignment at the utterance level:
 $ python3 utils/data_split.py --subs_dir ~/data/asr-co-aligned/ --audio_dir ~/data/asr-co/ --out_dir ~/data/asr-co-segments/
 ```
 
-### Validate
+### 5. Validate
 
-### Import
+## Importing the datasets
 
 Import data into DeepSpeech manifest format to allow data ingestion:
 
