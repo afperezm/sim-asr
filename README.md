@@ -40,6 +40,8 @@ above imported datasets.
 
 ## Usage
 
+![Workflow_-_ASR_of_Colombian_Dialects](/uploads/-/system/personal_snippet/2050408/d964de8c3f38ea7e5e1f37e8d4726001/Workflow_-_ASR_of_Colombian_Dialects.png)
+
 Clean transcriptions from introductions and keep only the ones that weren't cleaned since they're easier to handle 
 on alignment phase:
 
