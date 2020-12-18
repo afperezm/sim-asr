@@ -17,6 +17,7 @@ import textract
 src_path = "/var/www/html/expedientes/storage/app/public"
 loc_path = "/rep/CaptureModule"
 dst_path = "/home/andresf/data/asr-co"
+PARAMS = None
 
 
 def create_db_connection(host, username, password, auth_source, auth_mechanism):
@@ -320,7 +321,7 @@ def copy_resources(ssh_client, resources_list, max_workers):
         #     #     print(transcript_records)
 
 
-def main():
+def parse_args():
     parser = argparse.ArgumentParser(description="File synchronization through SSH")
     parser.add_argument("--mongo_host", type=str, help="MongoDB host", required=True)
     parser.add_argument("--mongo_user", type=str, help="MongoDB username", required=True)
@@ -332,28 +333,31 @@ def main():
     parser.add_argument("--ssh_key_pass", type=str, help="SSH key password", required=False)
     parser.add_argument("--num_workers", type=int, help="Number of workers", required=False, default=1)
 
-    args = parser.parse_args()
+    return parser.parse_args()
 
+
+def main():
     # connect to the production database
-    db_conn = create_db_connection(args.mongo_host, args.mongo_user, args.mongo_pass, args.mongo_db, "SCRAM-SHA-256")
+    db_conn = create_db_connection(PARAMS.mongo_host, PARAMS.mongo_user, PARAMS.mongo_pass, PARAMS.mongo_db, "SCRAM-SHA-256")
 
     # retrieve list of files to copy
     print("Retrieving resources list")
-    resources_list = get_resources_list(db_conn, args.mongo_db)
+    resources_list = get_resources_list(db_conn, PARAMS.mongo_db)
     print("Obtained {0} resources".format(len(resources_list)))
 
     # close database connection
     db_conn.close()
 
     # create SSH client with auto add policy for new host keys
-    ssh_conn = create_ssh_connection(args.ssh_host, args.ssh_user, args.ssh_key_file, args.ssh_key_pass)
+    ssh_conn = create_ssh_connection(PARAMS.ssh_host, PARAMS.ssh_user, PARAMS.ssh_key_file, PARAMS.ssh_key_pass)
 
     # execute files copy to local
-    copy_resources(ssh_conn, resources_list, args.num_workers)
+    copy_resources(ssh_conn, resources_list, PARAMS.num_workers)
 
     # close SSH connection
     ssh_conn.close()
 
 
 if __name__ == '__main__':
+    PARAMS = parse_args()
     main()
