@@ -14,9 +14,6 @@ import pdftotext
 import tempfile
 import textract
 
-src_path = "/var/www/html/expedientes/storage/app/public"
-loc_path = "/rep/CaptureModule"
-dst_path = "/home/andresf/data/asr-co"
 PARAMS = None
 
 
@@ -86,7 +83,7 @@ def create_ssh_filesystem(hostname, username, key_filename, key_password=None):
 def validate_file(file_name, sftp_client):
     """Validate files on remote filesystem"""
 
-    stat_info = sftp_client.stat(file_name.replace(loc_path, src_path))
+    stat_info = sftp_client.stat(file_name.replace(PARAMS.root_path, PARAMS.src_path))
 
     if stat_info.st_size == 0:
         raise OSError("File is empty")
@@ -137,12 +134,12 @@ def copy_records_with_rollback(ssh_client, resource):
         print("{0} - Done".format(resource_id))
     else:
         print("{0} - Failed".format(resource_id))
-        if os.path.exists("{0}/{1}.txt".format(dst_path, resource_id)):
+        if os.path.exists("{0}/{1}.txt".format(PARAMS.loc_path, resource_id)):
             print("{0} - Remove transcript".format(resource_id))
-            os.remove("{0}/{1}.txt".format(dst_path, resource_id))
-        if os.path.exists("{0}/{1}.wav".format(dst_path, resource_id)):
+            os.remove("{0}/{1}.txt".format(PARAMS.loc_path, resource_id))
+        if os.path.exists("{0}/{1}.wav".format(PARAMS.loc_path, resource_id)):
             print("{0} - Remove audio".format(resource_id))
-            os.remove("{0}/{1}.wav".format(dst_path, resource_id))
+            os.remove("{0}/{1}.wav".format(PARAMS.loc_path, resource_id))
         print("{0} - Done".format(resource_id))
 
     return copy_result
@@ -155,8 +152,8 @@ def copy_records(ssh_client, resource_id, transcript_record, audio_record):
     # print(audio_record)
     # print(transcript_record)
 
-    transcript_exists = os.path.isfile("{0}/{1}.txt".format(dst_path, resource_id))
-    audio_exists = os.path.isfile("{0}/{1}.wav".format(dst_path, resource_id))
+    transcript_exists = os.path.isfile("{0}/{1}.txt".format(PARAMS.loc_path, resource_id))
+    audio_exists = os.path.isfile("{0}/{1}.wav".format(PARAMS.loc_path, resource_id))
 
     if transcript_exists and audio_exists:
         print("{0} - Transcript and audio files already copied".format(resource_id))
@@ -170,7 +167,7 @@ def copy_records(ssh_client, resource_id, transcript_record, audio_record):
     # Validate file on remote location
     try:
         print("{0} - Verifying transcript file".format(resource_id))
-        validate_file(transcript_record["filename"].replace(loc_path, src_path), sftp_client)
+        validate_file(transcript_record["filename"].replace(PARAMS.root_path, PARAMS.src_path), sftp_client)
         print("{0} - Verifying transcript file - Done".format(resource_id))
     except OSError as e:
         print("{0} - Verifying transcript file - Failed.".format(resource_id), e)
@@ -181,7 +178,7 @@ def copy_records(ssh_client, resource_id, transcript_record, audio_record):
     # Copy file to temporary location
     try:
         print("{0} - Copying transcript file".format(resource_id))
-        sftp_client.get(transcript_record["filename"].replace(loc_path, src_path), tmp.name)
+        sftp_client.get(transcript_record["filename"].replace(PARAMS.root_path, PARAMS.src_path), tmp.name)
         print("{0} - Copying transcript file - Done".format(resource_id))
     except IOError as e:
         print("{0} - Copying transcript file - Failed.".format(resource_id), e)
@@ -203,7 +200,7 @@ def copy_records(ssh_client, resource_id, transcript_record, audio_record):
     # Write extracted file content
     try:
         print("{0} - Writing extracted transcript file".format(resource_id))
-        with open("{0}/{1}.txt".format(dst_path, resource_id), "w") as f:
+        with open("{0}/{1}.txt".format(PARAMS.loc_path, resource_id), "w") as f:
             f.write(transcript_content)
         print("{0} - Writing extracted transcript file - Done".format(resource_id))
     except IOError as e:
@@ -218,7 +215,7 @@ def copy_records(ssh_client, resource_id, transcript_record, audio_record):
     # Validate file on remote location
     try:
         print("{0} - Verifying audio file".format(resource_id))
-        validate_file(audio_record["filename"].replace(loc_path, src_path), sftp_client)
+        validate_file(audio_record["filename"].replace(PARAMS.root_path, PARAMS.src_path), sftp_client)
         print("{0} - Verifying audio file - Done".format(resource_id))
     except OSError as e:
         print("{0} - Verifying audio file - Failed.".format(resource_id), e)
@@ -229,7 +226,7 @@ def copy_records(ssh_client, resource_id, transcript_record, audio_record):
     # Copy file to temporary location
     try:
         print("{0} - Copying audio file".format(resource_id))
-        sftp_client.get(audio_record["filename"].replace(loc_path, src_path), tmp.name)
+        sftp_client.get(audio_record["filename"].replace(PARAMS.root_path, PARAMS.src_path), tmp.name)
         print("{0} - Copying audio file - Done".format(resource_id))
     except IOError as e:
         print("{0} - Copying audio file - Failed.".format(resource_id), e)
@@ -240,7 +237,7 @@ def copy_records(ssh_client, resource_id, transcript_record, audio_record):
     try:
         print("{0} - Converting copied audio".format(resource_id))
         check_call(["ffmpeg", "-y", "-i", "{0}".format(tmp.name), "-map_metadata", "-1", "-acodec", "pcm_s16le", "-ac",
-                    "1", "-ar", "16000", "{0}/{1}.wav".format(dst_path, resource_id)], stdout=DEVNULL, stderr=STDOUT)
+                    "1", "-ar", "16000", "{0}/{1}.wav".format(PARAMS.loc_path, resource_id)], stdout=DEVNULL, stderr=STDOUT)
         print("{0} - Converting copied audio - Done".format(resource_id))
     except CalledProcessError as e:
         print("{0} - Converting copied audio - Failed.".format(resource_id), e)
@@ -257,7 +254,7 @@ def copy_records(ssh_client, resource_id, transcript_record, audio_record):
 def copy_resources(ssh_client, resources_list, max_workers):
     """Performs file copying from a remote server through SSH using a key file for authentication."""
 
-    os.makedirs(dst_path, exist_ok=True)
+    os.makedirs(PARAMS.loc_path, exist_ok=True)
 
     with concurrent.futures.ThreadPoolExecutor(max_workers=max_workers) as executor:
         futures = {
@@ -323,6 +320,11 @@ def copy_resources(ssh_client, resources_list, max_workers):
 
 def parse_args():
     parser = argparse.ArgumentParser(description="File synchronization through SSH")
+    parser.add_argument("--src_path", type=str, help="Path at the source filesystem where files will be read from",
+                        required=True)
+    parser.add_argument("--root_path", type=str, help="Root path of the file paths stored in MongoDB", required=True)
+    parser.add_argument("--loc_path", type=str, help="Path at the local filesystem where files will be copied",
+                        required=True)
     parser.add_argument("--mongo_host", type=str, help="MongoDB host", required=True)
     parser.add_argument("--mongo_user", type=str, help="MongoDB username", required=True)
     parser.add_argument("--mongo_pass", type=str, help="MongoDB password", required=True)
