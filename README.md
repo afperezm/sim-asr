@@ -195,7 +195,28 @@ Andino-Pacífico, Rioplatense, Caribe, Chileno, America central) and keeps tilde
 
 ## Training your own model
 
+To train the ASR models we rely on the Mozilla's implementation of DeepSpeech. We provide several Bash scripts located
+in the `scripts` directory, they simplify the task of scheduling models training. After importing the datasets as
+explained earlier it is only necessary to adjust the environment variables `data_dir`, `ckpt_dir` and `summ_dir` so that
+they point to the directories where audio segments data is located, checkpoints will be stored and training summaries
+will be stored. An example of how to run the trainer script for the M-AILABS dataset is as follows, first import the
+dataset:
+
+```bash
+$ python3 importers/import_cv2.py ~/data/m-ailabs/ --validate_label_locale utils/validate_locale_spa.py --filter_alphabet ~/data/m-ailabs/alphabet.txt --normalize
+```
+
+Beware that before this you would have to create the `~/data/m-ailabs/` directory and include the `alphabet.txt` that we
+provide. Finally to run the trainer script in background and save the stdout and stderr output to a log file:
+
+```bash
+$ ./scripts/train_es_ES.sh &> ~/logs/train_es_ES.log &
+```
+
 ## Using pre-trained models
+
+We provide the three trained models in `.pbmm` format as well as the language model generated from the full dataset and
+not only the validated ones. You can use these as explained in [12].
 
 # References
 
@@ -220,3 +241,5 @@ Andino-Pacífico, Rioplatense, Caribe, Chileno, America central) and keeps tilde
 [10] https://cloud.google.com/docs/authentication/production#best_practices
 
 [11] https://github.com/mozilla/DeepSpeech
+
+[12] https://deepspeech.readthedocs.io/en/r0.8/USING.html
