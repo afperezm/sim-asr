@@ -24,7 +24,7 @@ from google.cloud import speech
 from multiprocessing import Pool
 from num2words import num2words
 
-MIN_SECS = 2
+MIN_SECS = 9.61
 MAX_SECS = 11.65
 SAMPLE_RATE = 16000
 SIMILARITY_THRESHOLD = 0.9
