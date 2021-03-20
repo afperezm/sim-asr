@@ -268,92 +268,99 @@ def extract_text(file_name, file_format):
 def copy_records_with_rollback(ssh_client, resource):
     """Copies transcript and audio records files and rollback if copy fails."""
 
-    resource_id = resource['_id']
     audio_records = [record for record in resource['records'] if record['type'] == 'Audio de la entrevista']
-    transcript_records = [record for record in resource['records'] if record['type'] == 'Transcripción final']
+    # transcript_records = [record for record in resource['records'] if record['type'] == 'Transcripción final']
 
-    print("{0} - Copying records".format(resource_id))
+    total_copy_result = True
 
-    copy_result = copy_records(ssh_client, resource_id, transcript_records[0], audio_records[0])
+    for idx, audio_record in enumerate(audio_records):
 
-    if copy_result:
-        print("{0} - Done".format(resource_id))
-    else:
-        print("{0} - Failed".format(resource_id))
-        if os.path.exists("{0}/{1}.txt".format(PARAMS.loc_path, resource_id)):
-            print("{0} - Remove transcript".format(resource_id))
-            os.remove("{0}/{1}.txt".format(PARAMS.loc_path, resource_id))
-        if os.path.exists("{0}/{1}.wav".format(PARAMS.loc_path, resource_id)):
-            print("{0} - Remove audio".format(resource_id))
-            os.remove("{0}/{1}.wav".format(PARAMS.loc_path, resource_id))
-        print("{0} - Done".format(resource_id))
+        resource_id = "{0}_{1}".format(resource['_id'], idx)
 
-    return copy_result
+        print("{0} - Copying records".format(resource_id))
+
+        copy_result = copy_records(ssh_client, resource_id, audio_record)
+        total_copy_result &= total_copy_result
+
+        if copy_result:
+            print("{0} - Done".format(resource_id))
+        else:
+            print("{0} - Failed".format(resource_id))
+            if os.path.exists("{0}/{1}.txt".format(PARAMS.loc_path, resource_id)):
+                print("{0} - Remove transcript".format(resource_id))
+                os.remove("{0}/{1}.txt".format(PARAMS.loc_path, resource_id))
+            if os.path.exists("{0}/{1}.wav".format(PARAMS.loc_path, resource_id)):
+                print("{0} - Remove audio".format(resource_id))
+                os.remove("{0}/{1}.wav".format(PARAMS.loc_path, resource_id))
+            print("{0} - Done".format(resource_id))
+
+    return total_copy_result
 
 
-def copy_records(ssh_client, resource_id, transcript_record, audio_record):
+def copy_records(ssh_client, resource_id, audio_record):
     """Copies transcript and audio records files from a remote server through SSH."""
 
     # print(resource_id)
     # print(audio_record)
     # print(transcript_record)
 
-    transcript_exists = os.path.isfile("{0}/{1}.txt".format(PARAMS.loc_path, resource_id))
+    # transcript_exists = os.path.isfile("{0}/{1}.txt".format(PARAMS.loc_path, resource_id))
     audio_exists = os.path.isfile("{0}/{1}.wav".format(PARAMS.loc_path, resource_id))
 
-    if transcript_exists and audio_exists:
-        print("{0} - Transcript and audio files already copied".format(resource_id))
+    # if transcript_exists and audio_exists:
+    if audio_exists:
+        print("{0} - Audio file already copied".format(resource_id))
         return True
 
     sftp_client = ssh_client.open_sftp()
 
-    # Copy transcript
-    print("{0} - Copying transcript".format(resource_id))
-
-    # Validate file on remote location
-    try:
-        print("{0} - Verifying transcript file".format(resource_id))
-        validate_file(transcript_record["filename"].replace(PARAMS.root_path, PARAMS.src_path), sftp_client)
-        print("{0} - Verifying transcript file - Done".format(resource_id))
-    except OSError as e:
-        print("{0} - Verifying transcript file - Failed.".format(resource_id), e)
-        return False
-
-    tmp = tempfile.NamedTemporaryFile(mode="w+")
-
-    # Copy file to temporary location
-    try:
-        print("{0} - Copying transcript file".format(resource_id))
-        sftp_client.get(transcript_record["filename"].replace(PARAMS.root_path, PARAMS.src_path), tmp.name)
-        print("{0} - Copying transcript file - Done".format(resource_id))
-    except IOError as e:
-        print("{0} - Copying transcript file - Failed.".format(resource_id), e)
-        tmp.close()
-        return False
-
-    # Extract copied file content
-    try:
-        print("{0} - Extracting transcript content".format(resource_id))
-        transcript_content = extract_text(tmp.name, transcript_record["fileFormat"])
-        print("{0} - Extracting transcript content - Done".format(resource_id))
-    except ValueError as e:
-        print("{0} - Extracting transcript content - Failed.".format(resource_id), e)
-        tmp.close()
-        return False
-
-    tmp.close()
-
-    # Write extracted file content
-    try:
-        print("{0} - Writing extracted transcript file".format(resource_id))
-        with open("{0}/{1}.txt".format(PARAMS.loc_path, resource_id), "w") as f:
-            f.write(transcript_content)
-        print("{0} - Writing extracted transcript file - Done".format(resource_id))
-    except IOError as e:
-        print("{0} - Writing extracted transcript file - Failed.".format(resource_id), e)
-        return False
-
-    print("{0} - Copying transcript - Done".format(resource_id))
+    # # Copy transcript
+    # print("{0} - Copying transcript".format(resource_id))
+    #
+    # # Validate file on remote location
+    # try:
+    #     print("{0} - Verifying transcript file".format(resource_id))
+    #     validate_file(transcript_record["filename"].replace(PARAMS.root_path, PARAMS.src_path), sftp_client)
+    #     print("{0} - Verifying transcript file - Done".format(resource_id))
+    # except OSError as e:
+    #     print("{0} - Verifying transcript file - Failed.".format(resource_id), e)
+    #     return False
+    #
+    # tmp = tempfile.NamedTemporaryFile(mode="w+")
+    #
+    # # Copy file to temporary location
+    # try:
+    #     print("{0} - Copying transcript file".format(resource_id))
+    #     sftp_client.get(transcript_record["filename"].replace(PARAMS.root_path, PARAMS.src_path), tmp.name)
+    #     print("{0} - Copying transcript file - Done".format(resource_id))
+    # except IOError as e:
+    #     print("{0} - Copying transcript file - Failed.".format(resource_id), e)
+    #     tmp.close()
+    #     return False
+    #
+    # # Extract copied file content
+    # try:
+    #     print("{0} - Extracting transcript content".format(resource_id))
+    #     transcript_content = extract_text(tmp.name, transcript_record["fileFormat"])
+    #     print("{0} - Extracting transcript content - Done".format(resource_id))
+    # except ValueError as e:
+    #     print("{0} - Extracting transcript content - Failed.".format(resource_id), e)
+    #     tmp.close()
+    #     return False
+    #
+    # tmp.close()
+    #
+    # # Write extracted file content
+    # try:
+    #     print("{0} - Writing extracted transcript file".format(resource_id))
+    #     with open("{0}/{1}.txt".format(PARAMS.loc_path, resource_id), "w") as f:
+    #         f.write(transcript_content)
+    #     print("{0} - Writing extracted transcript file - Done".format(resource_id))
+    # except IOError as e:
+    #     print("{0} - Writing extracted transcript file - Failed.".format(resource_id), e)
+    #     return False
+    #
+    # print("{0} - Copying transcript - Done".format(resource_id))
 
     # Copy audio
     print("{0} - Copying audio".format(resource_id))
