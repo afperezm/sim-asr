@@ -40,10 +40,8 @@ def export_chunk(chunk, output_dir, basename):
     # Normalize the entire chunk
     normalized_chunk = match_target_amplitude(audio_chunk, -20.0)
     # Export the audio chunk
-    print("Exporting {0}.wav".format(basename))
-    # print("Exporting {0}_chunk_{1:05d}.wav".format(basename, chunks_group_idx))
+    print("  Exporting {0}.wav".format(basename))
     normalized_chunk.export(
-        # "{0}/{1}_chunk_{2:05d}.wav".format(output_dir, basename, chunks_group_idx),
         "{0}/{1}.wav".format(output_dir, basename),
         format="wav"
     )
@@ -53,13 +51,15 @@ def main():
     audio_dir = os.path.abspath(PARAMS.audio_dir)
     output_dir = os.path.abspath(PARAMS.out_dir)
 
-    audio_files = glob.glob("{0}/988-VI-00001_*.wav".format(audio_dir))
+    audio_files = glob.glob("{0}/*.wav".format(audio_dir))
 
     chunk_lengths = []
 
     for audio_file in sorted(audio_files):
 
         basename = os.path.splitext(os.path.basename(audio_file))[0]
+
+        print("- Processing {0}".format(basename))
 
         audio = AudioSegment.from_wav(audio_file)
 
@@ -72,6 +72,8 @@ def main():
                                   # anything under -16 dBFS is considered silence
                                   silence_thresh=dBFS - 16
                                   )
+
+        print("  Obtained {0} chunks".format(len(chunks)))
 
         chunks_group = []
 
