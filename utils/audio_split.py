@@ -61,6 +61,9 @@ def main():
 
         print("- Processing {0}".format(basename))
 
+        if os.path.exists("{0}/{1}_chunk_{2:05d}.wav".format(output_dir, basename, 1)):
+            print("  Skipping, already processed")
+
         audio = AudioSegment.from_wav(audio_file)
 
         # audio loudness
