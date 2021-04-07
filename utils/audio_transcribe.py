@@ -107,6 +107,11 @@ def parse_args():
         help="Audio chunks data directory, where audio chunk files are located.",
         required=True
     )
+    parser.add_argument(
+        "--num_workers",
+        type=int,
+        help="Number of parallel processes to launch.",
+        default=4)
     return parser.parse_args()
 
 
@@ -119,7 +124,7 @@ def _transcribe_data(audio_dir):
     num_files = len(audio_files)
     rows = []
 
-    pool = Pool(initializer=init_worker, initargs=(PARAMS,))
+    pool = Pool(initializer=init_worker, initargs=(PARAMS,), processes=PARAMS.num_workers)
     bar = progressbar.ProgressBar(max_value=num_files, widgets=SIMPLE_BAR)
     for row_idx, processed in enumerate(pool.imap_unordered(transcribe_one, audio_files), start=1):
         rows += processed
