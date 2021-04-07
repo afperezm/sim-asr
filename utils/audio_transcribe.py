@@ -30,9 +30,21 @@ def transcribe_one(audio_file):
 
     print("{0} - Processing".format(basename))
 
+    if os.path.exists("{0}/{1}.txt".format(dirname, basename)):
+
+        print("{0} - Skipping, already processed".format(basename))
+
+        transcript = ""
+        confidence = ""
+
+        rows.append((basename, transcript, confidence))
+
+        return rows
+
     audio_segment = AudioSegment.from_file(audio_file)
 
     if audio_segment.duration_seconds > 60:
+
         print("{0} - Skipping, audio is longer than 1 minute".format(basename))
 
         transcript = ""
