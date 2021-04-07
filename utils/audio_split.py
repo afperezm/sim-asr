@@ -73,7 +73,9 @@ def main():
                                   # split on silences longer than 500ms (0.5 sec)
                                   min_silence_len=500,
                                   # anything under -16 dBFS is considered silence
-                                  silence_thresh=dBFS - 16
+                                  silence_thresh=dBFS - 16,
+                                  # do not keep leading/trailing silences
+                                  keep_silence=0
                                   )
 
         print("  Obtained {0} chunks".format(len(chunks)))
