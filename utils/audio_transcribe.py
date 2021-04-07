@@ -33,7 +33,7 @@ def transcribe_one(audio_file):
     audio_segment = AudioSegment.from_file(audio_file)
 
     if audio_segment.duration_seconds > 60:
-        print("{0} - Skipping, audio is longer than 1 minute")
+        print("{0} - Skipping, audio is longer than 1 minute".format(basename))
 
         transcript = ""
         confidence = ""
