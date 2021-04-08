@@ -7,6 +7,8 @@ import re
 
 from deepspeech_training.util.downloader import SIMPLE_BAR
 from google.cloud import speech
+from google.cloud import storage
+from google.oauth2 import service_account
 from multiprocessing import Pool
 
 from google.cloud.speech_v1 import RecognizeResponse, SpeechRecognitionResult, SpeechRecognitionAlternative
@@ -15,12 +17,15 @@ from pydub import AudioSegment
 
 PARAMS = None
 SPEECH_CLIENT = None
+STORAGE_CLIENT = None
 
 
 def init_worker(params):
     global SPEECH_CLIENT  # pylint: disable=global-statement
     speech_credentials = service_account.Credentials.from_service_account_file('speech_credentials.json')
     SPEECH_CLIENT = speech.SpeechClient(credentials=speech_credentials)
+    bucket_credentials = service_account.Credentials.from_service_account_file('bucket_credentials.json')
+    STORAGE_CLIENT = storage.Client(credentials=bucket_credentials)
 
 
 def transcribe_one(audio_file):
