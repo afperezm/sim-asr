@@ -25,6 +25,7 @@ STORAGE_CLIENT = None
 
 def init_worker(params):
     global SPEECH_CLIENT  # pylint: disable=global-statement
+    global STORAGE_CLIENT  # pylint: disable=global-statement
     speech_credentials = service_account.Credentials.from_service_account_file('speech_credentials.json')
     SPEECH_CLIENT = speech.SpeechClient(credentials=speech_credentials)
     bucket_credentials = service_account.Credentials.from_service_account_file('bucket_credentials.json')
