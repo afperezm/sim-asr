@@ -13,13 +13,14 @@ from google.cloud.speech_v1 import RecognizeResponse, SpeechRecognitionResult, S
 from num2words import num2words
 from pydub import AudioSegment
 
-CLIENT = None
 PARAMS = None
+SPEECH_CLIENT = None
 
 
 def init_worker(params):
-    global CLIENT  # pylint: disable=global-statement
-    CLIENT = speech.SpeechClient()
+    global SPEECH_CLIENT  # pylint: disable=global-statement
+    speech_credentials = service_account.Credentials.from_service_account_file('speech_credentials.json')
+    SPEECH_CLIENT = speech.SpeechClient(credentials=speech_credentials)
 
 
 def transcribe_one(audio_file):
@@ -66,7 +67,7 @@ def transcribe_one(audio_file):
             use_enhanced=False)
 
         # Launch recognition request
-        response = CLIENT.recognize(config=config, audio=audio)
+        response = SPEECH_CLIENT.recognize(config=config, audio=audio)
 
         # Create dummy recognition response
         # response = RecognizeResponse(results=[SpeechRecognitionResult(alternatives=[SpeechRecognitionAlternative(
