@@ -73,7 +73,7 @@ def transcribe_one(audio_file):
         #     transcript="Muchas gracias por hacer el esfuerzo a todo el mundo", confidence=0.8635320067405701)])])
 
         # Gather transcript and confidence results
-        transcript = "".join([result.alternatives[0].transcript for result in response.results])
+        transcript = " ".join([result.alternatives[0].transcript for result in response.results])
         confidence = "+".join([str(result.alternatives[0].confidence) for result in response.results])
 
         # Convert numbers to spoken format if any
