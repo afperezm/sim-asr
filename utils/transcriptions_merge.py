@@ -41,6 +41,10 @@ def _merge_data(transcripts_dir, output_dir):
 
         print("Processing {0}".format(utb))
 
+        if os.path.exists("{0}/{1}.txt".format(output_dir, utb)):
+            print("Skipping, already processed")
+            continue
+
         chunk_filenames = sorted(glob.glob("{0}/{1}*.txt".format(transcripts_dir, utb)))
 
         transcripts = []
