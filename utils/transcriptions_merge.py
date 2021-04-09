@@ -25,13 +25,21 @@ def parse_args():
 
 def _merge_data(transcripts_dir, output_dir):
 
+    print("Loading transcript chunk files...")
+
     transcripts_filename = sorted(glob.glob("{0}/*.txt".format(transcripts_dir)))
+
+    print("Obtained {0} chunk files".format(len(transcripts_filename)))
 
     transcripts_basename = ['_'.join(os.path.basename(t).split('_')[:-2]) for t in transcripts_filename]
 
     unique_transcripts_basename = list(dict.fromkeys(transcripts_basename))
 
+    print("Composing transcript chunks")
+
     for utb in unique_transcripts_basename:
+
+        print("Processing {0}".format(utb))
 
         chunk_filenames = sorted(glob.glob("{0}/{1}*.txt".format(transcripts_dir, utb)))
 
@@ -43,6 +51,8 @@ def _merge_data(transcripts_dir, output_dir):
 
         with io.open("{0}/{1}.txt".format(output_dir, utb), 'wt') as transcript_file:
             transcript_file.write('\n\n'.join(transcripts))
+
+        print("Done")
 
 
 def main():
