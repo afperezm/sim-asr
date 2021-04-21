@@ -10,8 +10,8 @@ python -u DeepSpeech.py --noshow_progressbar \
        --train_batch_size 45 \
        --dev_files "${data_dir}/m-ailabs/es_ES/es_ES_dev.csv" \
        --dev_batch_size 45 \
-       --checkpoint_dir "${ckpt_dir}/ds-train-eng2spa-es_ES/" \
-       --summary_dir "${summ_dir}/ds-train-eng2spa-es_ES/" \
+       --checkpoint_dir "${ckpt_dir}/ds-train-es_ES/" \
+       --summary_dir "${summ_dir}/ds-train-es_ES/" \
        --scorer_path '' \
        --dropout_rate 0.22 \
        --learning_rate 0.00095 \

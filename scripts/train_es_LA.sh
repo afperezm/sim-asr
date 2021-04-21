@@ -10,8 +10,8 @@ python -u DeepSpeech.py --noshow_progressbar --noearly_stop \
        --train_batch_size 64 \
        --dev_files "${data_dir}/es_LA_dev.csv" \
        --dev_batch_size 64 \
-       --checkpoint_dir "${ckpt_dir}/ds-train-eng2spa-es_LA/" \
-       --summary_dir "${summ_dir}/ds-train-eng2spa-es_LA/" \
+       --checkpoint_dir "${ckpt_dir}/ds-train-es_LA/" \
+       --summary_dir "${summ_dir}/ds-train-es_LA/" \
        --learning_rate 0.0001 \
        --dropout_rate 0.4 \
        --n_hidden 2048 \

@@ -13,8 +13,8 @@ python -u DeepSpeech.py --noshow_progressbar \
        --train_batch_size 64 \
        --dev_files "${data_dir}/cv_ES/es/clips/dev.csv,${data_dir}/es_LA/es_LA_dev.csv" \
        --dev_batch_size 64 \
-       --checkpoint_dir "${ckpt_dir}/ds-train-eng2spa-cv_ES+es_LA_dr3e-1/" \
-       --summary_dir "${summ_dir}/ds-train-eng2spa-cv_ES+es_LA_dr3e-1/" \
+       --checkpoint_dir "${ckpt_dir}/ds-train-cv_ES+es_LA/" \
+       --summary_dir "${summ_dir}/ds-train-cv_ES+es_LA/" \
        --scorer_path '' \
        --dropout_rate 0.3 \
        --learning_rate 0.0001 \
