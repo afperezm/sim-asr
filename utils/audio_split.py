@@ -6,7 +6,7 @@ from matplotlib import pyplot as plt
 from pydub import AudioSegment
 from pydub.silence import split_on_silence
 
-TARGET_LENGTH = 15000  # 15 seconds
+TARGET_LENGTH = 14000  # 15 seconds
 
 
 def parse_args():
