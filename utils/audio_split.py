@@ -33,8 +33,8 @@ def match_target_amplitude(aChunk, target_dBFS):
 
 
 def export_chunk(chunk, output_dir, basename):
-    # Create a silence chunk that's 0.2 seconds (or 200 ms) long for padding
-    silence_chunk = AudioSegment.silent(duration=200)
+    # Create a silence chunk that's 0.5 seconds (or 500 ms) long for padding
+    silence_chunk = AudioSegment.silent(duration=500)
     # Add the padding chunk to beginning and end of the entire chunk
     audio_chunk = silence_chunk + chunk + silence_chunk
     # Normalize the entire chunk
