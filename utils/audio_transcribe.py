@@ -168,7 +168,7 @@ def _transcribe_data(audio_dir):
     # Making paths absolute
     audio_dir = os.path.abspath(audio_dir)
 
-    audio_files = glob.glob("{0}/*.wav".format(audio_dir))
+    audio_files = sorted(glob.glob("{0}/*.wav".format(audio_dir)))
 
     valid_audios = ['001-CO-00519', '001-HV-00080', '001-PR-02798', '001-PR-02854', '001-PR-02906', '001-PR-02908',
                     '001-VI-00057', '001-VI-00059', '001-VI-00062', '001-VI-00063', '093-VI-00004', '093-VI-00010',
