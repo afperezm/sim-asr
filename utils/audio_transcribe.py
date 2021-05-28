@@ -132,7 +132,7 @@ def transcribe_one(audio_file):
             word_value = num2words(number, lang="es_CO")
             transcript = transcript.replace(word_key, word_value)
 
-    with open("{0}/{1}.txt".format(dirname, basename), "w") as f:
+    with open("{0}/{1}.txt".format(dirname, basename), "wt") as f:
         f.write(transcript)
 
     with open("{0}/{1}_confidence.txt".format(dirname, basename), "wt") as f:
