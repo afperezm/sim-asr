@@ -50,11 +50,11 @@ def transcribe_one(audio_file):
         with open("{0}/{1}_confidence.txt".format(dirname, basename), "rt") as confidence_file:
             confidence = confidence_file.read()
 
-        rows.append((basename, transcript, confidence))
-
         print("{0} - Transcript:\t{1}".format(basename, transcript))
 
         print("{0} - Confidence:\t{1}".format(basename, confidence))
+
+        rows.append((basename, transcript, confidence))
 
         return rows
 
