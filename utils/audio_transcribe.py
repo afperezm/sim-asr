@@ -19,8 +19,6 @@ from pydub import AudioSegment
 
 BUCKET_NAME = "procesamiento-1"
 PARAMS = None
-SPEECH_CLIENT = None
-STORAGE_CLIENT = None
 VALID_FILES = ['001-CO-00519', '001-HV-00080', '001-PR-02798', '001-PR-02854', '001-PR-02906', '001-PR-02908',
                '001-VI-00057', '001-VI-00059', '001-VI-00062', '001-VI-00063', '001-VI-00064', '093-VI-00004',
                '093-VI-00010', '093-VI-00020', '093-VI-00021', '1003-VI-00002', '1003-VI-00003', '1004-VI-00002',
@@ -126,15 +124,6 @@ VALID_FILES = ['001-CO-00519', '001-HV-00080', '001-PR-02798', '001-PR-02854', '
                '961-VI-00009', '961-VI-00010', '980-VI-00002', '980-VI-00003', '988-VI-00001']
 
 
-def init_worker(params):
-    global SPEECH_CLIENT  # pylint: disable=global-statement
-    global STORAGE_CLIENT  # pylint: disable=global-statement
-    speech_credentials = service_account.Credentials.from_service_account_file('speech_credentials.json')
-    SPEECH_CLIENT = speech.SpeechClient(credentials=speech_credentials)
-    bucket_credentials = service_account.Credentials.from_service_account_file('bucket_credentials.json')
-    STORAGE_CLIENT = storage.Client(credentials=bucket_credentials)
-
-
 def transcribe_one(audio_file):
     basename = os.path.splitext(os.path.basename(audio_file))[0]
     dirname = os.path.dirname(audio_file)
@@ -172,6 +161,12 @@ def transcribe_one(audio_file):
 
         return rows
 
+    speech_credentials = service_account.Credentials.from_service_account_file('speech_credentials.json')
+    speech_client = speech.SpeechClient(credentials=speech_credentials)
+
+    bucket_credentials = service_account.Credentials.from_service_account_file('bucket_credentials.json')
+    storage_client = storage.Client(credentials=bucket_credentials)
+
     audio_segment = AudioSegment.from_file(audio_file)
 
     if audio_segment.duration_seconds > 60:
@@ -182,7 +177,7 @@ def transcribe_one(audio_file):
         # confidence = ""
 
         # Compose audio cloud name
-        bucket = STORAGE_CLIENT.get_bucket(BUCKET_NAME)
+        bucket = storage_client.get_bucket(BUCKET_NAME)
         alphabet = string.ascii_lowercase
         cloud_name_simple = ''.join(random.choice(alphabet) for i in range(10)) + ".wav"
 
@@ -204,7 +199,7 @@ def transcribe_one(audio_file):
             use_enhanced=False)
 
         # Launch recognition request
-        operation = SPEECH_CLIENT.long_running_recognize(config=config, audio=audio)
+        operation = speech_client.long_running_recognize(config=config, audio=audio)
 
         print("{0} - Waiting for operation to complete...".format(basename))
         response = operation.result(timeout=900000)
@@ -236,7 +231,7 @@ def transcribe_one(audio_file):
             use_enhanced=False)
 
         # Launch recognition request
-        response = SPEECH_CLIENT.recognize(config=config, audio=audio)
+        response = speech_client.recognize(config=config, audio=audio)
 
         # Create dummy recognition response
         # response = RecognizeResponse(results=[SpeechRecognitionResult(alternatives=[SpeechRecognitionAlternative(
@@ -297,7 +292,7 @@ def _transcribe_data(audio_dir):
     num_files = len(audio_files)
     rows = []
 
-    pool = Pool(initializer=init_worker, initargs=(PARAMS,), processes=PARAMS.num_workers)
+    pool = Pool(processes=PARAMS.num_workers)
     bar = progressbar.ProgressBar(max_value=num_files, widgets=SIMPLE_BAR)
     for row_idx, processed in enumerate(pool.imap_unordered(transcribe_one, audio_files), start=1):
         rows += processed
