@@ -135,6 +135,9 @@ def transcribe_one(audio_file):
     with open("{0}/{1}.txt".format(dirname, basename), "w") as f:
         f.write(transcript)
 
+    with open("{0}/{1}_confidence.txt".format(dirname, basename), "wt") as f:
+        f.write(confidence)
+
     print("{0} - Processed".format(basename))
 
     print("{0} - Transcript:\t{1}".format(basename, transcript))
