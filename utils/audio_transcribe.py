@@ -44,10 +44,17 @@ def transcribe_one(audio_file):
 
         print("{0} - Skipping, already processed".format(basename))
 
-        transcript = ""
-        confidence = ""
+        with open("{0}/{1}.txt".format(dirname, basename), "rt") as transcript_file:
+            transcript = transcript_file.read()
+
+        with open("{0}/{1}_confidence.txt".format(dirname, basename), "rt") as confidence_file:
+            confidence = confidence_file.read()
 
         rows.append((basename, transcript, confidence))
+
+        print("{0} - Transcript:\t{1}".format(basename, transcript))
+
+        print("{0} - Confidence:\t{1}".format(basename, confidence))
 
         return rows
 
