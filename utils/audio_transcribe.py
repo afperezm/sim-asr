@@ -172,21 +172,15 @@ def transcribe_one(audio_file):
 
         return rows
 
-    # speech_credentials = service_account.Credentials.from_service_account_file('speech_credentials.json')
-    # speech_client = speech.SpeechClient(credentials=speech_credentials)
-    #
-    # bucket_credentials = service_account.Credentials.from_service_account_file('bucket_credentials.json')
-    # storage_client = storage.Client(credentials=bucket_credentials)
-    #
-    # audio_segment = AudioSegment.from_file(audio_file)
-    #
-    # if audio_segment.duration_seconds > 60:
-    #
-    #     # print("{0} - Skipping, audio is longer than 1 minute".format(basename))
-    #
-    #     # transcript = ""
-    #     # confidence = ""
-    #
+    audio_segment = AudioSegment.from_file(audio_file)
+
+    if audio_segment.duration_seconds > 60:
+
+        print("{0} - Skipping, audio is longer than 1 minute".format(basename))
+
+        transcript = ""
+        confidence = ""
+
     #     # Compose audio cloud name
     #     bucket = storage_client.get_bucket(BUCKET_NAME)
     #     alphabet = string.ascii_lowercase
@@ -225,42 +219,39 @@ def transcribe_one(audio_file):
     #         word_key = number
     #         word_value = num2words(number, lang="es_CO")
     #         transcript = transcript.replace(word_key, word_value)
-    #
-    # else:
-    #
-    #     # Read utterance audio content
-    #     audio_content = audio_segment.raw_data
-    #
-    #     # Create speech recognition request
-    #     audio = speech.RecognitionAudio(content=audio_content)
-    #     config = speech.RecognitionConfig(
-    #         encoding=speech.RecognitionConfig.AudioEncoding.LINEAR16,
-    #         sample_rate_hertz=16000,
-    #         language_code='es-CO',
-    #         max_alternatives=1,
-    #         model='default',
-    #         use_enhanced=False)
-    #
-    #     # Launch recognition request
-    #     response = speech_client.recognize(config=config, audio=audio)
-    #
-    #     # Create dummy recognition response
-    #     # response = RecognizeResponse(results=[SpeechRecognitionResult(alternatives=[SpeechRecognitionAlternative(
-    #     #     transcript="Muchas gracias por hacer el esfuerzo a todo el mundo", confidence=0.8635320067405701)])])
-    #
-    #     # Gather transcript and confidence results
-    #     transcript = " ".join([result.alternatives[0].transcript for result in response.results])
-    #     confidence = "+".join([str(result.alternatives[0].confidence) for result in response.results])
-    #
-    #     # Convert numbers to spoken format if any
-    #     numbers = sorted(list(set(re.findall(r"(\d+)", transcript))), key=lambda n: len(n), reverse=True)
-    #     for number in numbers:
-    #         word_key = number
-    #         word_value = num2words(number, lang="es_CO")
-    #         transcript = transcript.replace(word_key, word_value)
 
-    transcript = ""
-    confidence = ""
+    else:
+
+        # Read utterance audio content
+        audio_content = audio_segment.raw_data
+
+        # Create speech recognition request
+        audio = speech.RecognitionAudio(content=audio_content)
+        config = speech.RecognitionConfig(
+            encoding=speech.RecognitionConfig.AudioEncoding.LINEAR16,
+            sample_rate_hertz=16000,
+            language_code='es-CO',
+            max_alternatives=1,
+            model='default',
+            use_enhanced=False)
+
+        # Launch recognition request
+        response = SPEECH_CLIENT.recognize(config=config, audio=audio)
+
+        # Create dummy recognition response
+        # response = RecognizeResponse(results=[SpeechRecognitionResult(alternatives=[SpeechRecognitionAlternative(
+        #     transcript="Muchas gracias por hacer el esfuerzo a todo el mundo", confidence=0.8635320067405701)])])
+
+        # Gather transcript and confidence results
+        transcript = " ".join([result.alternatives[0].transcript for result in response.results])
+        confidence = "+".join([str(result.alternatives[0].confidence) for result in response.results])
+
+        # Convert numbers to spoken format if any
+        numbers = sorted(list(set(re.findall(r"(\d+)", transcript))), key=lambda n: len(n), reverse=True)
+        for number in numbers:
+            word_key = number
+            word_value = num2words(number, lang="es_CO")
+            transcript = transcript.replace(word_key, word_value)
 
     with open("{0}/{1}.txt".format(dirname, basename), "wt") as f:
         f.write(transcript)
