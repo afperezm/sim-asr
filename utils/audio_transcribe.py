@@ -132,127 +132,130 @@ def transcribe_one(audio_file):
 
     print("{0} - Processing".format(basename))
 
-    if not os.path.basename(audio_file).split('_')[0] in VALID_FILES:
+    transcript = ""
+    confidence = ""
 
-        print("{0} - Skipping, not spanish".format(basename))
-
-        transcript = ""
-        confidence = ""
-
-        rows.append((basename, transcript, confidence))
-
-        return rows
-
-    if os.path.exists("{0}/{1}.txt".format(dirname, basename)):
-
-        print("{0} - Skipping, already processed".format(basename))
-
-        with open("{0}/{1}.txt".format(dirname, basename), "rt") as transcript_file:
-            transcript = transcript_file.read()
-
-        with open("{0}/{1}_confidence.txt".format(dirname, basename), "rt") as confidence_file:
-            confidence = confidence_file.read()
-
-        print("{0} - Transcript:\t{1}".format(basename, transcript))
-
-        print("{0} - Confidence:\t{1}".format(basename, confidence))
-
-        rows.append((basename, transcript, confidence))
-
-        return rows
-
-    speech_credentials = service_account.Credentials.from_service_account_file('speech_credentials.json')
-    speech_client = speech.SpeechClient(credentials=speech_credentials)
-
-    bucket_credentials = service_account.Credentials.from_service_account_file('bucket_credentials.json')
-    storage_client = storage.Client(credentials=bucket_credentials)
-
-    audio_segment = AudioSegment.from_file(audio_file)
-
-    if audio_segment.duration_seconds > 60:
-
-        # print("{0} - Skipping, audio is longer than 1 minute".format(basename))
-
-        # transcript = ""
-        # confidence = ""
-
-        # Compose audio cloud name
-        bucket = storage_client.get_bucket(BUCKET_NAME)
-        alphabet = string.ascii_lowercase
-        cloud_name_simple = ''.join(random.choice(alphabet) for i in range(10)) + ".wav"
-
-        # Upload audio file to google cloud
-        blob = bucket.blob(cloud_name_simple)
-        blob.upload_from_filename(audio_file)
-
-        # Compose file name in cloud
-        cloud_name = "gs://" + BUCKET_NAME + "/" + cloud_name_simple
-
-        # Create speech recognition request
-        audio = speech.RecognitionAudio(uri=cloud_name)
-        config = speech.RecognitionConfig(
-            encoding=speech.RecognitionConfig.AudioEncoding.LINEAR16,
-            sample_rate_hertz=16000,
-            language_code='es-CO',
-            max_alternatives=1,
-            model='default',
-            use_enhanced=False)
-
-        # Launch recognition request
-        operation = speech_client.long_running_recognize(config=config, audio=audio)
-
-        print("{0} - Waiting for operation to complete...".format(basename))
-        response = operation.result(timeout=900000)
-
-        # Gather transcript and confidence results
-        transcript = " ".join([result.alternatives[0].transcript for result in response.results])
-        confidence = "+".join([str(result.alternatives[0].confidence) for result in response.results])
-
-        # Convert numbers to spoken format if any
-        numbers = sorted(list(set(re.findall(r"(\d+)", transcript))), key=lambda n: len(n), reverse=True)
-        for number in numbers:
-            word_key = number
-            word_value = num2words(number, lang="es_CO")
-            transcript = transcript.replace(word_key, word_value)
-
-    else:
-
-        # Read utterance audio content
-        audio_content = audio_segment.raw_data
-
-        # Create speech recognition request
-        audio = speech.RecognitionAudio(content=audio_content)
-        config = speech.RecognitionConfig(
-            encoding=speech.RecognitionConfig.AudioEncoding.LINEAR16,
-            sample_rate_hertz=16000,
-            language_code='es-CO',
-            max_alternatives=1,
-            model='default',
-            use_enhanced=False)
-
-        # Launch recognition request
-        response = speech_client.recognize(config=config, audio=audio)
-
-        # Create dummy recognition response
-        # response = RecognizeResponse(results=[SpeechRecognitionResult(alternatives=[SpeechRecognitionAlternative(
-        #     transcript="Muchas gracias por hacer el esfuerzo a todo el mundo", confidence=0.8635320067405701)])])
-
-        # Gather transcript and confidence results
-        transcript = " ".join([result.alternatives[0].transcript for result in response.results])
-        confidence = "+".join([str(result.alternatives[0].confidence) for result in response.results])
-
-        # Convert numbers to spoken format if any
-        numbers = sorted(list(set(re.findall(r"(\d+)", transcript))), key=lambda n: len(n), reverse=True)
-        for number in numbers:
-            word_key = number
-            word_value = num2words(number, lang="es_CO")
-            transcript = transcript.replace(word_key, word_value)
-
-    with open("{0}/{1}.txt".format(dirname, basename), "wt") as f:
-        f.write(transcript)
-
-    with open("{0}/{1}_confidence.txt".format(dirname, basename), "wt") as f:
-        f.write(confidence)
+    # if not os.path.basename(audio_file).split('_')[0] in VALID_FILES:
+    #
+    #     print("{0} - Skipping, not spanish".format(basename))
+    #
+    #     transcript = ""
+    #     confidence = ""
+    #
+    #     rows.append((basename, transcript, confidence))
+    #
+    #     return rows
+    #
+    # if os.path.exists("{0}/{1}.txt".format(dirname, basename)):
+    #
+    #     print("{0} - Skipping, already processed".format(basename))
+    #
+    #     with open("{0}/{1}.txt".format(dirname, basename), "rt") as transcript_file:
+    #         transcript = transcript_file.read()
+    #
+    #     with open("{0}/{1}_confidence.txt".format(dirname, basename), "rt") as confidence_file:
+    #         confidence = confidence_file.read()
+    #
+    #     print("{0} - Transcript:\t{1}".format(basename, transcript))
+    #
+    #     print("{0} - Confidence:\t{1}".format(basename, confidence))
+    #
+    #     rows.append((basename, transcript, confidence))
+    #
+    #     return rows
+    #
+    # speech_credentials = service_account.Credentials.from_service_account_file('speech_credentials.json')
+    # speech_client = speech.SpeechClient(credentials=speech_credentials)
+    #
+    # bucket_credentials = service_account.Credentials.from_service_account_file('bucket_credentials.json')
+    # storage_client = storage.Client(credentials=bucket_credentials)
+    #
+    # audio_segment = AudioSegment.from_file(audio_file)
+    #
+    # if audio_segment.duration_seconds > 60:
+    #
+    #     # print("{0} - Skipping, audio is longer than 1 minute".format(basename))
+    #
+    #     # transcript = ""
+    #     # confidence = ""
+    #
+    #     # Compose audio cloud name
+    #     bucket = storage_client.get_bucket(BUCKET_NAME)
+    #     alphabet = string.ascii_lowercase
+    #     cloud_name_simple = ''.join(random.choice(alphabet) for i in range(10)) + ".wav"
+    #
+    #     # Upload audio file to google cloud
+    #     blob = bucket.blob(cloud_name_simple)
+    #     blob.upload_from_filename(audio_file)
+    #
+    #     # Compose file name in cloud
+    #     cloud_name = "gs://" + BUCKET_NAME + "/" + cloud_name_simple
+    #
+    #     # Create speech recognition request
+    #     audio = speech.RecognitionAudio(uri=cloud_name)
+    #     config = speech.RecognitionConfig(
+    #         encoding=speech.RecognitionConfig.AudioEncoding.LINEAR16,
+    #         sample_rate_hertz=16000,
+    #         language_code='es-CO',
+    #         max_alternatives=1,
+    #         model='default',
+    #         use_enhanced=False)
+    #
+    #     # Launch recognition request
+    #     operation = speech_client.long_running_recognize(config=config, audio=audio)
+    #
+    #     print("{0} - Waiting for operation to complete...".format(basename))
+    #     response = operation.result(timeout=900000)
+    #
+    #     # Gather transcript and confidence results
+    #     transcript = " ".join([result.alternatives[0].transcript for result in response.results])
+    #     confidence = "+".join([str(result.alternatives[0].confidence) for result in response.results])
+    #
+    #     # Convert numbers to spoken format if any
+    #     numbers = sorted(list(set(re.findall(r"(\d+)", transcript))), key=lambda n: len(n), reverse=True)
+    #     for number in numbers:
+    #         word_key = number
+    #         word_value = num2words(number, lang="es_CO")
+    #         transcript = transcript.replace(word_key, word_value)
+    #
+    # else:
+    #
+    #     # Read utterance audio content
+    #     audio_content = audio_segment.raw_data
+    #
+    #     # Create speech recognition request
+    #     audio = speech.RecognitionAudio(content=audio_content)
+    #     config = speech.RecognitionConfig(
+    #         encoding=speech.RecognitionConfig.AudioEncoding.LINEAR16,
+    #         sample_rate_hertz=16000,
+    #         language_code='es-CO',
+    #         max_alternatives=1,
+    #         model='default',
+    #         use_enhanced=False)
+    #
+    #     # Launch recognition request
+    #     response = speech_client.recognize(config=config, audio=audio)
+    #
+    #     # Create dummy recognition response
+    #     # response = RecognizeResponse(results=[SpeechRecognitionResult(alternatives=[SpeechRecognitionAlternative(
+    #     #     transcript="Muchas gracias por hacer el esfuerzo a todo el mundo", confidence=0.8635320067405701)])])
+    #
+    #     # Gather transcript and confidence results
+    #     transcript = " ".join([result.alternatives[0].transcript for result in response.results])
+    #     confidence = "+".join([str(result.alternatives[0].confidence) for result in response.results])
+    #
+    #     # Convert numbers to spoken format if any
+    #     numbers = sorted(list(set(re.findall(r"(\d+)", transcript))), key=lambda n: len(n), reverse=True)
+    #     for number in numbers:
+    #         word_key = number
+    #         word_value = num2words(number, lang="es_CO")
+    #         transcript = transcript.replace(word_key, word_value)
+    #
+    # with open("{0}/{1}.txt".format(dirname, basename), "wt") as f:
+    #     f.write(transcript)
+    #
+    # with open("{0}/{1}_confidence.txt".format(dirname, basename), "wt") as f:
+    #     f.write(confidence)
 
     print("{0} - Processed".format(basename))
 
