@@ -19,6 +19,8 @@ from pydub import AudioSegment
 
 BUCKET_NAME = "procesamiento-1"
 PARAMS = None
+SPEECH_CLIENT = None
+STORAGE_CLIENT = None
 VALID_FILES = ['001-CO-00519', '001-HV-00080', '001-PR-02798', '001-PR-02854', '001-PR-02906', '001-PR-02908',
                '001-VI-00057', '001-VI-00059', '001-VI-00062', '001-VI-00063', '001-VI-00064', '093-VI-00004',
                '093-VI-00010', '093-VI-00020', '093-VI-00021', '1003-VI-00002', '1003-VI-00003', '1004-VI-00002',
@@ -122,6 +124,15 @@ VALID_FILES = ['001-CO-00519', '001-HV-00080', '001-PR-02798', '001-PR-02854', '
                '943-VI-00002', '943-VI-00003', '944-VI-00001', '944-VI-00003', '944-VI-00004', '960-VI-00001',
                '961-VI-00003', '961-VI-00004', '961-VI-00005', '961-VI-00006', '961-VI-00007', '961-VI-00008',
                '961-VI-00009', '961-VI-00010', '980-VI-00002', '980-VI-00003', '988-VI-00001']
+
+
+def init_worker(params):
+    global SPEECH_CLIENT  # pylint: disable=global-statement
+    global STORAGE_CLIENT  # pylint: disable=global-statement
+    speech_credentials = service_account.Credentials.from_service_account_file('speech_credentials.json')
+    SPEECH_CLIENT = speech.SpeechClient(credentials=speech_credentials)
+    bucket_credentials = service_account.Credentials.from_service_account_file('bucket_credentials.json')
+    STORAGE_CLIENT = storage.Client(credentials=bucket_credentials)
 
 
 def transcribe_one(audio_file):
@@ -295,7 +306,7 @@ def _transcribe_data(audio_dir):
     num_files = len(audio_files)
     rows = []
 
-    pool = Pool(processes=PARAMS.num_workers)
+    pool = Pool(initializer=init_worker, initargs=(PARAMS,), processes=PARAMS.num_workers)
     bar = progressbar.ProgressBar(max_value=num_files, widgets=SIMPLE_BAR)
     for row_idx, processed in enumerate(pool.imap_unordered(transcribe_one, audio_files), start=1):
         rows += processed
