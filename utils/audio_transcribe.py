@@ -181,6 +181,10 @@ def transcribe_one(audio_file):
         transcript = ""
         confidence = ""
 
+        rows.append((basename, transcript, confidence))
+
+        return rows
+
     #     # Compose audio cloud name
     #     bucket = storage_client.get_bucket(BUCKET_NAME)
     #     alphabet = string.ascii_lowercase
