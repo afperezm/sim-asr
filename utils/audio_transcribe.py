@@ -143,38 +143,35 @@ def transcribe_one(audio_file):
 
     print("{0} - Processing".format(basename))
 
-    transcript = ""
-    confidence = ""
+    if not os.path.basename(audio_file).split('_')[0] in VALID_FILES:
 
-    # if not os.path.basename(audio_file).split('_')[0] in VALID_FILES:
-    #
-    #     print("{0} - Skipping, not spanish".format(basename))
-    #
-    #     transcript = ""
-    #     confidence = ""
-    #
-    #     rows.append((basename, transcript, confidence))
-    #
-    #     return rows
-    #
-    # if os.path.exists("{0}/{1}.txt".format(dirname, basename)):
-    #
-    #     print("{0} - Skipping, already processed".format(basename))
-    #
-    #     with open("{0}/{1}.txt".format(dirname, basename), "rt") as transcript_file:
-    #         transcript = transcript_file.read()
-    #
-    #     with open("{0}/{1}_confidence.txt".format(dirname, basename), "rt") as confidence_file:
-    #         confidence = confidence_file.read()
-    #
-    #     print("{0} - Transcript:\t{1}".format(basename, transcript))
-    #
-    #     print("{0} - Confidence:\t{1}".format(basename, confidence))
-    #
-    #     rows.append((basename, transcript, confidence))
-    #
-    #     return rows
-    #
+        print("{0} - Skipping, not spanish".format(basename))
+
+        transcript = ""
+        confidence = ""
+
+        rows.append((basename, transcript, confidence))
+
+        return rows
+
+    if os.path.exists("{0}/{1}.txt".format(dirname, basename)):
+
+        print("{0} - Skipping, already processed".format(basename))
+
+        with open("{0}/{1}.txt".format(dirname, basename), "rt") as transcript_file:
+            transcript = transcript_file.read()
+
+        with open("{0}/{1}_confidence.txt".format(dirname, basename), "rt") as confidence_file:
+            confidence = confidence_file.read()
+
+        print("{0} - Transcript:\t{1}".format(basename, transcript))
+
+        print("{0} - Confidence:\t{1}".format(basename, confidence))
+
+        rows.append((basename, transcript, confidence))
+
+        return rows
+
     # speech_credentials = service_account.Credentials.from_service_account_file('speech_credentials.json')
     # speech_client = speech.SpeechClient(credentials=speech_credentials)
     #
@@ -261,12 +258,15 @@ def transcribe_one(audio_file):
     #         word_key = number
     #         word_value = num2words(number, lang="es_CO")
     #         transcript = transcript.replace(word_key, word_value)
-    #
-    # with open("{0}/{1}.txt".format(dirname, basename), "wt") as f:
-    #     f.write(transcript)
-    #
-    # with open("{0}/{1}_confidence.txt".format(dirname, basename), "wt") as f:
-    #     f.write(confidence)
+
+    transcript = ""
+    confidence = ""
+
+    with open("{0}/{1}.txt".format(dirname, basename), "wt") as f:
+        f.write(transcript)
+
+    with open("{0}/{1}_confidence.txt".format(dirname, basename), "wt") as f:
+        f.write(confidence)
 
     print("{0} - Processed".format(basename))
 
