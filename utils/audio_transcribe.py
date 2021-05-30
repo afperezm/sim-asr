@@ -147,10 +147,11 @@ def transcribe_one(audio_file):
 
         print("{0} - Skipping, not spanish".format(basename))
 
+        duration = ""
         transcript = ""
         confidence = ""
 
-        rows.append((basename, transcript, confidence))
+        rows.append((basename, duration, transcript, confidence))
 
         return rows
 
@@ -164,24 +165,29 @@ def transcribe_one(audio_file):
         with open("{0}/{1}_confidence.txt".format(dirname, basename), "rt") as confidence_file:
             confidence = confidence_file.read()
 
+        with open("{0}/{1}_duration.txt".format(dirname, basename), "wt") as f:
+            duration = f.read()
+
         print("{0} - Transcript:\t{1}".format(basename, transcript))
 
         print("{0} - Confidence:\t{1}".format(basename, confidence))
 
-        rows.append((basename, transcript, confidence))
+        rows.append((basename, duration, transcript, confidence))
 
         return rows
 
     audio_segment = AudioSegment.from_file(audio_file)
+    duration = audio_segment.duration_seconds
 
     if audio_segment.duration_seconds > 60:
 
         print("{0} - Skipping, audio is longer than 1 minute".format(basename))
 
+        duration = ""
         transcript = ""
         confidence = ""
 
-        rows.append((basename, transcript, confidence))
+        rows.append((basename, duration, transcript, confidence))
 
         return rows
 
@@ -263,13 +269,16 @@ def transcribe_one(audio_file):
     with open("{0}/{1}_confidence.txt".format(dirname, basename), "wt") as f:
         f.write(confidence)
 
+    with open("{0}/{1}_duration.txt".format(dirname, basename), "wt") as f:
+        f.write(duration)
+
     print("{0} - Processed".format(basename))
 
     print("{0} - Transcript:\t{1}".format(basename, transcript))
 
     print("{0} - Confidence:\t{1}".format(basename, confidence))
 
-    rows.append((basename, transcript, confidence))
+    rows.append((basename, duration, transcript, confidence))
 
     return rows
 
@@ -315,8 +324,8 @@ def _transcribe_data(audio_dir):
     with open(output_tsv, "wt", encoding="utf-8", newline="") as output_tsv_file:
         output_tsv_writer = csv.writer(output_tsv_file, dialect=csv.excel_tab)
         bar = progressbar.ProgressBar(max_value=len(rows), widgets=SIMPLE_BAR)
-        for filename, transcript, confidence in bar([row for idx, row in enumerate(rows)]):
-            output_tsv_writer.writerow([filename, transcript, confidence])
+        for filename, duration, transcript, confidence in bar([row for idx, row in enumerate(rows)]):
+            output_tsv_writer.writerow([filename, duration, transcript, confidence])
 
 
 def main():
