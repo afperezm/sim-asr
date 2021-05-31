@@ -165,7 +165,7 @@ def transcribe_one(audio_file):
         with open("{0}/{1}_confidence.txt".format(dirname, basename), "rt") as confidence_file:
             confidence = confidence_file.read()
 
-        with open("{0}/{1}_duration.txt".format(dirname, basename), "wt") as f:
+        with open("{0}/{1}_duration.txt".format(dirname, basename), "rt") as f:
             duration = f.read()
 
         print("{0} - Transcript:\t{1}".format(basename, transcript))
