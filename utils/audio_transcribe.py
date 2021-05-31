@@ -177,7 +177,6 @@ def transcribe_one(audio_file):
         return rows
 
     audio_segment = AudioSegment.from_file(audio_file)
-    duration = audio_segment.duration_seconds
 
     if audio_segment.duration_seconds > 60:
 
@@ -263,6 +262,8 @@ def transcribe_one(audio_file):
             word_value = num2words(number, lang="es_CO")
             transcript = transcript.replace(word_key, word_value)
 
+    duration = str(audio_segment.duration_seconds)
+
     with open("{0}/{1}.txt".format(dirname, basename), "wt") as f:
         f.write(transcript)
 
@@ -278,7 +279,9 @@ def transcribe_one(audio_file):
 
     print("{0} - Confidence:\t{1}".format(basename, confidence))
 
-    rows.append((basename, duration, transcript, confidence))
+    print("{0} - Duration:\t{1}".format(basename, duration))
+
+    rows.append((basename, transcript, confidence, duration))
 
     return rows
 
@@ -298,6 +301,12 @@ def parse_args():
         type=int,
         help="Number of parallel processes to launch.",
         default=4)
+    parser.add_argument(
+        "--threshold",
+        type=float,
+        help="Confidence threshold to filter bad quality transcriptions",
+        default=0.9
+    )
     return parser.parse_args()
 
 
@@ -324,8 +333,20 @@ def _transcribe_data(audio_dir):
     with open(output_tsv, "wt", encoding="utf-8", newline="") as output_tsv_file:
         output_tsv_writer = csv.writer(output_tsv_file, dialect=csv.excel_tab)
         bar = progressbar.ProgressBar(max_value=len(rows), widgets=SIMPLE_BAR)
-        for filename, duration, transcript, confidence in bar([row for idx, row in enumerate(rows)]):
-            output_tsv_writer.writerow([filename, duration, transcript, confidence])
+        for filename, transcript, confidence, duration in bar([row for idx, row in enumerate(rows)]):
+            if len(transcript) == 0:
+                print(f"Skipping {filename}, no transcription")
+                continue
+            parsed_duration = float(duration)
+            if parsed_duration > 15.0:
+                print(f"Skipping {filename}, audio too long")
+                continue
+            parsed_confidences = [float(c) for c in confidence.split("+")]
+            avg_confidence = sum(parsed_confidences) / len(parsed_confidences)
+            if avg_confidence < PARAMS.threshold:
+                print(f"Skipping {filename}, low confidence")
+                continue
+            output_tsv_writer.writerow([filename, transcript])
 
 
 def main():
