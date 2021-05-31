@@ -151,7 +151,7 @@ def transcribe_one(audio_file):
         transcript = ""
         confidence = ""
 
-        rows.append((basename, duration, transcript, confidence))
+        rows.append((basename, transcript, confidence, duration))
 
         return rows
 
@@ -172,7 +172,7 @@ def transcribe_one(audio_file):
 
         print("{0} - Confidence:\t{1}".format(basename, confidence))
 
-        rows.append((basename, duration, transcript, confidence))
+        rows.append((basename, transcript, confidence, duration))
 
         return rows
 
@@ -186,7 +186,7 @@ def transcribe_one(audio_file):
         transcript = ""
         confidence = ""
 
-        rows.append((basename, duration, transcript, confidence))
+        rows.append((basename, transcript, confidence, duration))
 
         return rows
 
