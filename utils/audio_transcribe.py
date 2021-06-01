@@ -346,7 +346,7 @@ def _transcribe_data(audio_dir):
             if avg_confidence < PARAMS.threshold:
                 print(f"Skipping {filename}, low confidence")
                 continue
-            output_tsv_writer.writerow([filename, transcript])
+            output_tsv_writer.writerow(["{0}.wav".format(filename), transcript])
 
 
 def main():
