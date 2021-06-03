@@ -21,7 +21,7 @@ from multiprocessing import Pool
 FIELDNAMES = ["wav_filename", "wav_filesize", "transcript"]
 SAMPLE_RATE = 16000
 MAX_SECS = None
-CHARS_PER_SEC = 1000 / MAX_SECS / 2
+CHARS_PER_SEC = None
 THRESHOLD = 0.5
 
 PARAMS = None
@@ -220,4 +220,5 @@ def main():
 if __name__ == "__main__":
     PARAMS = parse_args()
     MAX_SECS = PARAMS.max_secs
+    CHARS_PER_SEC = 1000 / MAX_SECS / 2
     main()
