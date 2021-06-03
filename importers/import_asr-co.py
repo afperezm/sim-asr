@@ -20,7 +20,7 @@ from multiprocessing import Pool
 
 FIELDNAMES = ["wav_filename", "wav_filesize", "transcript"]
 SAMPLE_RATE = 16000
-MAX_SECS = 15
+MAX_SECS = None
 CHARS_PER_SEC = 1000 / MAX_SECS / 2
 THRESHOLD = 0.5
 
@@ -202,6 +202,12 @@ def parse_args():
         action="store_true",
         help="Converts diacritic characters to their base ones",
     )
+    parser.add_argument(
+        "--max_secs",
+        type=int,
+        help="Maximum sample length",
+        default=15
+    )
     return parser.parse_args()
 
 
@@ -213,4 +219,5 @@ def main():
 
 if __name__ == "__main__":
     PARAMS = parse_args()
+    MAX_SECS = PARAMS.max_secs
     main()
