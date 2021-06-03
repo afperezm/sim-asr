@@ -176,54 +176,44 @@ def transcribe_one(audio_file):
 
     if audio_segment.duration_seconds > 60:
 
-        print("{0} - Skipping, audio is longer than 1 minute".format(basename))
+        # Compose audio cloud name
+        bucket = STORAGE_CLIENT.get_bucket(BUCKET_NAME)
+        alphabet = string.ascii_lowercase
+        cloud_name_simple = ''.join(random.choice(alphabet) for i in range(10)) + ".wav"
 
-        duration = ""
-        transcript = ""
-        confidence = ""
+        # Upload audio file to google cloud
+        blob = bucket.blob(cloud_name_simple)
+        blob.upload_from_filename(audio_file)
 
-        rows.append((basename, transcript, confidence, duration))
+        # Compose file name in cloud
+        cloud_name = "gs://" + BUCKET_NAME + "/" + cloud_name_simple
 
-        return rows
+        # Create speech recognition request
+        audio = speech.RecognitionAudio(uri=cloud_name)
+        config = speech.RecognitionConfig(
+            encoding=speech.RecognitionConfig.AudioEncoding.LINEAR16,
+            sample_rate_hertz=16000,
+            language_code='es-CO',
+            max_alternatives=1,
+            model='default',
+            use_enhanced=False)
 
-    #     # Compose audio cloud name
-    #     bucket = storage_client.get_bucket(BUCKET_NAME)
-    #     alphabet = string.ascii_lowercase
-    #     cloud_name_simple = ''.join(random.choice(alphabet) for i in range(10)) + ".wav"
-    #
-    #     # Upload audio file to google cloud
-    #     blob = bucket.blob(cloud_name_simple)
-    #     blob.upload_from_filename(audio_file)
-    #
-    #     # Compose file name in cloud
-    #     cloud_name = "gs://" + BUCKET_NAME + "/" + cloud_name_simple
-    #
-    #     # Create speech recognition request
-    #     audio = speech.RecognitionAudio(uri=cloud_name)
-    #     config = speech.RecognitionConfig(
-    #         encoding=speech.RecognitionConfig.AudioEncoding.LINEAR16,
-    #         sample_rate_hertz=16000,
-    #         language_code='es-CO',
-    #         max_alternatives=1,
-    #         model='default',
-    #         use_enhanced=False)
-    #
-    #     # Launch recognition request
-    #     operation = speech_client.long_running_recognize(config=config, audio=audio)
-    #
-    #     print("{0} - Waiting for operation to complete...".format(basename))
-    #     response = operation.result(timeout=900000)
-    #
-    #     # Gather transcript and confidence results
-    #     transcript = " ".join([result.alternatives[0].transcript for result in response.results])
-    #     confidence = "+".join([str(result.alternatives[0].confidence) for result in response.results])
-    #
-    #     # Convert numbers to spoken format if any
-    #     numbers = sorted(list(set(re.findall(r"(\d+)", transcript))), key=lambda n: len(n), reverse=True)
-    #     for number in numbers:
-    #         word_key = number
-    #         word_value = num2words(number, lang="es_CO")
-    #         transcript = transcript.replace(word_key, word_value)
+        # Launch recognition request
+        operation = SPEECH_CLIENT.long_running_recognize(config=config, audio=audio)
+
+        print("{0} - Waiting for operation to complete...".format(basename))
+        response = operation.result(timeout=900000)
+
+        # Gather transcript and confidence results
+        transcript = " ".join([result.alternatives[0].transcript for result in response.results])
+        confidence = "+".join([str(result.alternatives[0].confidence) for result in response.results])
+
+        # Convert numbers to spoken format if any
+        numbers = sorted(list(set(re.findall(r"(\d+)", transcript))), key=lambda n: len(n), reverse=True)
+        for number in numbers:
+            word_key = number
+            word_value = num2words(number, lang="es_CO")
+            transcript = transcript.replace(word_key, word_value)
 
     else:
 
