@@ -32,6 +32,7 @@ def create_db_connection(host, username, password, auth_source, auth_mechanism):
 def get_resources_list(db_conn, db_name):
     """Executes an aggregation pipeline to extract the list of WAV and HTML records for VI type interviews."""
 
+    # Pipeline to retrieve VI audios and transcriptions
     pipeline = [
         {'$match': {'type': {'$in': ['Audio de la entrevista', 'Transcripción final']}}},
         {'$group': {'_id': '$identifier', 'records': {'$push': {'type': '$type',
@@ -72,6 +73,7 @@ def get_resources_list(db_conn, db_name):
         {'$sort': {'_id': 1}},
     ]
 
+    # Pipeline to retrieve exile audios
     pipeline = [
         {'$match': {'type': {'$in': ['Audio de la entrevista']}}},
         {'$group': {'_id': '$identifier', 'records': {'$push': {'type': '$type',
