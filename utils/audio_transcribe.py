@@ -168,10 +168,6 @@ def transcribe_one(audio_file):
         with open("{0}/{1}_duration.txt".format(dirname, basename), "rt") as f:
             duration = f.read()
 
-        print("{0} - Transcript:\t{1}".format(basename, transcript))
-
-        print("{0} - Confidence:\t{1}".format(basename, confidence))
-
         rows.append((basename, transcript, confidence, duration))
 
         return rows
