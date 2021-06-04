@@ -64,10 +64,10 @@ def one_sample(sample):
     frames = 0
 
     if os.path.exists(wav_filename):
-        tmp_filename = os.path.splitext(wav_filename)[0] + '.tmp.wav'
-        subprocess.check_call(['sox', wav_filename, tmp_filename, 'silence', '1', '0.1', '1%', 'reverse', 'silence',
-                               '1', '0.1', '1%', 'reverse'], stderr=subprocess.STDOUT)
-        os.rename(tmp_filename, wav_filename)
+        # tmp_filename = os.path.splitext(wav_filename)[0] + '.tmp.wav'
+        # subprocess.check_call(['sox', wav_filename, tmp_filename, 'silence', '1', '0.1', '1%', 'reverse', 'silence',
+        #                        '1', '0.1', '1%', 'reverse'], stderr=subprocess.STDOUT)
+        # os.rename(tmp_filename, wav_filename)
         file_size = os.path.getsize(wav_filename)
         frames = int(subprocess.check_output(["soxi", "-s", wav_filename], stderr=subprocess.STDOUT))
     else:
