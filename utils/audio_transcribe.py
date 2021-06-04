@@ -314,7 +314,7 @@ def _transcribe_data(audio_dir):
     pool.close()
     pool.join()
 
-    output_tsv = os.path.join(audio_dir, "transcriptions.tsv")
+    output_tsv = os.path.join(audio_dir, "output.tsv")
     print("Saving transcriptions TSV file to: ", output_tsv)
     with open(output_tsv, "wt", encoding="utf-8", newline="") as output_tsv_file:
         output_tsv_writer = csv.writer(output_tsv_file, dialect=csv.excel_tab)
