@@ -13,30 +13,30 @@ from deepspeech_training.util.downloader import SIMPLE_BAR
 # cat validate_data_09.61_11.65.log validate_data_11.65_12.log validate_data_12_15.log | grep Transcript: > transcripts.txt
 # cat validate_data_09.61_11.65.log validate_data_11.65_12.log validate_data_12_15.log | grep Confidence: > confidences.txt
 
-filenames_txt = "filenames.txt"
-with open(filenames_txt, "rt") as filenames_txt_file:
-    filenames = [filename.strip() for filename in filenames_txt_file.readlines()]
-
-transcripts_txt = "transcripts.txt"
-with open(transcripts_txt, "rt") as transcripts_txt_file:
-    transcripts = [transcript.strip() for transcript in transcripts_txt_file.readlines()]
-
-subtitles_txt = "subtitles.txt"
-with open(subtitles_txt, "rt") as subtitles_txt_file:
-    subtitles = [subtitle.strip() for subtitle in subtitles_txt_file]
-
-confidences_txt = "confidences.txt"
-with open(confidences_txt, "rt") as confidences_txt_file:
-    confidences = [confidence.strip() for confidence in confidences_txt_file.readlines()]
-
-scores_txt = "scores.txt"
-with open(scores_txt, "rt") as scores_txt_file:
-    scores = [score.strip() for score in scores_txt_file.readlines()]
-
-assert len(filenames) == len(transcripts)
-assert len(filenames) == len(subtitles)
-assert len(filenames) == len(confidences)
-assert len(filenames) == len(scores)
+# filenames_txt = "filenames.txt"
+# with open(filenames_txt, "rt") as filenames_txt_file:
+#     filenames = [filename.strip() for filename in filenames_txt_file.readlines()]
+#
+# transcripts_txt = "transcripts.txt"
+# with open(transcripts_txt, "rt") as transcripts_txt_file:
+#     transcripts = [transcript.strip() for transcript in transcripts_txt_file.readlines()]
+#
+# subtitles_txt = "subtitles.txt"
+# with open(subtitles_txt, "rt") as subtitles_txt_file:
+#     subtitles = [subtitle.strip() for subtitle in subtitles_txt_file]
+#
+# confidences_txt = "confidences.txt"
+# with open(confidences_txt, "rt") as confidences_txt_file:
+#     confidences = [confidence.strip() for confidence in confidences_txt_file.readlines()]
+#
+# scores_txt = "scores.txt"
+# with open(scores_txt, "rt") as scores_txt_file:
+#     scores = [score.strip() for score in scores_txt_file.readlines()]
+#
+# assert len(filenames) == len(transcripts)
+# assert len(filenames) == len(subtitles)
+# assert len(filenames) == len(confidences)
+# assert len(filenames) == len(scores)
 # cache_dict = [(filenames[idx], transcripts[idx], confidences[idx]) for idx in range(len(filenames))]
 # cache_pkl = "cache.pkl"
 # with open(cache_pkl, "wb") as cache_pkl_file:
