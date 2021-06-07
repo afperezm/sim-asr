@@ -81,7 +81,8 @@ def main():
                 parsed_confidences = [float(c) for c in confidence.split("\t")[1].split("+")]
                 avg_confidence = sum(parsed_confidences) / len(parsed_confidences)
                 if avg_confidence >= threshold:
-                    print(filename, transcript, confidence)
+                    # print(filename, transcript, confidence)
+                    print(f"Processing {filename}")
                     output_tsv_writer.writerow([filename.replace("***", "").strip(), transcript.split("\t")[1]])
                 else:
                     print(f"Skipping {filename} since it has a confidence of {avg_confidence}")
