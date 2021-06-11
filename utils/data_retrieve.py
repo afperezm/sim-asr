@@ -35,6 +35,7 @@ def main():
     host = PARAMS.host
     port = PARAMS.port
     database = PARAMS.database
+    key = PARAMS.key
     # data_dir = "./"
 
     connection = psycopg2.connect(user=user,
@@ -61,7 +62,7 @@ def main():
             born_location = ', '.join(filter(None, [row.lugar_nac_n2_txt, row.lugar_nac_n1_txt]))
             # TODO control queries per second since Google Geocoding API has a quota of 50 QPS
             # Geocode born location
-            g = geocoder.google(born_location, key='AIzaSyDNRG-2VaztgMhymInIKZN3LF8vO3nIDQM')
+            g = geocoder.google(born_location, key=key)
             print(born_location)
             print(g)
             persons_interviewed_df.at[row.Index, 'lugar_nac_n2_lat'] = g.latlng[0]
@@ -75,7 +76,7 @@ def main():
                                                    row.lugar_residencia_n1_txt]))
             # TODO control queries per second since Google Geocoding API has a quota of 50 QPS
             # Geocode residence location
-            g = geocoder.google(residence_location, key='AIzaSyDNRG-2VaztgMhymInIKZN3LF8vO3nIDQM')
+            g = geocoder.google(residence_location, key=key)
             print(residence_location)
             print(g)
             persons_interviewed_df.at[row.Index, 'lugar_residencia_n3_lat'] = g.latlng[0]
@@ -119,6 +120,11 @@ def parse_args():
         "--database",
         type=str,
         help="Database",
+        required=True)
+    parser.add_argument(
+        "--key",
+        type=str,
+        help="Google API key",
         required=True)
     return parser.parse_args()
 
