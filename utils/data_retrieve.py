@@ -2,7 +2,7 @@ import argparse
 import pandas as pd
 import progressbar
 import psycopg2
-from geopy.exc import GeocoderTimedOut
+from geopy.exc import GeocoderServiceError
 from geopy.geocoders import GoogleV3
 
 
@@ -76,7 +76,7 @@ def main():
                 # print(row_idx, 'born', born_location_address, born_location)
                 persons_interviewed_df.at[row.Index, 'lugar_nac_n2_lat'] = born_location.latitude
                 persons_interviewed_df.at[row.Index, 'lugar_nac_n2_lon'] = born_location.longitude
-            except GeocoderTimedOut as e:
+            except GeocoderServiceError as e:
                 print("Error: geocode failed on input %s with message %s" % (born_location_address, e.message))
                 persons_interviewed_df.at[row.Index, 'lugar_nac_n2_lat'] = '-'
                 persons_interviewed_df.at[row.Index, 'lugar_nac_n2_lon'] = '-'
@@ -93,7 +93,7 @@ def main():
                 # print(row_idx, 'residence', residence_location_address, residence_location)
                 persons_interviewed_df.at[row.Index, 'lugar_residencia_n3_lat'] = residence_location.latitude
                 persons_interviewed_df.at[row.Index, 'lugar_residencia_n3_lon'] = residence_location.longitude
-            except GeocoderTimedOut as e:
+            except GeocoderServiceError as e:
                 print("Error: geocode failed on input %s with message %s" % (residence_location_address, e.message))
                 persons_interviewed_df.at[row.Index, 'lugar_residencia_n3_lat'] = '-'
                 persons_interviewed_df.at[row.Index, 'lugar_residencia_n3_lon'] = '-'
