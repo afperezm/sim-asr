@@ -93,7 +93,7 @@ def main():
         bar.update(row_idx)
     bar.update(row_count)
 
-    compression_opts = dict(method='zip', archive_name='persons_interviewed.csv')
+    compression_opts = dict(method='zip', archive_name='persons_interviewed.tsv')
 
     persons_interviewed_df.to_csv('persons_interviewed.zip', index=False, sep='\t', compression=compression_opts)
 
