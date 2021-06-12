@@ -36,7 +36,6 @@ def main():
     port = PARAMS.port
     database = PARAMS.database
     key = PARAMS.key
-    # data_dir = "./"
 
     connection = psycopg2.connect(user=user,
                                   password=password,
