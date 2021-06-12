@@ -63,8 +63,7 @@ def main():
             # Concatenate born location names
             born_location_address = ', '.join(filter(lambda l: '' if l is None or l == '[Internacional]' else l,
                                                      [row.lugar_nac_n2_txt, row.lugar_nac_n1_txt]))
-            # TODO control queries per second since Google Geocoding API has a quota of 50 QPS
-            # Geocode born location
+            # Geocode born location, beware it can throw an error if Google Geocoding quota of 50 QPS is exceeded
             try:
                 born_location = geo_locator.geocode(born_location_address)
                 # print(row_idx, 'born', born_location_address, born_location)
@@ -76,13 +75,12 @@ def main():
                 persons_interviewed_df.at[row.Index, 'lugar_nac_n2_lon'] = '-'
         # Geocode residence location if not present
         if row.lugar_residencia_n3_lat is None:
-            # TODO Beware that either level 2 (n2) or level 3 (n3) locations might be None
-            # Concatenate residence location names
+            # Concatenate residence location names, beware that either level 2 (n2) or level 3 (n3) locations might
+            # be none and thus the geocoded location becomes less accurate
             residence_location_address = ', '.join(filter(lambda l: '' if l is None or l == '[Internacional]' else l,
                                                           [row.lugar_residencia_n3_txt, row.lugar_residencia_n2_txt,
                                                            row.lugar_residencia_n1_txt]))
-            # TODO control queries per second since Google Geocoding API has a quota of 50 QPS
-            # Geocode residence location
+            # Geocode residence location, beware it can throw an error if Google Geocoding quota of 50 QPS is exceeded
             try:
                 residence_location = geo_locator.geocode(residence_location_address)
                 # print(row_idx, 'residence', residence_location_address, residence_location)
