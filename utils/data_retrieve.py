@@ -77,7 +77,7 @@ def main():
                 persons_interviewed_df.at[row.Index, 'lugar_nac_n2_lat'] = born_location.latitude
                 persons_interviewed_df.at[row.Index, 'lugar_nac_n2_lon'] = born_location.longitude
             except GeocoderServiceError as e:
-                print("Error: geocode failed on input %s with message %s" % (born_location_address, e.message))
+                print(f"Error: geocode failed on input {born_location_address} with error {e}")
                 persons_interviewed_df.at[row.Index, 'lugar_nac_n2_lat'] = '-'
                 persons_interviewed_df.at[row.Index, 'lugar_nac_n2_lon'] = '-'
         # Geocode residence location if not present
@@ -94,7 +94,7 @@ def main():
                 persons_interviewed_df.at[row.Index, 'lugar_residencia_n3_lat'] = residence_location.latitude
                 persons_interviewed_df.at[row.Index, 'lugar_residencia_n3_lon'] = residence_location.longitude
             except GeocoderServiceError as e:
-                print("Error: geocode failed on input %s with message %s" % (residence_location_address, e.message))
+                print(f"Error: geocode failed on input {residence_location_address} with error {e}")
                 persons_interviewed_df.at[row.Index, 'lugar_residencia_n3_lat'] = '-'
                 persons_interviewed_df.at[row.Index, 'lugar_residencia_n3_lon'] = '-'
         bar.update(row_idx)
