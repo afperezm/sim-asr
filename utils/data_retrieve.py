@@ -59,8 +59,8 @@ def main():
     for row_idx, row in enumerate(persons_interviewed_df.itertuples(), start=1):
         # Geocode born location if not present
         if row.lugar_nac_n2_lat is None:
-            # TODO Beware that level 2 (n2) location might be None
-            # Concatenate born location names
+            # Concatenate born location names, beware that level 2 (n2) location might be none and thus geocoded
+            # location becomes less accurate
             born_location_address = ', '.join(filter(lambda l: '' if l is None or l == '[Internacional]' else l,
                                                      [row.lugar_nac_n2_txt, row.lugar_nac_n1_txt]))
             # Geocode born location, beware it can throw an error if Google Geocoding quota of 50 QPS is exceeded
