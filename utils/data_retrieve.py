@@ -1,10 +1,10 @@
 import argparse
-import csv
-import geocoder
-import os
 import pandas as pd
 import progressbar
 import psycopg2
+from geopy.exc import GeocoderTimedOut
+from geopy.geocoders import GoogleV3
+
 
 PERSON_INTERVIEWED_QUERY = "SELECT id_persona_entrevistada, id_entrevista, id_persona, codigo_entrevista, " \
                            "es_victima, es_testigo, nombre, apellido, otros_nombres, fec_nac_anio, fec_nac_mes, " \
@@ -44,6 +44,8 @@ def main():
                                   port=port,
                                   database=database)
 
+    geo_locator = GoogleV3(api_key=key, timeout=5)
+
     # Convert query results
     persons_interviewed_df = pd.read_sql_query(PERSON_INTERVIEWED_QUERY, connection)
 
@@ -59,29 +61,38 @@ def main():
         if row.lugar_nac_n2_lat is None:
             # TODO Beware that level 2 (n2) location might be None
             # Concatenate born location names
-            born_location = ', '.join(filter(None, [row.lugar_nac_n2_txt, row.lugar_nac_n1_txt]))
+            born_location_address = ', '.join(filter(None, [row.lugar_nac_n2_txt, row.lugar_nac_n1_txt]))
             # TODO control queries per second since Google Geocoding API has a quota of 50 QPS
             # Geocode born location
-            g = geocoder.google(born_location, key=key)
-            print(born_location)
-            print(g)
-            persons_interviewed_df.at[row.Index, 'lugar_nac_n2_lat'] = g.latlng[0]
-            persons_interviewed_df.at[row.Index, 'lugar_nac_n2_lon'] = g.latlng[1]
+            try:
+                born_location = geo_locator.geocode(born_location_address)
+                print(born_location_address)
+                print(born_location)
+                persons_interviewed_df.at[row.Index, 'lugar_nac_n2_lat'] = born_location.latitude
+                persons_interviewed_df.at[row.Index, 'lugar_nac_n2_lon'] = born_location.longitude
+            except GeocoderTimedOut as e:
+                print("Error: geocode failed on input %s with message %s" % (born_location_address, e.message))
+                persons_interviewed_df.at[row.Index, 'lugar_nac_n2_lat'] = '-'
+                persons_interviewed_df.at[row.Index, 'lugar_nac_n2_lon'] = '-'
         # Geocode residence location if not present
         if row.lugar_residencia_n3_lat is None:
             # TODO Beware that either level 2 (n2) or level 3 (n3) locations might be None
             # Concatenate residence location names
-            residence_location = ', '.join(filter(lambda l: '' if l is None or l == '[Internacional]' else l,
-                                                  [row.lugar_residencia_n3_txt, row.lugar_residencia_n2_txt,
-                                                   row.lugar_residencia_n1_txt]))
+            residence_location_address = ', '.join(filter(lambda l: '' if l is None or l == '[Internacional]' else l,
+                                                          [row.lugar_residencia_n3_txt, row.lugar_residencia_n2_txt,
+                                                           row.lugar_residencia_n1_txt]))
             # TODO control queries per second since Google Geocoding API has a quota of 50 QPS
             # Geocode residence location
-            g = geocoder.google(residence_location, key=key)
-            print(residence_location)
-            print(g)
-            persons_interviewed_df.at[row.Index, 'lugar_residencia_n3_lat'] = g.latlng[0]
-            persons_interviewed_df.at[row.Index, 'lugar_residencia_n3_lon'] = g.latlng[1]
-        # print(row)
+            try:
+                residence_location = geo_locator.geocode(residence_location_address)
+                print(residence_location_address)
+                print(residence_location)
+                persons_interviewed_df.at[row.Index, 'lugar_residencia_n3_lat'] = residence_location.latitude
+                persons_interviewed_df.at[row.Index, 'lugar_residencia_n3_lon'] = residence_location.longitude
+            except GeocoderTimedOut as e:
+                print("Error: geocode failed on input %s with message %s" % (residence_location_address, e.message))
+                persons_interviewed_df.at[row.Index, 'lugar_residencia_n3_lat'] = '-'
+                persons_interviewed_df.at[row.Index, 'lugar_residencia_n3_lon'] = '-'
         bar.update(row_idx)
     bar.update(row_count)
 
