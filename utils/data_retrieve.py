@@ -61,7 +61,8 @@ def main():
         if row.lugar_nac_n2_lat is None:
             # TODO Beware that level 2 (n2) location might be None
             # Concatenate born location names
-            born_location_address = ', '.join(filter(None, [row.lugar_nac_n2_txt, row.lugar_nac_n1_txt]))
+            born_location_address = ', '.join(filter(lambda l: '' if l is None or l == '[Internacional]' else l,
+                                                     [row.lugar_nac_n2_txt, row.lugar_nac_n1_txt]))
             # TODO control queries per second since Google Geocoding API has a quota of 50 QPS
             # Geocode born location
             try:
