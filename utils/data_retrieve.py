@@ -71,7 +71,7 @@ def main():
             born_location_address = ', '.join(filter(lambda l: '' if l is None or l == '[Internacional]' else l,
                                                      [row.lugar_nac_n2_txt, row.lugar_nac_n1_txt]))
             if len(born_location_address) == 0:
-                print(f"Error: cannot geocode born address [{born_location_address}] since it is empty")
+                print(f"Error: cannot geocode born address since it is empty")
                 persons_interviewed_df.at[row.Index, 'lugar_nac_n2_lat'] = '-'
                 persons_interviewed_df.at[row.Index, 'lugar_nac_n2_lon'] = '-'
                 continue
@@ -93,7 +93,7 @@ def main():
                                                           [row.lugar_residencia_n3_txt, row.lugar_residencia_n2_txt,
                                                            row.lugar_residencia_n1_txt]))
             if len(residence_location_address) == 0:
-                print(f"Error: cannot geocode residence address [{residence_location_address}] since it is empty")
+                print(f"Error: cannot geocode residence address since it is empty")
                 persons_interviewed_df.at[row.Index, 'lugar_residencia_n3_lat'] = '-'
                 persons_interviewed_df.at[row.Index, 'lugar_residencia_n3_lon'] = '-'
                 continue
