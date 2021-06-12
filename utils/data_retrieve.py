@@ -67,8 +67,7 @@ def main():
             # Geocode born location
             try:
                 born_location = geo_locator.geocode(born_location_address)
-                print(born_location_address)
-                print(born_location)
+                # print(row_idx, 'born', born_location_address, born_location)
                 persons_interviewed_df.at[row.Index, 'lugar_nac_n2_lat'] = born_location.latitude
                 persons_interviewed_df.at[row.Index, 'lugar_nac_n2_lon'] = born_location.longitude
             except GeocoderTimedOut as e:
@@ -86,8 +85,7 @@ def main():
             # Geocode residence location
             try:
                 residence_location = geo_locator.geocode(residence_location_address)
-                print(residence_location_address)
-                print(residence_location)
+                # print(row_idx, 'residence', residence_location_address, residence_location)
                 persons_interviewed_df.at[row.Index, 'lugar_residencia_n3_lat'] = residence_location.latitude
                 persons_interviewed_df.at[row.Index, 'lugar_residencia_n3_lon'] = residence_location.longitude
             except GeocoderTimedOut as e:
