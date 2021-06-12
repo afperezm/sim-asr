@@ -50,6 +50,8 @@ def main():
     # Convert query results
     persons_interviewed_df = pd.read_sql_query(PERSON_INTERVIEWED_QUERY, connection)
 
+    connection.close()
+
     # Add born location geographic coordinate fields
     persons_interviewed_df['lugar_nac_n2_lat'] = None
     persons_interviewed_df['lugar_nac_n2_lon'] = None
@@ -106,8 +108,6 @@ def main():
     persons_interviewed_df.to_csv('persons_interviewed.zip', index=False, sep='\t', compression=compression_opts)
 
     print("  Done")
-
-    connection.close()
 
 
 def parse_args():
