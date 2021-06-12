@@ -45,6 +45,8 @@ def main():
 
     geo_locator = GoogleV3(api_key=key, timeout=5)
 
+    print("- Querying interviewed persons")
+
     # Convert query results
     persons_interviewed_df = pd.read_sql_query(PERSON_INTERVIEWED_QUERY, connection)
 
@@ -53,6 +55,10 @@ def main():
     persons_interviewed_df['lugar_nac_n2_lon'] = None
 
     row_count = len(persons_interviewed_df.index)
+
+    print(f"  Done, obtained {row_count} rows")
+
+    print("- Geocoding born and residence addresses")
 
     bar = progressbar.ProgressBar(max_value=row_count)
     for row_idx, row in enumerate(persons_interviewed_df.itertuples(), start=1):
@@ -92,9 +98,14 @@ def main():
         bar.update(row_idx)
     bar.update(row_count)
 
-    compression_opts = dict(method='zip', archive_name='persons_interviewed.tsv')
+    print("  Done")
 
+    print("- Exporting data TSV formatted file")
+
+    compression_opts = dict(method='zip', archive_name='persons_interviewed.tsv')
     persons_interviewed_df.to_csv('persons_interviewed.zip', index=False, sep='\t', compression=compression_opts)
+
+    print("  Done")
 
     connection.close()
 
