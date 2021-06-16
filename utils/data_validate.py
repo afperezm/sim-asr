@@ -216,6 +216,12 @@ def _validate_data(data_dir, audio_dir):
             output_tsv_writer.writerow([filename, transcript])
 
 
+def main():
+    data_dir = PARAMS.data_dir
+    audio_dir = PARAMS.audio_dir if PARAMS.audio_dir else os.path.join(PARAMS.data_dir, "wavs")
+    _validate_data(data_dir, audio_dir)
+
+
 def parse_args():
     parser = get_importers_parser(
         description="Validator for ASR-CO dataset."
@@ -239,12 +245,6 @@ def parse_args():
         help="Converts diacritic characters to their base ones",
     )
     return parser.parse_args()
-
-
-def main():
-    data_dir = PARAMS.data_dir
-    audio_dir = PARAMS.audio_dir if PARAMS.audio_dir else os.path.join(PARAMS.data_dir, "wavs")
-    _validate_data(data_dir, audio_dir)
 
 
 if __name__ == '__main__':

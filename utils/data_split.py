@@ -9,28 +9,6 @@ import unicodedata
 from pydub import AudioSegment
 
 
-def parse_args():
-    parser = argparse.ArgumentParser(
-        description="Splitter of audio-aligned transcripts in SubRip file format."
-    )
-    parser.add_argument(
-        "--subs_dir",
-        type=str,
-        help="Subtitles data directory, where audio-aligned transcripts are located.",
-        required=True)
-    parser.add_argument(
-        "--audio_dir",
-        type=str,
-        help="Audio data directory, where audio-aligned transcripts associated audios are located.",
-        required=True)
-    parser.add_argument(
-        "--out_dir",
-        type=str,
-        help="Output data directory, where to store split audio-aligned transcripts.",
-        required=True)
-    return parser.parse_args()
-
-
 def main():
     subtitles_dir = os.path.abspath(PARAMS.subs_dir)
     audio_dir = os.path.abspath(PARAMS.audio_dir)
@@ -118,6 +96,28 @@ def main():
 
     with open(durations_pkl, "wb") as durations_pkl_file:
         pickle.dump(durations, durations_pkl_file, protocol=pickle.HIGHEST_PROTOCOL)
+
+
+def parse_args():
+    parser = argparse.ArgumentParser(
+        description="Splitter of audio-aligned transcripts in SubRip file format."
+    )
+    parser.add_argument(
+        "--subs_dir",
+        type=str,
+        help="Subtitles data directory, where audio-aligned transcripts are located.",
+        required=True)
+    parser.add_argument(
+        "--audio_dir",
+        type=str,
+        help="Audio data directory, where audio-aligned transcripts associated audios are located.",
+        required=True)
+    parser.add_argument(
+        "--out_dir",
+        type=str,
+        help="Output data directory, where to store split audio-aligned transcripts.",
+        required=True)
+    return parser.parse_args()
 
 
 if __name__ == "__main__":

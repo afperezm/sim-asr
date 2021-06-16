@@ -9,23 +9,6 @@ from pydub.silence import split_on_silence
 TARGET_LENGTH = 14000  # 15 seconds
 
 
-def parse_args():
-    parser = argparse.ArgumentParser(
-        description="Splitter of audio files in chunks by silence."
-    )
-    parser.add_argument(
-        "--audio_dir",
-        type=str,
-        help="Audio data directory, where audio files are located.",
-        required=True)
-    parser.add_argument(
-        "--out_dir",
-        type=str,
-        help="Output data directory, where to store audio chunks.",
-        required=True)
-    return parser.parse_args()
-
-
 def match_target_amplitude(aChunk, target_dBFS):
     """Normalize given audio chunk"""
     change_in_dBFS = target_dBFS - aChunk.dBFS
@@ -109,6 +92,23 @@ def main():
 
     plt.hist(chunk_lengths)
     plt.savefig("histogram.png")
+
+
+def parse_args():
+    parser = argparse.ArgumentParser(
+        description="Splitter of audio files in chunks by silence."
+    )
+    parser.add_argument(
+        "--audio_dir",
+        type=str,
+        help="Audio data directory, where audio files are located.",
+        required=True)
+    parser.add_argument(
+        "--out_dir",
+        type=str,
+        help="Output data directory, where to store audio chunks.",
+        required=True)
+    return parser.parse_args()
 
 
 if __name__ == "__main__":

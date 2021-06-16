@@ -272,30 +272,6 @@ def transcribe_one(audio_file):
     return rows
 
 
-def parse_args():
-    parser = argparse.ArgumentParser(
-        description="Transcriber of audio chunks"
-    )
-    parser.add_argument(
-        "--audio_dir",
-        type=str,
-        help="Audio chunks data directory, where audio chunk files are located.",
-        required=True
-    )
-    parser.add_argument(
-        "--num_workers",
-        type=int,
-        help="Number of parallel processes to launch.",
-        default=4)
-    parser.add_argument(
-        "--threshold",
-        type=float,
-        help="Confidence threshold to filter bad quality transcriptions",
-        default=0.9
-    )
-    return parser.parse_args()
-
-
 def _transcribe_data(audio_dir):
     # Making paths absolute
     audio_dir = os.path.abspath(audio_dir)
@@ -338,6 +314,30 @@ def _transcribe_data(audio_dir):
 def main():
     audio_dir = PARAMS.audio_dir
     _transcribe_data(audio_dir)
+
+
+def parse_args():
+    parser = argparse.ArgumentParser(
+        description="Transcriber of audio chunks"
+    )
+    parser.add_argument(
+        "--audio_dir",
+        type=str,
+        help="Audio chunks data directory, where audio chunk files are located.",
+        required=True
+    )
+    parser.add_argument(
+        "--num_workers",
+        type=int,
+        help="Number of parallel processes to launch.",
+        default=4)
+    parser.add_argument(
+        "--threshold",
+        type=float,
+        help="Confidence threshold to filter bad quality transcriptions",
+        default=0.9
+    )
+    return parser.parse_args()
 
 
 if __name__ == "__main__":

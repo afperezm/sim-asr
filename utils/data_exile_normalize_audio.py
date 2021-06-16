@@ -6,23 +6,6 @@ from pydub import AudioSegment
 TARGET_DBFS = -20
 
 
-def parse_args():
-    parser = argparse.ArgumentParser(
-        description="Normalizer of audio files in chunks by silence."
-    )
-    parser.add_argument(
-        "--audio_dir",
-        type=str,
-        help="Audio data directory, where audio files are located.",
-        required=True)
-    parser.add_argument(
-        "--out_dir",
-        type=str,
-        help="Output data directory, where to store audio chunks.",
-        required=True)
-    return parser.parse_args()
-
-
 def match_target_amplitude(audio, target_dBFS):
     """Normalize given audio chunk"""
     change_in_dBFS = target_dBFS - audio.dBFS
@@ -55,6 +38,23 @@ def main():
             "{0}/{1}.wav".format(output_dir, basename),
             format="wav"
         )
+
+
+def parse_args():
+    parser = argparse.ArgumentParser(
+        description="Normalizer of audio files in chunks by silence."
+    )
+    parser.add_argument(
+        "--audio_dir",
+        type=str,
+        help="Audio data directory, where audio files are located.",
+        required=True)
+    parser.add_argument(
+        "--out_dir",
+        type=str,
+        help="Output data directory, where to store audio chunks.",
+        required=True)
+    return parser.parse_args()
 
 
 if __name__ == "__main__":

@@ -42,23 +42,6 @@ from deepspeech_training.util.downloader import SIMPLE_BAR
 # with open(cache_pkl, "wb") as cache_pkl_file:
 #     pickle.dump(cache_dict, cache_pkl_file, protocol=pickle.HIGHEST_PROTOCOL)
 
-def parse_args():
-    parser = argparse.ArgumentParser(
-        description="Reader of ASR."
-    )
-    parser.add_argument(
-        "--data_dir",
-        help="Data directory, where cached transcripts in pickle format are located.",
-        required=True
-    )
-    parser.add_argument(
-        "--threshold",
-        type=float,
-        help="Confidence threshold to filter bad quality transcriptions",
-        default=0.9
-    )
-    return parser.parse_args()
-
 
 def main():
     # Retrieve program arguments
@@ -88,6 +71,24 @@ def main():
                     print(f"Skipping {filename} since it has a confidence of {avg_confidence}")
             else:
                 print(f"Skipping {filename} since it has no transcription")
+
+
+def parse_args():
+    parser = argparse.ArgumentParser(
+        description="Reader of ASR."
+    )
+    parser.add_argument(
+        "--data_dir",
+        help="Data directory, where cached transcripts in pickle format are located.",
+        required=True
+    )
+    parser.add_argument(
+        "--threshold",
+        type=float,
+        help="Confidence threshold to filter bad quality transcriptions",
+        default=0.9
+    )
+    return parser.parse_args()
 
 
 if __name__ == '__main__':

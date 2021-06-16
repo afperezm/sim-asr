@@ -479,26 +479,6 @@ def copy_resources(ssh_client, resources_list, max_workers):
         #     #     print(transcript_records)
 
 
-def parse_args():
-    parser = argparse.ArgumentParser(description="File synchronization through SSH")
-    parser.add_argument("--src_path", type=str, help="Path at the source filesystem where files will be read from",
-                        required=True)
-    parser.add_argument("--root_path", type=str, help="Root path of the file paths stored in MongoDB", required=True)
-    parser.add_argument("--loc_path", type=str, help="Path at the local filesystem where files will be copied",
-                        required=True)
-    parser.add_argument("--mongo_host", type=str, help="MongoDB host", required=True)
-    parser.add_argument("--mongo_user", type=str, help="MongoDB username", required=True)
-    parser.add_argument("--mongo_pass", type=str, help="MongoDB password", required=True)
-    parser.add_argument("--mongo_db", type=str, help="MongoDB database", required=True)
-    parser.add_argument("--ssh_host", type=str, help="SSH host", required=True)
-    parser.add_argument("--ssh_user", type=str, help="SSH username", required=True)
-    parser.add_argument("--ssh_key_file", type=str, help="Path to SSH key file", required=True)
-    parser.add_argument("--ssh_key_pass", type=str, help="SSH key password", required=False)
-    parser.add_argument("--num_workers", type=int, help="Number of workers", required=False, default=1)
-
-    return parser.parse_args()
-
-
 def main():
     # connect to the production database
     db_conn = create_db_connection(PARAMS.mongo_host, PARAMS.mongo_user, PARAMS.mongo_pass, PARAMS.mongo_db, "SCRAM-SHA-256")
@@ -519,6 +499,26 @@ def main():
 
     # close SSH connection
     ssh_conn.close()
+
+
+def parse_args():
+    parser = argparse.ArgumentParser(description="File synchronization through SSH")
+    parser.add_argument("--src_path", type=str, help="Path at the source filesystem where files will be read from",
+                        required=True)
+    parser.add_argument("--root_path", type=str, help="Root path of the file paths stored in MongoDB", required=True)
+    parser.add_argument("--loc_path", type=str, help="Path at the local filesystem where files will be copied",
+                        required=True)
+    parser.add_argument("--mongo_host", type=str, help="MongoDB host", required=True)
+    parser.add_argument("--mongo_user", type=str, help="MongoDB username", required=True)
+    parser.add_argument("--mongo_pass", type=str, help="MongoDB password", required=True)
+    parser.add_argument("--mongo_db", type=str, help="MongoDB database", required=True)
+    parser.add_argument("--ssh_host", type=str, help="SSH host", required=True)
+    parser.add_argument("--ssh_user", type=str, help="SSH username", required=True)
+    parser.add_argument("--ssh_key_file", type=str, help="Path to SSH key file", required=True)
+    parser.add_argument("--ssh_key_pass", type=str, help="SSH key password", required=False)
+    parser.add_argument("--num_workers", type=int, help="Number of workers", required=False, default=1)
+
+    return parser.parse_args()
 
 
 if __name__ == '__main__':

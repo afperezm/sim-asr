@@ -4,25 +4,6 @@ import io
 import os
 
 
-def parse_args():
-    parser = argparse.ArgumentParser(
-        description="Merger of transcription chunks"
-    )
-    parser.add_argument(
-        "--transcripts_dir",
-        type=str,
-        help="Transcriptions directory, where transcription chunk files are located.",
-        required=True
-    )
-    parser.add_argument(
-        "--output_dir",
-        type=str,
-        help="Output directory, where to store merged transcriptions.",
-        required=True
-    )
-    return parser.parse_args()
-
-
 def _merge_data(transcripts_dir, output_dir):
 
     print("Loading transcript chunk files...")
@@ -63,6 +44,25 @@ def main():
     transcripts_dir = PARAMS.transcripts_dir
     output_dir = PARAMS.output_dir
     _merge_data(transcripts_dir, output_dir)
+
+
+def parse_args():
+    parser = argparse.ArgumentParser(
+        description="Merger of transcription chunks"
+    )
+    parser.add_argument(
+        "--transcripts_dir",
+        type=str,
+        help="Transcriptions directory, where transcription chunk files are located.",
+        required=True
+    )
+    parser.add_argument(
+        "--output_dir",
+        type=str,
+        help="Output directory, where to store merged transcriptions.",
+        required=True
+    )
+    return parser.parse_args()
 
 
 if __name__ == "__main__":

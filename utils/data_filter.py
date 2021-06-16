@@ -5,28 +5,6 @@ import pickle
 import srt
 
 
-def parse_args():
-    parser = argparse.ArgumentParser(
-        description="Filter validated audio-aligned transcripts in SubRip file format."
-    )
-    parser.add_argument(
-        "--subs_dir",
-        type=str,
-        help="Subtitles data directory, where audio-aligned transcripts are located.",
-        required=True)
-    parser.add_argument(
-        "--out_dir",
-        type=str,
-        help="Output data directory, where to store split audio-aligned transcripts.",
-        required=True)
-    parser.add_argument(
-        "--valid_cache",
-        type=str,
-        help="Validation cache, pickle file location containing validated transcripts.",
-        required=True)
-    return parser.parse_args()
-
-
 def main():
     subtitles_dir = os.path.abspath(PARAMS.subs_dir)
     output_dir = os.path.abspath(PARAMS.out_dir)
@@ -74,6 +52,28 @@ def main():
             valid_subtitle_srt_file.write(srt.compose(valid_subs))
 
         print("{0} - Done".format(sub_srt_basename))
+
+
+def parse_args():
+    parser = argparse.ArgumentParser(
+        description="Filter validated audio-aligned transcripts in SubRip file format."
+    )
+    parser.add_argument(
+        "--subs_dir",
+        type=str,
+        help="Subtitles data directory, where audio-aligned transcripts are located.",
+        required=True)
+    parser.add_argument(
+        "--out_dir",
+        type=str,
+        help="Output data directory, where to store split audio-aligned transcripts.",
+        required=True)
+    parser.add_argument(
+        "--valid_cache",
+        type=str,
+        help="Validation cache, pickle file location containing validated transcripts.",
+        required=True)
+    return parser.parse_args()
 
 
 if __name__ == "__main__":
