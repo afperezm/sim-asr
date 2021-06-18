@@ -266,12 +266,12 @@ The produced model can be used to run DeepSpeech inference on a sample WAV file 
 documentation](https://deepspeech.readthedocs.io/en/v0.8.2/) however this performs well only for short length audios. In
 order to run this for longer audios one has to use the `transcribe.py` script included in the DeepSpeech installation
 directory. It suffices to specify the source WAV file and destination JSON where the timestamped transcription will be
-written, as well as the alphabet, model checkpoint and scorer to use: 
+written, as well as the alphabet, model checkpoint and scorer to use:
 
 ```bash
 $ python transcribe.py --src /home/andresf/data/asr-co-manual/audios/001-VI-00003.wav \
                        --dst /home/andresf/data/asr-co-manual/audios/001-VI-00003.json \
-                       --force --alphabet_config_path ~/models/cclmtv_es/alphabet.txt \ 
+                       --force --alphabet_config_path ~/models/cclmtv_es/alphabet.txt \
                        --load_checkpoint_dir /home/andresf/checkpoints/cclmtv_es/ \
                        --load_evaluate "best" \
                        --scorer_path ~/models/cclmtv_es/kenlm_es.scorer \
