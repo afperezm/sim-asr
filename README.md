@@ -260,6 +260,25 @@ $ convert_graphdef_memmapped_format --in_graph=/home/andresf/models/ds-transfer-
                                     --out_graph=/home/andresf/models/ds-transfer-es_CO/output_graph.pbmm
 ```
 
+## Long audio transcription
+
+The produced model can be used to run DeepSpeech inference on a sample WAV file as explained in [DeepSpeech's
+documentation](https://deepspeech.readthedocs.io/en/v0.8.2/) however this performs well only for short length audios. In
+order to run this for longer audios one has to use the `transcribe.py` script included in the DeepSpeech installation
+directory. It suffices to specify the source WAV file and destination JSON where the timestamped transcription will be
+written, as well as the alphabet, model checkpoint and scorer to use: 
+
+```bash
+$ python transcribe.py --src /home/andresf/data/asr-co-manual/audios/001-VI-00003.wav \
+                       --dst /home/andresf/data/asr-co-manual/audios/001-VI-00003.json \
+                       --force --alphabet_config_path ~/models/cclmtv_es/alphabet.txt \ 
+                       --load_checkpoint_dir /home/andresf/checkpoints/cclmtv_es/ \
+                       --load_evaluate "best" \
+                       --scorer_path ~/models/cclmtv_es/kenlm_es.scorer \
+                       --n_hidden 2048 \
+                       --load_cudnn
+```
+
 ## Using pre-trained models
 
 We provide the three trained models in `.pbmm` format as well as the language model generated from the full dataset and
