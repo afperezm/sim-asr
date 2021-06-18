@@ -59,7 +59,9 @@ usage: data_copy.py [-h] --src_path SRC_PATH --root_path ROOT_PATH --loc_path
                     LOC_PATH --mongo_host MONGO_HOST --mongo_user MONGO_USER
                     --mongo_pass MONGO_PASS --mongo_db MONGO_DB --ssh_host
                     SSH_HOST --ssh_user SSH_USER --ssh_key_file SSH_KEY_FILE
-                    [--ssh_key_pass SSH_KEY_PASS] [--num_workers NUM_WORKERS]
+                    [--ssh_key_pass SSH_KEY_PASS] [--audios_only]
+                    [--resources_list RESOURCES_LIST [RESOURCES_LIST ...]]
+                    [--num_workers NUM_WORKERS]
 
 File synchronization through SSH
 
@@ -84,6 +86,9 @@ optional arguments:
                         Path to SSH key file
   --ssh_key_pass SSH_KEY_PASS
                         SSH key password
+  --audios_only         Flag to indicate copy audios only
+  --resources_list RESOURCES_LIST [RESOURCES_LIST ...]
+                        List of resources to copy
   --num_workers NUM_WORKERS
                         Number of workers
 ```
@@ -192,6 +197,78 @@ American Spanish dataset and `importers/import_cv2.py` which is used to import t
 Common Voice Spanish dataset. The latest one is a modified copy from the importer provided by the Mozilla DeepSpeech
 implementation [11] with the addition that imports only data associated to Latin American accents (Mexicano,
 Andino-Pacífico, Rioplatense, Caribe, Chileno, America central) and keeps tilde words.
+
+## Preparing manually validated dataset
+
+Manually validated transcripts are subtitle files in SubRip (srt) format locate in a shared Windows directory. The
+process of importing this transcripts into a valid dataset starts with copying those subtitle files into a local
+directory:
+
+```bash
+$ mkdir -p $HOME/data/entregadas_alineadas/
+$ mkdir -p $HOME/data/asr-co-manual/
+$ sudo mount -t cifs //192.168.1.8/alineacion_audios/entregadas_alineadas $HOME/data/entregadas_alineadas/ -o username=<cev.user>
+$ cp $HOME/data/entregadas_alineadas/*.srt $HOME/data/asr-co-manual/
+```
+
+The next step is to copy from the remote file server the audios related with those interviews. For that it is used the
+`utils/data_copy.py` script with the parameters `--audios_only` and `--resources_list` to specify that only audio files
+must be copied and the specific interviews that must be copied. The list of resources is whitespace separated list of
+the resource identifiers of the interviews, e.g. 001-VI-00003 001-VI-00009. These two parameters can be used only
+combined, used separately has no effect. Be sure that the `--loc_path` argument points to the
+`$HOME/data/asr-co-manual/` path.
+
+The above step will copy all related audio files for each of the interviews, remind that some of the are split in
+multiple parts and sometimes are even repeated in different formats so they will be appended a _0, _1 and so on suffix.
+This has to be solved since only one audio file is expected to be associated with each subtitle file (his is always
+the case for the manually validated interviews since they are the result of a former copy process which warranties
+this association). To solve for this it suffices to rename the associated first part audio files and remove the
+remaining ones:
+
+```bash
+$ cd $HOME/data/asr-co-manual/
+$ ls *_0.wav | cut -d"_" -f1 | xargs -I {} mv {}_0.wav {}.wav
+$ rm -f *_*.wav
+```
+
+At this point there must be an equal number of subtitle files (.srt) and audio files (.wav) in the
+`$HOME/data/asr-co-manual/` directory. If not be sure that all necessary interviews were included when running the
+`utils/data_copy.py` script and if necessary run it again with only the missing interviews.
+
+Once all subtitle and audio files are in place the next step is to split the audios at the corresponding subtitle
+timestamps. This can be done using the formerly explained `utils/data_split.py` script:
+
+```bash
+$ python utils/data_split.py --subs_dir $HOME/data/asr-co-manual/ --audio_dir $HOME/data/asr-co-manual/ --out_dir $HOME/data/asr-co-manual/
+```
+
+This will split the audios in save them in `wavs` directory and create the manifest file `output.tsv` in TSV format. At
+this point please consider normalizing the resulting audio segments using the `utils/data_exile_normalize_audio.py`:
+
+```bash
+$ mkdir -p $HOME/data/asr-co-manual/wavs_normalized/
+$ python3 utils/data_exile_normalize_audio.py --audio_dir $HOME/data/asr-co-manual/wavs/ --out_dir $HOME/data/asr-co-manual/wavs_normalized/
+```
+
+If you use the normalized versions of the audio segments remember to rename the directories so that the paths in the
+TSV manifest file are correct:
+
+```bash
+$ mv $HOME/data/asr-co-manual/wavs/ $HOME/data/asr-co-manual/wavs_raw/
+$ mv $HOME/data/asr-co-manual/wavs_normalized/ $HOME/data/asr-co-manual/wavs/
+```
+
+The last step is to execute the importer for the folder containing the audio segments and the manifest file:
+
+```bash
+$ python importers/import_asr-co.py --data_dir $HOME/data/asr-co-manual/ --validate_label_locale utils/validate_locale_spa.py --filter_alphabet $HOME/data/asr-co-segments/alphabet.txt --normalize
+```
+
+This will create the files `output_train.csv`, `output_dev.csv` and `output_test.csv` which can be fed into to the
+DeepSpeech model training script.
+
+NB: Be aware that this import process does not run on previous importations and thus you have to run it all again every
+time you execute it.
 
 ## Training your own model
 
