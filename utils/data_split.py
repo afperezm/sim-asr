@@ -27,7 +27,7 @@ def main():
     if not os.path.exists(waves_dir):
         os.makedirs(waves_dir)
 
-    output_tsv = os.path.join(output_dir, "output_all.tsv")
+    output_tsv = os.path.join(output_dir, "output.tsv")
     output_tsv_file = open(output_tsv, "w", encoding="utf-8", newline="")
     output_tsv_writer = csv.writer(output_tsv_file, dialect=csv.excel_tab)
 
