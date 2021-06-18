@@ -97,7 +97,7 @@ To speed up the copying process this script implements a thread based parallel p
 up the copying process, the number of parallel workers can be specified with the CLI argument `num_workers`.
 
 In the following example we assume the files were copied to a destination path in the local filesystem called
-`~/data/asr-co`.
+`$HOME/data/asr-co`.
 
 Beware that the files imported can be different than the files imported at the time of creation of this dataset, you are
 encouraged to validate it against the list of filenames we provide in `records.txt`.
@@ -110,7 +110,7 @@ weren't cleaned, i.e. those without an introduction, are kept since they're easi
 script can be run by simply specifying the input and output directories:
 
 ```bash
-$ python3 utils/data_clean_intros.py --in_dir ~/data/asr-co/ --out_dir ~/data/asr-co-intro-clean/
+$ python3 utils/data_clean_intros.py --in_dir $HOME/data/asr-co/ --out_dir $HOME/data/asr-co-intro-clean/
 ```
 
 ### 2. Clean Tags
@@ -122,7 +122,7 @@ this end we provide a script which to clean transcriptions from content and acto
 derived from partial timestamps:
 
 ```bash
-$ python3 utils/data_clean_tags.py --in_dir ~/data/asr-co-intro-clean/ --out_dir ~/data/asr-co-tag-clean/
+$ python3 utils/data_clean_tags.py --in_dir $HOME/data/asr-co-intro-clean/ --out_dir $HOME/data/asr-co-tag-clean/
 ```
 
 The segmentation by blocks is a key step to allow a better alignment since it is easier for a forced-alignment algorithm
@@ -139,7 +139,7 @@ is generated using a Text-to-Speech engine. The script can be run by simply spec
 output directories:
 
 ```bash
-$ python3 utils/data_align.py --trans_dir ~/data/asr-co-tag-clean/ --audio_dir ~/data/asr-co/ --out_dir ~/data/asr-co-aligned/
+$ python3 utils/data_align.py --trans_dir $HOME/data/asr-co-tag-clean/ --audio_dir $HOME/data/asr-co/ --out_dir $HOME/data/asr-co-aligned/
 ```
 
 ### 4. Split
@@ -150,7 +150,7 @@ at the utterance level. The script can be run simply by specifying the subtitles
 previous stage), the audio and output directories:
 
 ```bash
-$ python3 utils/data_split.py --subs_dir ~/data/asr-co-aligned/ --audio_dir ~/data/asr-co/ --out_dir ~/data/asr-co-segments/
+$ python3 utils/data_split.py --subs_dir $HOME/data/asr-co-aligned/ --audio_dir $HOME/data/asr-co/ --out_dir $HOME/data/asr-co-segments/
 ```
 
 ### 5. Validate
@@ -164,7 +164,7 @@ run this script it is necessary to have a valid Google Cloud account with Speech
 corresponding credentials by downloading a service account JSON [10] and setting an environment variable like this:
 
 ```bash
-$ export GOOGLE_APPLICATION_CREDENTIALS="/home/andresf/Downloads/SIM_ASR-CO-e011d1108489.json"
+$ export GOOGLE_APPLICATION_CREDENTIALS="$HOME/Downloads/SIM_ASR-CO-e011d1108489.json"
 ```
 
 The script can be run by setting the directory where the directory where splitting output is located, the path
@@ -172,7 +172,7 @@ to the `validate_locale_spa.py` source file and the path to the spanish alphabet
 non-spanish alphabet characters:
 
 ```bash
-$ python -u utils/data_validate.py --data_dir ~/data/asr-co-segments/ --validate_label_locale utils/validate_locale_spa.py --filter_alphabet ~/data/asr-co-segments/alphabet.txt --normalize
+$ python -u utils/data_validate.py --data_dir $HOME/data/asr-co-segments/ --validate_label_locale utils/validate_locale_spa.py --filter_alphabet $HOME/data/asr-co-segments/alphabet.txt --normalize
 ```
 
 This produces a TSV manifest `output_validate.tsv` with filtered transcriptions with a similarity score of 0.7 or above.
@@ -186,7 +186,7 @@ splitting output is located, the path to the `validate_locale_spa.py` source fil
 used to filter out transcriptions with non spanish alphabet characters:
 
 ```bash
-$ python3 importers/import_asr-co.py --data_dir ~/data/asr-co-segments/ --validate_label_locale utils/validate_locale_spa.py --filter_alphabet ~/data/asr-co-segments/alphabet.txt --normalize
+$ python3 importers/import_asr-co.py --data_dir $HOME/data/asr-co-segments/ --validate_label_locale utils/validate_locale_spa.py --filter_alphabet $HOME/data/asr-co-segments/alphabet.txt --normalize
 ```
 
 This produces three CSV files `output_train.csv`, `output_dev.csv`, and `output_test.csv` corresponding to the training,
@@ -280,14 +280,14 @@ will be stored. An example of how to run the trainer script for the M-AILABS dat
 dataset:
 
 ```bash
-$ python3 importers/import_cv2.py ~/data/m-ailabs/ --validate_label_locale utils/validate_locale_spa.py --filter_alphabet ~/data/m-ailabs/alphabet.txt --normalize
+$ python3 importers/import_cv2.py $HOME/data/m-ailabs/ --validate_label_locale utils/validate_locale_spa.py --filter_alphabet $HOME/data/m-ailabs/alphabet.txt --normalize
 ```
 
-Beware that before this you would have to create the `~/data/m-ailabs/` directory and include the `alphabet.txt` that we
+Beware that before this you would have to create the `$HOME/data/m-ailabs/` directory and include the `alphabet.txt` that we
 provide. Finally to run the trainer script in background and save the stdout and stderr output to a log file:
 
 ```bash
-$ ./scripts/train_es_ES.sh &> ~/logs/train_es_ES.log &
+$ ./scripts/train_es_ES.sh &> $HOME/logs/train_es_ES.log &
 ```
 
 ## Export models
@@ -297,11 +297,11 @@ with the `DeepSpeech.py` script from your local DeepSpeech folder by specifying 
 directory and model authorship details. The command below shows the necessary parameters:
 
 ```bash
-$ python DeepSpeech.py --alphabet_config_path /home/andresf/models/cclmtv_es/alphabet.txt \
-                       --checkpoint_dir /home/andresf/checkpoints/ds-transfer-es_CO/ \
+$ python DeepSpeech.py --alphabet_config_path $HOME/models/cclmtv_es/alphabet.txt \
+                       --checkpoint_dir $HOME/checkpoints/ds-transfer-es_CO/ \
                        --load_evaluate "best" \
                        --n_hidden 2048 \
-                       --export_dir /home/andresf/models/ds-transfer-es_CO/ \
+                       --export_dir $HOME/models/ds-transfer-es_CO/ \
                        --remove_export True \
                        --export_file_name "output_graph" \
                        --export_author_id "afperezm" \
@@ -333,8 +333,8 @@ This will download the `convert_graphdef_memmapped_format` tool to the folder wh
 executed. Finally producing a mmap-able model is as simple as:
 
 ```bash
-$ convert_graphdef_memmapped_format --in_graph=/home/andresf/models/ds-transfer-es_CO/output_graph.pb \
-                                    --out_graph=/home/andresf/models/ds-transfer-es_CO/output_graph.pbmm
+$ convert_graphdef_memmapped_format --in_graph=$HOME/models/ds-transfer-es_CO/output_graph.pb \
+                                    --out_graph=$HOME/models/ds-transfer-es_CO/output_graph.pbmm
 ```
 
 ## Long audio transcription
@@ -346,12 +346,12 @@ directory. It suffices to specify the source WAV file and destination JSON where
 written, as well as the alphabet, model checkpoint and scorer to use:
 
 ```bash
-$ python transcribe.py --src /home/andresf/data/asr-co-manual/audios/001-VI-00003.wav \
-                       --dst /home/andresf/data/asr-co-manual/audios/001-VI-00003.json \
-                       --force --alphabet_config_path ~/models/cclmtv_es/alphabet.txt \
-                       --load_checkpoint_dir /home/andresf/checkpoints/cclmtv_es/ \
+$ python transcribe.py --src $HOME/data/asr-co-manual/audios/001-VI-00003.wav \
+                       --dst $HOME/data/asr-co-manual/audios/001-VI-00003.json \
+                       --force --alphabet_config_path $HOME/models/cclmtv_es/alphabet.txt \
+                       --load_checkpoint_dir $HOME/checkpoints/cclmtv_es/ \
                        --load_evaluate "best" \
-                       --scorer_path ~/models/cclmtv_es/kenlm_es.scorer \
+                       --scorer_path $HOME/models/cclmtv_es/kenlm_es.scorer \
                        --n_hidden 2048 \
                        --load_cudnn
 ```
