@@ -463,7 +463,7 @@ def main():
     ssh_conn = create_ssh_connection(PARAMS.ssh_host, PARAMS.ssh_user, PARAMS.ssh_key_file, PARAMS.ssh_key_pass)
 
     # execute files copy to local
-    copy_resources(ssh_conn, resources_list, PARAMS.num_workers)
+    copy_resources(ssh_conn, resources_list, PARAMS.num_workers, PARAMS.audios_only)
 
     # close SSH connection
     ssh_conn.close()
