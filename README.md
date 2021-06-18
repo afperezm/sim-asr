@@ -213,6 +213,53 @@ provide. Finally to run the trainer script in background and save the stdout and
 $ ./scripts/train_es_ES.sh &> ~/logs/train_es_ES.log &
 ```
 
+## Export models
+
+The above trained model can be exported to PB format so that it can be used freely at inference time. This can be done
+with the `DeepSpeech.py` script from your local DeepSpeech folder by specifying the checkpoint to load and the export
+directory and model authorship details. The command below shows the necessary parameters:
+
+```bash
+$ python DeepSpeech.py --alphabet_config_path /home/andresf/models/cclmtv_es/alphabet.txt \
+                       --checkpoint_dir /home/andresf/checkpoints/ds-transfer-es_CO/ \
+                       --load_evaluate "best" \
+                       --n_hidden 2048 \
+                       --export_dir /home/andresf/models/ds-transfer-es_CO/ \
+                       --remove_export True \
+                       --export_file_name "output_graph" \
+                       --export_author_id "afperezm" \
+                       --export_model_name "model" \
+                       --export_model_version "0.0.1" \
+                       --export_contact_info "andres.perez@mail.polimi.it" \
+                       --export_license "Apache-2.0" \
+                       --export_language "es_CO" \
+                       --export_min_ds_version "v0.8.0" \
+                       --export_max_ds_version "v0.8.2" \
+                       --export_description "Entrevistas a victimas del conflicto armado"
+```
+
+The `output_graph.pb` model file generated with the above command will be loaded in memory to be dealt with when running
+inference. This results in extra loading time and memory consumption. To avoid this is one can directly read data from
+the disk by producing a mmap-able model.
+
+TensorFlow has a tooling to achieve this called `convert_graphdef_memmapped_format` which can be downloaded using the
+`util/taskcluster.py` script to download:
+
+```bash
+$ python util/taskcluster.py --source tensorflow \
+                             --artifact convert_graphdef_memmapped_format \
+                             --branch r1.15 \
+                             --target .
+```
+
+This will download the `convert_graphdef_memmapped_format` tool to the folder where the `taskcluster.py` script was
+executed. Finally producing a mmap-able model is as simple as:
+
+```bash
+$ convert_graphdef_memmapped_format --in_graph=/home/andresf/models/ds-transfer-es_CO/output_graph.pb \
+                                    --out_graph=/home/andresf/models/ds-transfer-es_CO/output_graph.pbmm
+```
+
 ## Using pre-trained models
 
 We provide the three trained models in `.pbmm` format as well as the language model generated from the full dataset and
