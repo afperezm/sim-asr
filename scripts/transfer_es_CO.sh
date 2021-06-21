@@ -1,15 +1,15 @@
 #!/bin/bash
 
-data_dir="/home/andresf/data/asr-co-segments"
+data_dir="/home/andresf/data"
 ckpt_dir="/home/andresf/checkpoints"
 mdls_dir="/home/andresf/models"
 summ_dir="/home/andresf/summaries"
 
 python -u DeepSpeech.py --noshow_progressbar \
        --alphabet_config_path "${mdls_dir}/cclmtv_es/alphabet.txt" \
-       --train_files "${data_dir}/output_train.csv" \
+       --train_files "${data_dir}/asr-co-exilio/output_train.csv,${data_dir}/asr-co-manual/output_train.csv,${data_dir}/asr-co-segments/output_train.csv" \
        --train_batch_size 64 \
-       --dev_files "${data_dir}/output_dev.csv" \
+       --dev_files "${data_dir}/asr-co-exilio/output_dev.csv,${data_dir}/asr-co-manual/output_dev.csv,${data_dir}/asr-co-segments/output_dev.csv" \
        --dev_batch_size 64 \
        --save_checkpoint_dir "${ckpt_dir}/ds-transfer-es_CO/" \
        --load_checkpoint_dir "${ckpt_dir}/cclmtv_es/" \
