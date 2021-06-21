@@ -26,6 +26,7 @@ THRESHOLD = 0.5
 
 PARAMS = None
 FILTER_OBJ = None
+TRIM_SILENCES = None
 
 
 class LabelFilter:
@@ -50,9 +51,11 @@ class LabelFilter:
 
 def init_worker(params):
     global FILTER_OBJ  # pylint: disable=global-statement
+    global TRIM_SILENCES  # pylint: disable=global-statement
     validate_label = get_validate_label(params)
     alphabet = Alphabet(params.filter_alphabet) if params.filter_alphabet else None
     FILTER_OBJ = LabelFilter(params.normalize, alphabet, validate_label)
+    TRIM_SILENCES = params.trim_silences
 
 
 def one_sample(sample):
@@ -64,10 +67,11 @@ def one_sample(sample):
     frames = 0
 
     if os.path.exists(wav_filename):
-        # tmp_filename = os.path.splitext(wav_filename)[0] + '.tmp.wav'
-        # subprocess.check_call(['sox', wav_filename, tmp_filename, 'silence', '1', '0.1', '1%', 'reverse', 'silence',
-        #                        '1', '0.1', '1%', 'reverse'], stderr=subprocess.STDOUT)
-        # os.rename(tmp_filename, wav_filename)
+        if TRIM_SILENCES:
+            tmp_filename = os.path.splitext(wav_filename)[0] + '.tmp.wav'
+            subprocess.check_call(['sox', wav_filename, tmp_filename, 'silence', '1', '0.1', '1%', 'reverse', 'silence',
+                                   '1', '0.1', '1%', 'reverse'], stderr=subprocess.STDOUT)
+            os.rename(tmp_filename, wav_filename)
         file_size = os.path.getsize(wav_filename)
         frames = int(subprocess.check_output(["soxi", "-s", wav_filename], stderr=subprocess.STDOUT))
     else:
@@ -201,6 +205,11 @@ def parse_args():
         "--normalize",
         action="store_true",
         help="Converts diacritic characters to their base ones",
+    )
+    parser.add_argument(
+        "--trim_silences",
+        action="store_true",
+        help="Remove trailing silences"
     )
     return parser.parse_args()
 
