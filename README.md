@@ -207,7 +207,7 @@ directory:
 ```bash
 $ mkdir -p $HOME/data/entregadas_alineadas/
 $ mkdir -p $HOME/data/asr-co-manual/
-$ sudo mount -t cifs //192.168.1.8/alineacion_audios/entregadas_alineadas $HOME/data/entregadas_alineadas/ -o username=<cev.user>
+$ sudo mount -t cifs //192.168.1.8/alineacion_audios/entregadas_alineadas $HOME/data/entregadas_alineadas/ -o username=<cev.user>,uid=$(id -u),gid=$(id -g)
 $ cp $HOME/data/entregadas_alineadas/*.srt $HOME/data/asr-co-manual/
 ```
 
