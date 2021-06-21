@@ -54,6 +54,9 @@ def main():
 
         for idx, sub in enumerate(audio_subs):
 
+            if sub.content == ["borrar", "uborrar"]:
+                continue
+
             print("{0} - Processing segment {1}/{2}".format(sub_srt_basename, idx, len(audio_subs)))
 
             # Compose audio segment filename
