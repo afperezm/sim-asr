@@ -136,6 +136,8 @@ def _maybe_convert_sets(data_dir, audio_dir):
 
     print_import_report(counter, SAMPLE_RATE, MAX_SECS)
 
+    rows.sort(key=lambda row: row[1])
+
     test_csv = output_csv_template.format("test")
     print("Saving DeepSpeech-formatted test CSV file to: ", test_csv)
     with open(test_csv, "wt", encoding="utf-8", newline="") as test_csv_file:

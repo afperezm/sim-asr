@@ -195,6 +195,8 @@ def _maybe_convert_sets(target_dir, language_pack_name):
     assert counter["all"] == num_samples
     assert len(rows) == imported_samples
 
+    rows.sort(key=lambda row: row[1])
+
     train_csv = target_csv_template.format("train")
     print("Saving DeepSpeech-formatted train CSV file to: ", train_csv)
     with open(train_csv, "wt", encoding="utf-8", newline="") as train_csv_file:
