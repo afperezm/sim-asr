@@ -20,8 +20,8 @@ from multiprocessing import Pool
 
 FIELDNAMES = ["wav_filename", "wav_filesize", "transcript"]
 SAMPLE_RATE = 16000
-MAX_SECS = 15
-CHARS_PER_SEC = 1000 / MAX_SECS / 2
+MAX_SECS = 10
+CHARS_PER_SEC = 1000 / 15 / 2
 THRESHOLD = 0.5
 
 PARAMS = None
