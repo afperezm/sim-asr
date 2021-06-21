@@ -361,6 +361,14 @@ $ python transcribe.py --src $HOME/data/asr-co-manual/audios/001-VI-00003.wav \
 We provide the three trained models in `.pbmm` format as well as the language model generated from the full dataset and
 not only the validated ones. You can use these as explained in [12].
 
+| Model | Datasets                                                | Epochs | Batch size | Dropout rate | Learn rate | Sequence length | WER |
+| ----- | ------------------------------------------------------- | ------ | ---------- | ------------ | ---------- | --------------- | --- |
+| exp1  | asr-co-segments                                         | 100    | 32         | 0.25         | 0.0001     | 15 seconds      |     |
+| exp2  | asr-co-segments                                         | 500    | 64         | 0.25         | 0.0001     | 15 seconds      |     |
+| exp3  | asr-co-segments                                         | 500    | 64         | 0.40         | 0.00001    | 15 seconds      |     |
+| exp4  | asr-co-segments + asr-co-exilio + asr-co-manual + es_LA | 500    | 64         | 0.25         | 0.0001     | 15 seconds      |     |
+| exp5  | asr-co-segments + asr-co-exilio + asr-co-manual         | 100    | 64         | 0.25         | 0.0001     | 10 seconds      |     |
+
 # References
 
 [1] https://research.google/pubs/pub49150/
