@@ -369,6 +369,14 @@ not only the validated ones. You can use these as explained in [12].
 | exp4  | asr-co-segments + asr-co-exilio + asr-co-manual + es_LA | 500    | 64         | 0.25         | 0.0001     | 15 seconds      |     |
 | exp5  | asr-co-segments + asr-co-exilio + asr-co-manual         | 100    | 64         | 0.25         | 0.0001     | 10 seconds      |     |
 
+## Getting alligned time
+
+There is a script to get the total time of audios that have been alligned. You need to have a LDAP valid user to connect to the fileserver where the audios are located. 
+
+```bash
+python3 get_align_audio.py --user LDAPUSER --password LDAPPASS --machine_name MACHINENAME --server_name alineacion_audios --server_ip IP --domain_name cev --share_path Alineacion_Audios --audio_folder Entregadas_alineadas
+```
+
 # References
 
 [1] https://research.google/pubs/pub49150/
