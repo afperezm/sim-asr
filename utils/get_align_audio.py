@@ -3,7 +3,7 @@ import os
 import argparse
 from datetime import datetime, date, timedelta
 from smb.SMBConnection import SMBConnection
-
+from datetime import date
 # ------ Main ------- #
 
 parser = argparse.ArgumentParser(description="Regex-based transcripts tag cleaner")
@@ -23,6 +23,8 @@ parser.add_argument("--share_path", type=str, help="Name of the main share path 
                         required=True)
 parser.add_argument("--audio_folder", type=str, help="Name of the folder where audios are",
                         required=True)
+parser.add_argument("--report", type=str, help="Set yes if reporte needed",
+                        required=False)
 
 args = parser.parse_args()
 
@@ -77,8 +79,17 @@ total = timedelta(0)
 for i in range(len(total_times)):
     total  = total + total_times[i]
 
-conn.close()
+today = date.today()
 print("Total files:", len(total_times))
-print("Total time for all", str(total))
+print("Total time for",today,":",str(total))
 
+if args.report == 'yes':
+    f = open("report.txt", "w")
+    f.write("Total files:"+ str(len(total_times))+"\n")
+    f.write("Total time:"+str(total))
+    f.close()
+    with open("report.txt", 'rb') as file:
+        conn.storeFile(args.share_path, '/Reportes/'+str(today)+"-"+args.audio_folder+'.txt', file)
+    os.remove("report.txt")
 
+conn.close()
