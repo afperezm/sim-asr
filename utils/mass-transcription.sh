@@ -29,6 +29,15 @@ for x in wav; do
 				echo "Transcription for "${filename}" and model "${model}" starts at "${days}""
 				python3 ~/workspace/DeepSpeech/transcribe.py --src ${i} --dst ${result_path}/${filename}/${filename}-${model}.json --force --alphabet_config_path $HOME/models/cclmtv_es/alphabet.txt --load_checkpoint_dir $HOME/checkpoints/${model}/ --load_evaluate "best" --scorer_path $HOME/models/cclmtv_es/kenlm_es.scorer  --n_hidden 2048 --load_cudnn
 				echo "Transcription for "${filename}" finished at "${days}""
+				doc_name=${result_path}/${filename}/${filename}-${model}.docx
+                                if test -f ${doc_name};
+                                        then
+                                                echo "Doc already created"
+                                        else
+                                                echo "Creating doc files for "${trans_filename}""
+                                                python3 $HOME/workspace/sim-asr/utils/process_trans.py --input ${trans_filename} --output ${doc_name}
+                                fi
+
 		fi
 		done	
 	done
