@@ -1,0 +1,45 @@
+mkdir /rep/modelos
+# Copiar en /rep/modelos/ la carpeta ds-transfer-es_CO checkpoints
+# Verificar que el archivo flags, best_dev_checkpoint, checkpoint están apuntando a /rep/modelos/ds-transfer-es_CO/
+
+cd /rep/modelos/
+git clone --branch v0.9.3 https://github.com/mozilla/DeepSpeech
+sudo apt-get install python3-dev
+python3 -m venv $HOME/tmp/deepspeech-train-venv/
+# Activar ambiente
+source $HOME/tmp/deepspeech-train-venv/bin/activate
+cd DeepSpeech/
+pip3 install --upgrade pip==20.2.2 wheel==0.34.2 setuptools==49.6.0
+pip3 install --upgrade -e .
+pip3 uninstall numpy
+pip3 install numpy==1.18.5
+pip install sox
+sudo apt-get install sox libsox-fmt-mp3
+vim best_dev_checkpoint # verificar rutas a /rep/buscador/
+vim checkpoint  # verificar rutas a /rep/buscador/
+pip install webrtcvad
+
+# Carpeta para guardar json temporalmente y los logs del proceso:
+mkdir /rep/modelos/examples/
+
+# probar con algun audio de ejemplo
+python /rep/modelos/DeepSpeech/transcribe.py --src /rep/modelos/examples/603ce8a42675e.wav  # Cualquier audio 
+                     --dst /rep/modelos/examples/ejemplo.json   
+                     --force --alphabet_config_path /rep/modelos/alphabet.txt  
+                     --load_checkpoint_dir /rep/modelos/ds-transfer-es_CO/    
+                     --load_evaluate "best"                        
+                     --scorer_path /rep/modelos/kenlm_es.scorer                        --n_hidden 2048                                      --load_cudnn
+                 
+                 
+cd /rep/modelos/
+git clone https://gitlab.com/comisiondelaverdad/sim-data-processing
+git checkout develop
+cd /rep/modelos/sim-data-processing/procesado-general/
+
+#Correr en qa:
+
+python3 ContentExtractAudio.py -e qa  -main_path '/rep/modelos/' -temp_path='examples/' -trans_script_path='DeepSpeech/transcribe.py' -alphabet_path='alphabet.txt' -scorer_path='kenlm_es.scorer' -checkpoint_path='ds-transfer-es_CO'
+
+#Correr en prod:
+
+python3 ContentExtractAudio.py -e prod  -main_path '/rep/modelos/' -temp_path='examples/' -trans_script_path='DeepSpeech/transcribe.py' -alphabet_path='alphabet.txt' -scorer_path='kenlm_es.scorer' -checkpoint_path='ds-transfer-es_CO'
