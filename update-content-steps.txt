@@ -1,6 +1,12 @@
 mkdir /rep/modelos
-# Copiar en /rep/modelos/ la carpeta ds-transfer-es_CO checkpoints
+
+# Copiar en /rep/modelos/ la carpeta ds-transfer-es_CO checkpoints (en el server de pruebas está en /rep/modelos//rep/modelos/ds-transfer-es_CO/)
 # Verificar que el archivo flags, best_dev_checkpoint, checkpoint están apuntando a /rep/modelos/ds-transfer-es_CO/
+
+# Copiar keys para conectar a base de datos
+
+scp conection_sim-backend-prod_encrypt.bin serverprod:/rep/modelos/sim-data-processing/procesado-general/classes/keys
+scp clave.key serverprod:/rep/modelos/sim-data-processing/procesado-general/classes/keys
 
 cd /rep/modelos/
 git clone --branch v0.9.3 https://github.com/mozilla/DeepSpeech
