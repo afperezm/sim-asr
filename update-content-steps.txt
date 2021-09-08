@@ -24,12 +24,7 @@ pip install webrtcvad
 mkdir /rep/modelos/examples/
 
 # probar con algun audio de ejemplo
-python /rep/modelos/DeepSpeech/transcribe.py --src /rep/modelos/examples/603ce8a42675e.wav  # Cualquier audio 
-                     --dst /rep/modelos/examples/ejemplo.json   
-                     --force --alphabet_config_path /rep/modelos/alphabet.txt  
-                     --load_checkpoint_dir /rep/modelos/ds-transfer-es_CO/    
-                     --load_evaluate "best"                        
-                     --scorer_path /rep/modelos/kenlm_es.scorer                        --n_hidden 2048                                      --load_cudnn
+python3 /rep/modelos/DeepSpeech/transcribe.py --src /rep/modelos/examples/603ce8a42675e.wav   --dst /rep/modelos/examples/ejemplo.json   --force --alphabet_config_path /rep/modelos/alphabet.txt  --load_checkpoint_dir /rep/modelos/ds-transfer-es_CO/ --load_evaluate "best"  --scorer_path /rep/modelos/misional_es.scorer --n_hidden 2048   --load_cudnn
                  
                  
 cd /rep/modelos/
