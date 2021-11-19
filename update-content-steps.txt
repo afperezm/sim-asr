@@ -19,6 +19,7 @@ sudo apt-get install sox libsox-fmt-mp3
 vim best_dev_checkpoint # verificar rutas a /rep/buscador/
 vim checkpoint  # verificar rutas a /rep/buscador/
 pip install webrtcvad
+pip install --upgrade tensorflow
 
 # Carpeta para guardar json temporalmente y los logs del proceso:
 mkdir /rep/modelos/examples/
@@ -37,10 +38,15 @@ cd /rep/modelos/sim-data-processing/procesado-general/
 scp conection_sim-backend-prod_encrypt.bin serverprod:/rep/modelos/sim-data-processing/procesado-general/classes/keys
 scp clave.key serverprod:/rep/modelos/sim-data-processing/procesado-general/classes/keys
 
+pip3 install pymongo
+pip3 install cryptography
+
 #Correr en qa:
 
-python3 ContentExtractAudio.py -e qa  -main_path '/rep/modelos/' -temp_path='examples/' -trans_script_path='DeepSpeech/transcribe.py' -alphabet_path='alphabet.txt' -scorer_path='kenlm_es.scorer' -checkpoint_path='ds-transfer-es_CO'
+python3 ContentExtractAudio.py -e qa  -main_path '/rep/modelos/' -temp_path='examples/' -trans_script_path='DeepSpeech/transcribe.py' -alphabet_path='alphabet.txt' -scorer_path='kenlm_es.scorer' -checkpoint_path='ds-transfer-es_CO' -state_to_process="Error"
 
 #Correr en prod:
 
-python3 ContentExtractAudio.py -e prod  -main_path '/rep/modelos/' -temp_path='examples/' -trans_script_path='DeepSpeech/transcribe.py' -alphabet_path='alphabet.txt' -scorer_path='kenlm_es.scorer' -checkpoint_path='ds-transfer-es_CO'
+python3 ContentExtractAudio.py -e prod  -main_path '/rep/modelos/' -temp_path='examples/' -trans_script_path='DeepSpeech/transcribe.py' -alphabet_path='alphabet.txt' -scorer_path='sim.scorer' -checkpoint_path='ds-transfer-es_CO' -state_to_process="Error"
+
+nice -n15 nohup python3 ContentExtractAudio.py -e prod  -main_path '/rep/modelos/' -temp_path='examples/' -trans_script_path='DeepSpeech/transcribe.py' -alphabet_path='alphabet.txt' -scorer_path='kenlm_es.scorer' -checkpoint_path='ds-transfer-es_CO' -skip_flag = "Error" & tail -f /rep/examples/nohup.out    
