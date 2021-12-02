@@ -43,7 +43,7 @@ pip3 install cryptography
 
 #Correr en qa:
 
-python3 ContentExtractAudio.py -e qa  -main_path '/rep/modelos/' -temp_path='examples/' -trans_script_path='DeepSpeech/transcribe.py' -alphabet_path='alphabet.txt' -scorer_path='kenlm_es.scorer' -checkpoint_path='ds-transfer-es_CO' -state_to_process="Error"
+python3 ContentExtractAudio.py -e qa  -main_path '/rep/modelos/' -temp_path='examples/' -trans_script_path='DeepSpeech/transcribe.py' -alphabet_path='alphabet.txt' -scorer_path='sim.scorer' -checkpoint_path='ds-transfer-es_CO' -state_to_process="Error"
 
 #Correr en prod:
 
