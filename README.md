@@ -41,7 +41,7 @@ above imported datasets.
 
 ## Preparing the dataset
 
-![workflow_overview](/uploads/29a585c3a3702cdb2d6dec541e4a5871/workflow_overview.png)
+![workflow_overview](workflow_overview.png)
 
 It consists of 5 pipeline stages as shown in the diagram above: clean intros, clean tags, align, split and validate.
 There is a preliminary stage that consist of copying the data from a remote server to the local computer where they will
